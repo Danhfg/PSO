@@ -1,11 +1,30 @@
-#ifndef _FORK_BOMB
-#define _FORK_BOMB
+#include <iostream>
+using std::cout;
+using std::endl;
 
-void fork_bomb(){
-	
-	while(true){
+#include <unistd.h>  		/// fork()		
+#include <sys/time.h> 		/// pid_t
+#include <sys/resource.h> 	/// rlimit
+
+
+void forkBomb(){
+
+	while(true)	
 		fork();
-	}
+
 }
 
-#endif
+int main(){
+
+	struct rlimit limiteProcessos;
+	getrlimit(RLIMIT_NPROC, &limiteProcessos);
+	
+	cout << limiteProcessos.rlim_cur << endl;	
+	fork();
+	getrlimit(RLIMIT_NPROC, &limiteProcessos);
+	
+	cout << limiteProcessos.rlim_cur << endl;	
+	
+
+	return 0;
+}
