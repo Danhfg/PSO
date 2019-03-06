@@ -1,3 +1,10 @@
+/**
+ * @file	hierarquiaProcessos.cpp
+ * @brief	Implementa a
+ * @since	01.03.2019
+ * @version 0.0.2
+ */ 
+
 #include <iostream>
 using std::cout;
 using std::endl;

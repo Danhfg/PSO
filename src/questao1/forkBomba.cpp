@@ -1,3 +1,10 @@
+/**
+ * @file	forkBomba.cpp
+ * @brief	Implementa a
+ * @since	01.03.2019
+ * @version 0.0.3
+ */ 
+
 #include <iostream>
 using std::cout;
 using std::endl;
