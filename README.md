@@ -24,8 +24,8 @@ Visite a página de [Download] ou instale diretamente no terminal usando o segui
 	Obs.: Todos os códigos digitados no terminal deverão ser na respectiva pasta raiz do programa.  
 	Exceto na vizualização da documentação do projeto, não será necessário alterar a pasta.
 
-Depois de clonar o repositório na respectiva pasta local, digite ```make``` para 
-realizar a compilação, resultando na criação dos respectivos arquivos binários(executáveis) 
+Depois de clonar o repositório na respectiva pasta local, **digite** ```make``` **para** 
+**realizar a compilação**, resultando na criação dos respectivos arquivos binários(executáveis) 
 denominados ***questao1*** e ***questao2***. Em seguida, digite ```.bin/questao1``` ou ```.bin/questao2```  para executar o programa.
 
 ###  Documentação e exclusão dos objetos e do executável
@@ -33,7 +33,7 @@ denominados ***questao1*** e ***questao2***. Em seguida, digite ```.bin/questao1
 Caso deseje verificar a documentação, digite na pasta doc ```make doc ```. Diante disso, abra a pasta **html**, depois abra o arquivo chamado **index.html** o qual possui a documentação.  
   
   
-Além disso, caso deseje fazer o debugger do programa, primeiro digite no terminal ```make debug```, depois digite ```gdb .bin/questao2``` ou ```gdb .bin/questao1```, de acordo com o programa que desejar.  Ou, se quiser apagar os objetos e o executável, digite ```make clean```.
+Além disso, caso deseje fazer o debugger do programa, primeiro digite no terminal ```make debug```, depois digite ```gdb .bin/questao2``` ou ```gdb .bin/questao1```, de acordo com o programa que desejar.  **Ou, se quiser apagar os objetos e o executável, digite** ```make clean```.
 
 <p align="right">
 <img src="https://www.star.bnl.gov/public/comp/sofi/doxygen/doxygen_logo.gif" width="14%"  />
