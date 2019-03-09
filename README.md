@@ -41,5 +41,5 @@ Além disso, caso deseje fazer o debugger do programa, primeiro digite no termin
 
 ## Autores  
 
-Programas desenvolvidos por Samuel Lucas de Moura Ferino ( _samuellucas97@ufrn.edu.br_ ) e Daniel     
+Programas desenvolvidos por Samuel Lucas de Moura Ferino ( _samuellucas97@ufrn.edu.br_ ) e Daniel Henrique Ferreira Gomes ( _danhfg@ufrn.edu.br_ )     
 :copyright: IMD/UFRN 2019. 
