@@ -17,10 +17,10 @@ CFLAGS=	-Wall -pedantic -ansi -std=c++11 -pthread
 .PHONY:	all	clean	doxy	debug	doc
 
 #Ao final da compilacão, remove os arquivos objetos
-all: init parte1 parte2
+all: init forkBomb antiBomb part2
 
 debug:	CFLAGS += -g -O0
-debug:	parte1 parte2
+debug:	forkBomb antiBomb part2 
 
 # Cria a pasta/diretório bin e a obj
 init:
@@ -29,9 +29,9 @@ init:
 	@mkdir -p $(BIN_DIR)
 
 # Alvo (target) para a construcao do executavel parte1
-# Define o arquivo forkBomba.o como dependência
-parte1: CFLAGS+= -I$(INC_DIR)/parte1
-parte1: $(OBJ_DIR)/parte1/forkBomba.o
+# Define o arquivo Fork_Bomb.o como dependência
+forkBomb: CFLAGS+= -I$(INC_DIR)/parte1
+forkBomb: $(OBJ_DIR)/parte1/Fork_bomb.o
 	@echo "============="
 	@echo "Ligando o alvo $@"
 	@echo "============="
@@ -39,13 +39,29 @@ parte1: $(OBJ_DIR)/parte1/forkBomba.o
 	@echo "+++ [Executavel parte1 criado em $(BIN_DIR)] +++"
 	@echo "============="
 
-# Alvo (target) para a construcao do objeto forkBomba.o
-# Define os arquivos forkBomba.cpp e forkBomba.h como dependencias.
-$(OBJ_DIR)/parte1/forkBomba.o: $(SRC_DIR)/parte1/forkBomba.cpp
+# Alvo (target) para a construcao do objeto Fork_bomb.o
+# Define os arquivos Fork_bomb.cpp e Fork_bomb.h como dependencias.
+$(OBJ_DIR)/parte1/Fork_bomb.o: $(SRC_DIR)/parte1/Fork_bomb.cpp
 	$(CC) -c $(CFLAGS) -o $@ $<
 
-parte2: CFLAGS+= -I$(INC_DIR)/parte2
-parte2: $(OBJ_DIR)/parte2/part.o
+# Alvo (target) para a construcao do executavel parte1
+# Define o arquivo Fork_Bomb.o como dependência
+antiBomb: CFLAGS+= -I$(INC_DIR)/parte1
+antiBomb: $(OBJ_DIR)/parte1/anti_bomb.o
+	@echo "============="
+	@echo "Ligando o alvo $@"
+	@echo "============="
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/$@ $^
+	@echo "+++ [Executavel parte1 criado em $(BIN_DIR)] +++"
+	@echo "============="
+
+# Alvo (target) para a construcao do objeto anti_bomb.o
+# Define os arquivos anti_bomb.cpp e anti_bomb.h como dependencias.
+$(OBJ_DIR)/parte1/anti_bomb.o: $(SRC_DIR)/parte1/anti_bomb.cpp
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+part2: CFLAGS+= -I$(INC_DIR)/parte2
+part2: $(OBJ_DIR)/parte2/part2.o
 	@echo "============="
 	@echo "Ligando o alvo $@"
 	@echo "============="
@@ -56,11 +72,6 @@ parte2: $(OBJ_DIR)/parte2/part.o
 # Alvo (target) para a construcao do objeto part2.o
 # Define o arquivo part2.cpp como dependência.
 $(OBJ_DIR)/parte2/part2.o:	$(SRC_DIR)/parte2/part2.cpp
-	$(CC) -c $(CFLAGS) -o $@ $<
-
-# Alvo (target) para a construcao do objeto arvore.o
-# Define o arquivo arvore.cpp como dependência.
-$(OBJ_DIR)/parte2/arvore.o:	$(SRC_DIR)/parte2/part.cpp
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 # Gera a documentação e remove a documentações anterior existentes
