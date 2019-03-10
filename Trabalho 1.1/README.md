@@ -18,8 +18,6 @@ Implementar na BeagleBone um programa que evite o fork bomb.
 
 ![](/image/print_antibomb_BBB.png)
 
-![](/image/print_antibomb_notebook.png)
-
 ### Parte 2: Hierarquia de Processos
 
 #### Objetivo
@@ -34,11 +32,16 @@ Implementar um programa que através de um processamento na pasta /proc imprima 
 
 ## Compilação e execução  
 
-Execute na linha de terminal para a compilação 
+Execute na linha de terminal para a compilação e criação do objetos
 
 ```
 $ make
+```  
+Ou, caso deseje apagar os objetos e os executáveis, digite  
+
 ```
+$ make clean
+```  
 Em seguida, serão criados os seguintes arquivos binários (executáveis):
 
 | Nome do executável: | Descrição: | 
@@ -47,22 +50,28 @@ Em seguida, serão criados os seguintes arquivos binários (executáveis):
 |***forkBomb*** 	|Programa fork bomb que implementa o ataque de negação de serviço (DDos).  
 |***part2*** 	|Programa que implementa o objetivo da parte 2 deste trabalho.  
   
-Diante disso, basta executa o respectivo código de acordo como o nome do executável. Logo, caso seja o **forkBomb**  
+Diante disso, basta executa o respectivo código de acordo como o nome do executável. Logo, caso seja o `forkBomb`  
 
 ```
 $ ./bin/forkBomb
 ```
-Caso contrário, se for o executável **antiBomb**  
+Caso contrário, se for o executável `antiBomb`  
 
 ```
 $ ./bin/antiBomb
 ```
-Ou, por fim, se for executável **part2**  
+Ou, por fim, se for executável `part2`  
 
 ```
 $ ./bin/part2
-```
+```  
+  
+Além disso, caso deseje ver a documentação, execute  
 
+```
+$ make doc
+```  
+Em seguida, vá até a pasta **doc** e abra o arquivo `index.html` em um navegador qualquer.   
 ## Autores  
 Samuel Lucas de Moura Ferino ( _samuellucas97@ufrn.edu.br_ ) e Daniel Henrique Ferreira Gomes ( _danhfg@ufrn.edu.br_ )     
 :copyright: IMD/UFRN 2019. 

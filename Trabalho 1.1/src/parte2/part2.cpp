@@ -1,10 +1,15 @@
+/**
+ * @file  part2.cpp
+ * @brief Contém as impressões periódicas na tela e a criação do JSON
+ */ 
+
 #include <cstdlib>
 #include <cstdio>
 #include <fstream>
 #include <string>
 #include <cerrno>
 
-///BIBLIOTECA DO UNIX/LINUX
+/// BIBLIOTECAS DO UNIX/LINUX
 #include <sys/select.h>
 #include <sys/time.h>
 #include <sys/types.h>
@@ -51,10 +56,10 @@ int main(int argc, char *argv[]) {
 	tv.tv_sec = 10;
 	tv.tv_usec = 0;
 
-	//Loop Principal do programa
+	/// Loop Principal do programa
 	while(true) {
 
-		//Zera as variáveis para o loop
+		/// Zerando as variáveis para o loop
 		fd_stdin = fileno(stdin);
 		FD_ZERO(&readfds);
 		FD_SET(fileno(stdin), &readfds);
@@ -62,50 +67,50 @@ int main(int argc, char *argv[]) {
 		printf("Digite o PID desejado (Digite 0 para parar): ");
 		fflush(stdout);
 
-		//Verifica se o usuário digitou algo
+		/// Verificando se o usuário digitou algo
 		num_readable = select(fd_stdin + 1, &readfds, NULL, NULL, &tv);
 
-		//Mensagem de erro na verificação
+		/// Mensagem de erro na verificação
 		if (num_readable == -1) {
 			fprintf(stderr, "\nError in select : %s\n", strerror(errno));
 			exit(1);
 		}
 
-		//Se o usuário não digitou
+		/// Se o usuário não digitou
 		if (num_readable == 0) {
 			system("clear");
 
-			//Imprime a quantidade de processos ativos
+			/// Imprime a quantidade de processos ativos
 			printf("Quantidade de processos ativos: ");
-			fflush(stdout);
+			fflush(stdout); /// Sincronizando systemcall com o printf
 			system("ps aux | wc -l");
 			printf("\n");
 
-			//Imprime a quantidade de processos ativos por usuário
+			/// Imprime a quantidade de processos ativos por usuário
 			printf("Quantidade de processos ativos por usuário:\n");
-			fflush(stdout);
+			fflush(stdout);  /// Sincronizando systemcall com o printf
 			system("ps -eo user=|sort|uniq -c");
 			printf("\n");
 
-			//Aumenta o tempo da verificação se o usuário digitou algo em 10 segundos
+			/// Aumenta o tempo da verificação se o usuário digitou algo em 10 segundos
 			tv.tv_sec += 10;
 			
-		//Se o usuário digitou
+		/// Se o usuário digitou
 		} else {
-			//Leitura da informação digitada pelo usuário
+			/// Leitura da informação digitada pelo usuário
 			num_bytes = read(fd_stdin, buf, MAXBYTES);
 
-			//Mensagem de erro na leitura
+			/// Mensagem de erro na leitura
 			if (num_bytes < 0) {
 				fprintf(stderr, "\nError on read : %s\n", strerror(errno));
 				exit(1);
 			}
 
-			//Verifica se o usuário digitou -1 (Comando para sair do programa)
+			/// Verificando se o usuário digitou -1 (Comando para sair do programa)
 			if(atoi(buf) == 0)
 				break;
 
-			//Verifica se a informação digitada pelo usuário é um processo válido
+			/// Verificando se a informação digitada pelo usuário é um processo válido
 			if(isValid(atoi(buf)))
 				saveFile(getArvore(atoi(buf)), atoi(buf));
 			else
