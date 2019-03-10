@@ -4,7 +4,7 @@
 
 Nesta pasta contém a implementação dos programas relativos ao trabalho 1.1, o qual era divido em 2 partes.
 
-### Parte 1: Fork Bomb
+### Fork Bomb :bomb: (Parte 1)
 
 #### Objetivo
 Implementar na BeagleBone um programa que evite o fork bomb.
@@ -18,7 +18,7 @@ Implementar na BeagleBone um programa que evite o fork bomb.
 
 ![](/image/print_antibomb_BBB.png)
 
-### Parte 2: Hierarquia de Processos
+### Hierarquia de Processos (Parte 2)
 
 #### Objetivo
 Implementar um programa que através de um processamento na pasta /proc imprima periodicamente informações sobre os processos.
@@ -46,9 +46,9 @@ Em seguida, serão criados os seguintes arquivos binários (executáveis):
 
 | Nome do executável: | Descrição: | 
 | ---------- | ------------- |
-|***antiBomb*** 	|Programa que impede que um fork bomb cause danos.  
-|***forkBomb*** 	|Programa fork bomb que implementa o ataque de negação de serviço (DDos).  
-|***part2*** 	|Programa que implementa o objetivo da parte 2 deste trabalho.  
+|`antiBomb` 	|Programa que impede que um fork bomb cause danos.  
+|`forkBomb` 	|Programa fork bomb que implementa o ataque de negação de serviço (DDos).  
+|`part2` 	|Programa que implementa o objetivo da parte 2 deste trabalho.  
   
 Diante disso, basta executa o respectivo código de acordo como o nome do executável. Logo, caso seja o `forkBomb`  
 
