@@ -1,5 +1,5 @@
 /**
- * @file  anti_bomb.cpp
+ * @file  antiBomb.cpp
  * @brief Contém a implementação de um anti fork bomba
  */ 
 
@@ -15,7 +15,7 @@
 using namespace std;
 
 int main() {
-    std::ifstream processLog, straceLog;
+    std::ifstream processLog;
     std::map <std::string, std::string> mapPid;
     std::map <std::string, int> mapCounter;
     int processLimit = 0;
@@ -76,34 +76,9 @@ int main() {
                             }
                         }
                     }
-                    /** Rastreiar todas as chamadas do sistema emitidas pelo programa 
-                      * junto com seus códigos de retorno.
+                    /** Matar a árvore de processos relacionada ao pidPai   
+                      * http://fibrevillage.com/sysadmin/237-ways-to-kill-parent-and-child-processes-in-one-command                         
                       */
-		    /*
-                    std::string timeoutStrace = "sudo  timeout 0.5 strace -o strace.log -p " +
-                                                to_string(pidPai);
-                    std::system(timeoutStrace.c_str());
-                    usleep(600000);
-                    // Abrir o arquivo strace
-                    straceLog.open("strace.log");
-                    if (straceLog.is_open())
-                    {
-                        std::string l, l1, l2, l3;
-
-                        while (getline (straceLog, l))
-                        {
-                            l3 = l2;
-                            l2 = l1;
-                            l1 = l;
-                        } 
-                        straceLog.close();
-
-                        std::cout << l3 << endl;
-                        std::cout << l2 << endl;
-                        std::cout << l1 << endl;*/
-                        /** Matar a árvore de processos relacionada ao pidPai   
-                          * http://fibrevillage.com/sysadmin/237-ways-to-kill-parent-and-child-processes-in-one-command                         
-                          */
                     std::string ps = "ps -eo ppid | grep -w " + std::to_string(pidPai)+
                                      " | wc -w > num_proc.temp";
                     std::system(ps.c_str());
@@ -118,13 +93,6 @@ int main() {
                     std::cout <<"PID: " << pidPai << ";name: " << mapPid[std::to_string(pidPai)] 
                               << "; number of children:"<< std::to_string(iter->second) <<std::endl;
                     usleep(1000000);
-            /*
-                    }
-                    else 
-                    {
-                        std::cout << "Could not open file!!!!!";
-                        exit(-1);
-                    }*/
                 }
             }
             mapCounter.clear();

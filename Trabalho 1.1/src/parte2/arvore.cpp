@@ -13,164 +13,102 @@
 using namespace std;
 
 /**
- * @brief   Verifica se o ppid é pai do processo pid
+ * @brief   Verifica se o ppid passado é pai do processo pid passado
  * @param   ppid    Número de identificação do processo pai
  * @parama  pid     Número de identificação do processo
  */ 
-bool isPai(long ppid, long pid) {
+bool parent(long ppid, long pid) 
+{
+    char pf[40], row[100], *idAux;
 
-    /// Inicialização das variáveis
-    char path[40], line[100], *p;
-    FILE* statusf;
-
-    /// Procura pelo arquivo status do processo procurado
-    snprintf(path, 40, "/proc/%ld/status", pid);
-
-    /// Abre o arquivo
-    statusf = fopen(path, "r");
-
-    /// É verificado se foi possível abrir o arquivo informado
-    if(!statusf)
-        return false;
-
-    /// Leitura do arquivo linha por linha
-    while(fgets(line, 100, statusf)) {
-        
-        /// Verifica se a linha é a linha que contém o PPid do processo
-        if(strncmp(line, "PPid:", 5) != 0)
-            continue;
-        
-        /// É tirado da string a parte 'PPid:' para ser verificado somente o número PPid em questão
-        p = line + 5;
-
-        /// Enquanto houver caracteres nulos, eles são retirados da string;
-        while(isspace(*p)) ++p;
-
+    FILE* readStatus;
+    snprintf(pf, 40, "/proc/%ld/status", pid);
+    readStatus = fopen(pf, "r");
+    if(!readStatus) return false;
+    // Busca pelo id do pai
+    while(fgets(row, 100, readStatus)) 
+    {
+        if(strncmp(row, "PPid:", 5) != 0) continue;
+        idAux = row + 5;
+        while(isspace(*idAux)) ++idAux;
         break;  
     }
+    fclose(readStatus);
 
-    /// Fechando o arquivo
-    fclose(statusf);
-
-    /// Verificando se o PPid passado como parâmetro é igual ao PPid achado no arquivo
-    if(ppid == atoi(p))
-        return true;
-    else
-        return false;
+    // Comparação entre o ppid passado por parâmetro com o ppid encontrado
+    if(ppid == atoi(idAux)) return true;
+    else return false;
 }
 
 /**
- * @brief   Verifica se o pid é um processo que existe no sistema
+ * @brief   Checka a existencia de um pid no sistema
  * @param   pid Número de identificação do processo
  * @return  True caso exista; caso contrário, false
  */
-bool isValid(long pid) {
+bool pidChack(long pid)
+{
+    char pf[40], row[100], *idAux;
+    FILE* readStatus;
 
-    /// Inicialização das variáveis
-    char path[40], line[100], *p;
-    FILE* statusf;
-
-    /// Procura pelo arquivo status do processo procurado
-    snprintf(path, 40, "/proc/%ld/status", pid);
-
-    /// Abre o arquivo
-    statusf = fopen(path, "r");
-
-    /// É verificado se é possivel abrir o arquivo informado
-    if(!statusf)
-        return false;
-
-    /// Leitura do arquivo linha por linha
-    while(fgets(line, 100, statusf)) {
-
-        /// Verifica se a linha é a linha que contém o PPid do processo
-        if(strncmp(line, "Pid:", 4) != 0)
-            continue;
-        
-        /// É tirado da string a parte 'Pid:' para ser verificado somente o PPid em questão
-        p = line + 4;
-
-        /// Enquanto houver caracteres nulos, eles são retirados da string;
-        while(isspace(*p)) ++p;
-
+    snprintf(pf, 40, "/proc/%ld/status", pid);
+    readStatus = fopen(pf, "r");
+    if(!readStatus) return false;
+    // Busca pelo id do pai
+    while(fgets(row, 100, readStatus)) {
+        if(strncmp(row, "Pid:", 4) != 0) continue;
+        idAux = row + 4;
+        while(isspace(*idAux)) ++idAux;
         break;
     }
+    fclose(readStatus);
 
-    /// Fecha o arquivo
-    fclose(statusf);
-
-    //Verfica se o Pid passado como parâmetro é igual ao Pid achado no arquivo
-    if(pid == atoi(p))
-        return true;
-    else
-        return false;
+    // Comparação entre o pid passado por parâmetro com o pid encontrado
+    if(pid == atoi(idAux)) return true;
+    else return false;
 }
 
 /**
- * @brief   Descobre o pid de todos os processos abertos no sistema
- * @return  Lista com todos os processos abertos no sistema
+ * @brief   Lista o pid de todos os processos em execução no sistema
+ * @return  Uma lista com todos os processos em execução no sistema
  */ 
-list<int> getProcessosAbertos(){
+list<int> listOfProcess(){
+    FILE *filec;
+    char pf[1035];
+    list <int> process;
 
-    /// Inicialização das variáveis
-    FILE *fp;
-    char path[1035];
-    list<int> processosAbertos;
-
-    /// Comando linux que pega todos pid dos processos abertos ordenados pelo primeiro dígito 
     string comando = "ls /proc | grep '^[0-9]'";
-
-    /// O comando é executado no terminal e a saída é armazenada em um arquivo
-    fp = popen(comando.c_str(), "r");
-
-    /// Verifica se o comando foi executado
-    if (fp == NULL) {
-        printf("Failed to run command\n" );
+    filec = popen(comando.c_str(), "r");
+    if (filec == nullptr) 
+    {
+        printf("Could not open file!!!!!\n" );
         exit(1);
     }
-
-    /// Lendo a saída linha por linha
-    while (fgets(path, sizeof(path)-1, fp) != NULL) {
-
-        //Adiciona o pid em uma lista de processos abertos
-        processosAbertos.push_back(atoi(path));
+    while (fgets(pf, sizeof(pf)-1, filec) != nullptr) 
+    {
+        process.push_back(atoi(pf));
     }
+    pclose(filec);
 
-    /// Fecha o arquivo
-    pclose(fp);
-
-    return processosAbertos;
+    return process;
 }
 
 /**
- * @brief   Descobre a árvore de processos filhos e coloca numa string formatada
+ * @brief   Gera a árvore de de hierarquia filhos e coloca numa string formatada
  * @return  O JSON da árvore de processos de um determinado Pid
  */ 
-string getArvore(long pid){
+string getJsonTree(long pid)
+{
+    string jsonTree = "{ PID: " + to_string(pid) + ", CHILDREN: [";
+    list<int> process = listOfProcess();
 
-    /// Inicializa o JSON com o pid, e setando os filhos
-    string json = "{ pid: " + to_string(pid) + ", filhos: [";
-
-    /// Inicializando com a lista de processos abertos
-    list<int> processosAbertos = getProcessosAbertos();
-
-    /// Percorrendo a lista de processos abertos
-    for(list<int>::iterator it = processosAbertos.begin(); it != processosAbertos.end(); ++it){
-
-        /// Verificando se o pid é pai do processo atual
-        if(isPai(pid,*it)){
-
-            /// Verificando se a última linha do JSON é '[', para saber se é o primeiro elemento da lista de filhos
-            if (json.back() != '[')
-                json += ",";
-
-            /// Adicionando ao json a árvore do filho 
-            json += getArvore(*it);
+    for(list<int>::iterator it = process.begin(); it != process.end(); ++it)
+    {
+        if(parent(pid,*it) == true){
+            if (jsonTree.back() != '[') jsonTree += ",";
+            jsonTree += getJsonTree(*it);
         }
     }
+    jsonTree += " ] }";
 
-    /// Fechando o JSON
-    json += " ] }";
-
-    return json;
+    return jsonTree;
 }
