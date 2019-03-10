@@ -1,6 +1,6 @@
 /**
  * @file  arvore.cpp
- * @brief Contém a implementação da árvore de processos
+ * @brief Contém a implementação da árvore de processos além das funções auxiliares
  */ 
 
 #include <cstring>
@@ -29,7 +29,7 @@ bool isPai(long ppid, long pid) {
     /// Abre o arquivo
     statusf = fopen(path, "r");
 
-    /// É verificado se é possivel abrir o arquivo informado
+    /// É verificado se foi possível abrir o arquivo informado
     if(!statusf)
         return false;
 
@@ -40,13 +40,13 @@ bool isPai(long ppid, long pid) {
         if(strncmp(line, "PPid:", 5) != 0)
             continue;
         
-        /// É tirado da string a parte 'PPid:' para ser verificado somente o PPid em questão
+        /// É tirado da string a parte 'PPid:' para ser verificado somente o número PPid em questão
         p = line + 5;
 
         /// Enquanto houver caracteres nulos, eles são retirados da string;
         while(isspace(*p)) ++p;
 
-        break;
+        break;  
     }
 
     /// Fechando o arquivo
@@ -106,64 +106,70 @@ bool isValid(long pid) {
         return false;
 }
 
-//Retorna uma lista com todos os processos abertos no sistema
+/**
+ * @brief   Descobre o pid de todos os processos abertos no sistema
+ * @return  Lista com todos os processos abertos no sistema
+ */ 
 list<int> getProcessosAbertos(){
 
-    //Inicialização das variáveis
+    /// Inicialização das variáveis
     FILE *fp;
     char path[1035];
     list<int> processosAbertos;
 
-    //Comando que pega todos pid dos processos abertos
+    /// Comando linux que pega todos pid dos processos abertos ordenados pelo primeiro dígito 
     string comando = "ls /proc | grep '^[0-9]'";
 
-    //O comando é executado no terminal e a saída é armazenada em um arquivo
+    /// O comando é executado no terminal e a saída é armazenada em um arquivo
     fp = popen(comando.c_str(), "r");
 
-    //Verifica se o comando foi executado
+    /// Verifica se o comando foi executado
     if (fp == NULL) {
         printf("Failed to run command\n" );
         exit(1);
     }
 
-    //Lê a saída linha por linha
+    /// Lendo a saída linha por linha
     while (fgets(path, sizeof(path)-1, fp) != NULL) {
 
         //Adiciona o pid em uma lista de processos abertos
         processosAbertos.push_back(atoi(path));
     }
 
-    //Fecha o arquivo
+    /// Fecha o arquivo
     pclose(fp);
 
     return processosAbertos;
 }
 
-//Retorna o JSON da árvore de processos de um determinado Pid
+/**
+ * @brief   Descobre a árvore de processos filhos e coloca numa string formatada
+ * @return  O JSON da árvore de processos de um determinado Pid
+ */ 
 string getArvore(long pid){
 
-    //Inicializa o JSON com o pid, e setando os filhos
+    /// Inicializa o JSON com o pid, e setando os filhos
     string json = "{ pid: " + to_string(pid) + ", filhos: [";
 
-    //Inicializa uma lista de processos abertos
+    /// Inicializando com a lista de processos abertos
     list<int> processosAbertos = getProcessosAbertos();
 
-    //Percorre a lista de processos abertos
+    /// Percorrendo a lista de processos abertos
     for(list<int>::iterator it = processosAbertos.begin(); it != processosAbertos.end(); ++it){
 
-        //Verifica se o pid é pai do processo atual
+        /// Verificando se o pid é pai do processo atual
         if(isPai(pid,*it)){
 
-            //Verifica se a ultima linha do JSON é '[', para saber se é o primeiro elemento da lista de filhos
+            /// Verificando se a última linha do JSON é '[', para saber se é o primeiro elemento da lista de filhos
             if (json.back() != '[')
                 json += ",";
 
-            //Adiciona ao json a árvore do filho
+            /// Adicionando ao json a árvore do filho 
             json += getArvore(*it);
         }
     }
 
-    //Fecha o JSON
+    /// Fechando o JSON
     json += " ] }";
 
     return json;

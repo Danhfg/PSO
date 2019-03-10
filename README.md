@@ -32,7 +32,7 @@ Depois de clonar o repositório na respectiva pasta local, **digite** ```make```
 
 ###  Documentação e exclusão dos objetos e do executável
 
-Caso deseje verificar a documentação, digite na pasta doc ```make doc ```. Diante disso, abra a pasta **html**, depois abra o arquivo chamado **index.html** o qual possui a documentação.  
+Caso deseje verificar a documentação, digite na pasta doc ```make doc ```. Diante disso, abra a pasta **doc**, depois abra o arquivo chamado `index.html` o qual possui a documentação.  
   
   
 Além disso, caso deseje fazer o debugger do programa, primeiro digite no terminal ```make debug```, depois digite ```gdb .bin/questao2``` ou ```gdb .bin/questao1```, de acordo com o programa que desejar.  **Ou, se quiser apagar os objetos e o executável, digite** ```make clean```.
