@@ -1,39 +1,46 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
+#include <fstream>
+#include <string>
+#include <cerrno>
+
+///BIBLIOTECA DO UNIX/LINUX
 #include <sys/select.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <string.h>
-#include <errno.h>
-#include <fstream>
+
 #include "arvore.cpp"
 
 #define MAXBYTES 80
 
 using namespace std;
 
-//Salva o JSON em um arquivo nomeado como $pid.txt
+/**
+ * @brief	Salva o JSON em um arquivo nomeado como $pid.txt
+ * @param	json	String com conteúdo de arquivo JSON		
+ * @param	pid	Número de identificação do processo
+ */
 void saveFile(string json, int pid){
-	//Inicializa o nome do arquivo
+	/// Inicializa o nome do arquivo
 	string path = "json/" + to_string(pid) + ".txt";
 
-	//Inicializa o arquivo
+	/// Inicializando o arquivo
     ofstream out(path.c_str());
 
-	//Envia o conteudo do json para o arquivo
+	/// Enviando o conteudo do json para o arquivo
     out << json;
 
-    //Fecha o arquivo
+    /// Fechando o arquivo
     out.close();
 
-    //Retorna uma mensagem de confirmação da geração do arquivo
+    /// Retorna uma mensagem de confirmação da geração do arquivo
     printf("Arquivo %s gerado com sucesso\n", path.c_str());
 }
 
 int main(int argc, char *argv[]) {
 
-	//Inicialização das variáveis
+	/// Inicialização das variáveis
 	fd_set readfds;
 	int    num_readable;
 	struct timeval tv;
@@ -45,7 +52,7 @@ int main(int argc, char *argv[]) {
 	tv.tv_usec = 0;
 
 	//Loop Principal do programa
-	while(1) {
+	while(true) {
 
 		//Zera as variáveis para o loop
 		fd_stdin = fileno(stdin);
