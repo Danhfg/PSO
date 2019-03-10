@@ -1,10 +1,16 @@
+/**
+ * @file  anti_bomb.cpp
+ * @brief Contém a implementação de um anti fork bomba
+ */ 
+
 #include <iostream>
-#include <unistd.h>
 #include <fstream>
 #include <map>
 #include <string>
 #include <cstdlib>
 #include <cstring>
+
+#include <unistd.h> /// fork()
 
 using namespace std;
 
@@ -18,15 +24,14 @@ int main() {
 
     int clonLimit = 0;
 
-    while (clonLimit < 50)
-    {
+    while (clonLimit < 50){
         cout << "Digite um limite de clones para um processo (>=50): ";
         cin >> clonLimit;
     }
 
-    while(1) {
+    while(true) {
 
-        system("ps -ec | awk '{print $1,$6 }' > temp.txt");
+        system("ps -ec | awk '{print $1,$6 }' > temp.txt"); /// Enviando para um arquivo txt uma lista com pid e nome dos processos executando
 
         procList.open("temp.txt");
 
@@ -34,13 +39,12 @@ int main() {
 
             string word, pid;
 
-
-            // Pula o cabeçalho (CMD e PID)
+            /// Pula o cabeçalho (CMD e PID)
             for (int i = 0; i < 2; i++)
                 procList >> pid;
 
 
-            // Lê o arquivo e armazena das informações em mapas
+            /// Lê o arquivo e armazena das informações em mapas
             while(procList >> pid) {
 
                 procList >> word;
@@ -52,15 +56,15 @@ int main() {
             procList.close();
             
 
-            // Faz uma varredura para encontrar algum nome com muitos processos associados
+            /// Faz uma varredura para encontrar algum nome com muitos processos associados
             for (map<string, int>::iterator it = procCount.begin(); it != procCount.end(); ++it) {
                 
-                if(it->second > clonLimit) {
+                if(it->second > clonLimit) { 
 
                     bool starting = true;
                     int lowerPid, aux;
 
-                    // Procura o processo pai
+                    /// Procura o processo pai
                     for (map<string, string>::iterator it2 = pidMap.begin(); it2 != pidMap.end(); ++it2) {
                         if (it->first.compare(it2->second) == 0) {
 
@@ -79,7 +83,7 @@ int main() {
                         }
                     }
 
-                    // Roda um strace no processo suspeito
+                    /// Rodando um strace no processo suspeito
                     string straceCmd = "sudo timeout 0.5 strace -p ";
                     straceCmd += to_string(lowerPid);
                     straceCmd += " -o aux.txt";
@@ -88,7 +92,7 @@ int main() {
 
                     usleep(600000);
 
-                    // Pega as 3 ultimas linhas do log do strace
+                    /// Pegando as 3 últimas linhas do log do strace
                     straceLog.open("aux.txt");
 
                     if (straceLog.is_open()) {
@@ -108,7 +112,7 @@ int main() {
                         cout << line2 << endl;
                         cout << line1 << endl;
 
-                        // comando para matar a arvore com o número do gpid
+                        /// Comando para matar a arvore com o número do gpid
                         string killCmd = "kill -9 -$(ps -o pgid= ";
                         killCmd += to_string(lowerPid);
                         killCmd += " | grep -o '[0-9]*')";
@@ -116,7 +120,7 @@ int main() {
                         system(killCmd.c_str());
                     }
                     else {
-                        cout << "Erro fatal na aplicação! Fechando...";
+                        cerr << "Erro fatal na leitura! Fechando..." << endl;
                         exit(-1);
                     }
                 }

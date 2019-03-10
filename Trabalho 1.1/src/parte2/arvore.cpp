@@ -1,89 +1,102 @@
-#include <string.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
+/**
+ * @file  arvore.cpp
+ * @brief Contém a implementação da árvore de processos
+ */ 
+
+#include <cstring>
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <list>
 
 using namespace std;
 
-//Verifica se o ppid é pai do processo pid
+/**
+ * @brief   Verifica se o ppid é pai do processo pid
+ * @param   ppid    Número de identificação do processo pai
+ * @parama  pid     Número de identificação do processo
+ */ 
 bool isPai(long ppid, long pid) {
 
-    //Inicialização das variáveis
+    /// Inicialização das variáveis
     char path[40], line[100], *p;
     FILE* statusf;
 
-    //Procura pelo arquivo status do processo procurado
+    /// Procura pelo arquivo status do processo procurado
     snprintf(path, 40, "/proc/%ld/status", pid);
 
-    //Abre o arquivo
+    /// Abre o arquivo
     statusf = fopen(path, "r");
 
-    //É verificado se é possivel abrir o arquivo informado
+    /// É verificado se é possivel abrir o arquivo informado
     if(!statusf)
         return false;
 
-    //Leitura do arquivo linha por linha
+    /// Leitura do arquivo linha por linha
     while(fgets(line, 100, statusf)) {
         
-        //Verifica se a linha é a linha que contém o PPid do processo
+        /// Verifica se a linha é a linha que contém o PPid do processo
         if(strncmp(line, "PPid:", 5) != 0)
             continue;
         
-        //É tirado da string a parte 'PPid:' para ser verificado somente o PPid em questão
+        /// É tirado da string a parte 'PPid:' para ser verificado somente o PPid em questão
         p = line + 5;
 
-        //Enquanto houver caracteres nulos, eles são retirados da string;
+        /// Enquanto houver caracteres nulos, eles são retirados da string;
         while(isspace(*p)) ++p;
 
         break;
     }
 
-    //Fecha o arquivo
+    /// Fechando o arquivo
     fclose(statusf);
 
-    //Verfica se o PPid passado como parâmetro é igual ao PPid achado no arquivo
+    /// Verificando se o PPid passado como parâmetro é igual ao PPid achado no arquivo
     if(ppid == atoi(p))
         return true;
     else
         return false;
 }
 
-//Verifica se o pid é um processo que existe no sistema
+/**
+ * @brief   Verifica se o pid é um processo que existe no sistema
+ * @param   pid Número de identificação do processo
+ * @return  True caso exista; caso contrário, false
+ */
 bool isValid(long pid) {
 
-    //Inicialização das variáveis
+    /// Inicialização das variáveis
     char path[40], line[100], *p;
     FILE* statusf;
 
-    //Procura pelo arquivo status do processo procurado
+    /// Procura pelo arquivo status do processo procurado
     snprintf(path, 40, "/proc/%ld/status", pid);
 
-    //Abre o arquivo
+    /// Abre o arquivo
     statusf = fopen(path, "r");
 
-    //É verificado se é possivel abrir o arquivo informado
+    /// É verificado se é possivel abrir o arquivo informado
     if(!statusf)
         return false;
 
-    //Leitura do arquivo linha por linha
+    /// Leitura do arquivo linha por linha
     while(fgets(line, 100, statusf)) {
 
-        //Verifica se a linha é a linha que contém o PPid do processo
+        /// Verifica se a linha é a linha que contém o PPid do processo
         if(strncmp(line, "Pid:", 4) != 0)
             continue;
         
-        //É tirado da string a parte 'Pid:' para ser verificado somente o PPid em questão
+        /// É tirado da string a parte 'Pid:' para ser verificado somente o PPid em questão
         p = line + 4;
 
-        //Enquanto houver caracteres nulos, eles são retirados da string;
+        /// Enquanto houver caracteres nulos, eles são retirados da string;
         while(isspace(*p)) ++p;
 
         break;
     }
 
-    //Fecha o arquivo
+    /// Fecha o arquivo
     fclose(statusf);
 
     //Verfica se o Pid passado como parâmetro é igual ao Pid achado no arquivo

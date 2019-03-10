@@ -25,8 +25,10 @@ Visite a página de [Download] ou instale diretamente no terminal usando o segui
 	Exceto na vizualização da documentação do projeto, não será necessário alterar a pasta.
 
 Depois de clonar o repositório na respectiva pasta local, **digite** ```make``` **para** 
-**realizar a compilação**, resultando na criação dos respectivos arquivos binários(executáveis) 
-denominados ***questao1*** e ***questao2***. Em seguida, digite ```.bin/questao1``` ou ```.bin/questao2```  para executar o programa.
+**realizar a compilação**, resultando na criação dos respectivos arquivos binários(executáveis)
+. Em seguida, digite ```.bin/antiBomb``` para executar o programa, seguido de seu respectivo argumento.
+
+
 
 ###  Documentação e exclusão dos objetos e do executável
 
@@ -41,5 +43,5 @@ Além disso, caso deseje fazer o debugger do programa, primeiro digite no termin
 
 ## Autores  
 
-Programas desenvolvidos por Samuel Lucas de Moura Ferino ( _samuellucas97@ufrn.edu.br_ ) e Daniel Henrique Ferreira Gomes ( _danhfg@ufrn.edu.br_ )     
+Samuel Lucas de Moura Ferino ( _samuellucas97@ufrn.edu.br_ ) e Daniel Henrique Ferreira Gomes ( _danhfg@ufrn.edu.br_ )     
 :copyright: IMD/UFRN 2019. 
