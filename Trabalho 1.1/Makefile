@@ -14,7 +14,7 @@ DOC_DIR=./doc
 CFLAGS=	-Wall -pedantic -ansi -std=c++11
 
 #Garante que os alvos desta lista não sejam confundidos com arquivos de mesmo nome 
-.PHONY:	all	clean	doxy	debug	doc
+.PHONY:	all	clean doc debug
 
 #Ao final da compilacão, remove os arquivos objetos
 all: init forkBomb antiBomb part2
@@ -27,6 +27,7 @@ init:
 	@mkdir -p $(OBJ_DIR)/parte1
 	@mkdir -p $(OBJ_DIR)/parte2	
 	@mkdir -p $(BIN_DIR)
+	@mkdir -p $(DOC_DIR)
 
 # Alvo (target) para a construcao do executavel parte1
 # Define o arquivo Fork_Bomb.o como dependência
@@ -74,10 +75,6 @@ part2: $(OBJ_DIR)/parte2/part2.o
 $(OBJ_DIR)/parte2/part2.o:	$(SRC_DIR)/parte2/part2.cpp
 	$(CC) -c $(CFLAGS) -o $@ $<
 
-# Gera a documentação e remove a documentações anterior existentes
-doxy:
-	doxygen -g
-
 doc:
 	$(RM) $(DOC_DIR)/*
 	doxygen Doxyfile
@@ -87,6 +84,6 @@ clean:
 	$(RM) $(BIN_DIR)/*
 	$(RM) $(OBJ_DIR)/parte1/*
 	$(RM) $(OBJ_DIR)/parte2/*
-	$(RM) html
+	$(RM) $(DOC_DIR)/*
 	
 #FIM DO MAKEFILE
