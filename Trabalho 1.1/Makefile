@@ -17,10 +17,10 @@ CFLAGS=	-Wall -pedantic -ansi -std=c++11
 .PHONY:	all	clean doc debug
 
 #Ao final da compilacão, remove os arquivos objetos
-all: init forkBomb antiBomb part2
+all: init forkBomb antiBomb main
 
 debug:	CFLAGS += -g -O0
-debug:	forkBomb antiBomb part2 
+debug:	forkBomb antiBomb main 
 
 # Cria a pasta/diretório bin e a obj
 init:

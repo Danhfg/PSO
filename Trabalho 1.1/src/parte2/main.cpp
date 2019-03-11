@@ -13,8 +13,7 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
-
-#include "arvore.cpp"
+#include "tree.cpp"
 
 #define NMAX 80
 
@@ -39,6 +38,7 @@ int main() {
     struct timeval tv;
     char buf[NMAX];
     int nRead, num_bytes, fd_stdin;
+    printf("Hello, welcome to the hierarchy of processes, to get hierarchy tree relative some process, just enter the PID of the desired process at any time.\nIn addition, if you want to get the total number of processes in the system and the total number of processes per system user, simply do not enter anything that periodically the program will print this information on the screen!!!!\n");
 
     tv.tv_sec = 12;
     tv.tv_usec = 0;
@@ -46,7 +46,6 @@ int main() {
         fd_stdin = fileno(stdin);
         FD_ZERO(&rfds);
         FD_SET(fileno(stdin), &rfds);
-        printf("Hello, welcome to the hierarchy of processes, to get hierarchy tree relative some process, just enter the PID of the desired process at any time.\nIn addition, if you want to get the total number of processes in the system and the total number of processes per system user, simply do not enter anything that periodically the program will print this information on the screen!!!!\n");
         printf("Enter some PID(Press 0 to stop): ");
         fflush(stdout);
         nRead = select(fd_stdin + 1, &rfds, NULL, NULL, &tv);
