@@ -14,10 +14,6 @@ Implementar na BeagleBone um programa que evite o fork bomb.
 * Capturar mensagens de exceção geradas.
 * Configurar parâmetro correspondente ao nº de processos suportados pelo programa.
 
-### Imagens de Testes
-
-![](/image/print_antibomb_BBB.png)
-
 ### Hierarquia de Processos (Parte 2)
 
 #### Objetivo
