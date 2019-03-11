@@ -98,7 +98,7 @@ list<int> listOfProcess(){
  */ 
 string getJsonTree(long pid)
 {
-    string jsonTree = "{ PID: " + to_string(pid) + ", CHILDREN: [";
+    string jsonTree = "{ \"PID\" : " + to_string(pid) + ", \"CHILDREN\" : [";
     list<int> process = listOfProcess();
 
     for(list<int>::iterator it = process.begin(); it != process.end(); ++it)
