@@ -48,7 +48,7 @@ Em seguida, serão criados os seguintes arquivos binários (executáveis):
 | ---------- | ------------- |
 |`antiBomb` 	|Programa que impede que um fork bomb cause danos.  
 |`forkBomb` 	|Programa fork bomb que implementa o ataque de negação de serviço (DDos).  
-|`part2` 	|Programa que implementa o objetivo da parte 2 deste trabalho.  
+|`main` 	|Programa que implementa o objetivo da parte 2 deste trabalho.  
   
 Diante disso, basta executa o respectivo código de acordo como o nome do executável. Logo, caso seja o `forkBomb`  
 
@@ -60,10 +60,10 @@ Caso contrário, se for o executável `antiBomb`
 ```
 $ ./bin/antiBomb
 ```
-Ou, por fim, se for executável `part2`  
+Ou, por fim, se for executável `main`  
 
 ```
-$ ./bin/part2
+$ ./bin/main
 ```  
   
 Além disso, caso deseje ver a documentação, execute  
