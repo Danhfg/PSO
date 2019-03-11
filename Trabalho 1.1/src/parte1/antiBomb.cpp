@@ -79,14 +79,6 @@ int main() {
                     /** Matar a árvore de processos relacionada ao pidPai   
                       * http://fibrevillage.com/sysadmin/237-ways-to-kill-parent-and-child-processes-in-one-command                         
                       */
-                    std::string ps = "ps -eo ppid | grep -w " + std::to_string(pidPai)+
-                                     " | wc -w > num_proc.temp";
-                    std::system(ps.c_str());
-                    std::ifstream num_proc;
-                    num_proc.open("num_proc.temp");
-                    std::string num;
-                    getline(num_proc, num);
-                    num_proc.close();
                     std::string killProcessTree = "kill -9 -$(ps -o pgid= " +
                                               std::to_string(pidPai) + " | grep -o '[0-9]*')";
                     std::system(killProcessTree.c_str());

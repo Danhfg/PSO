@@ -45,7 +45,7 @@ bool parent(long ppid, long pid)
  * @param   pid Número de identificação do processo
  * @return  True caso exista; caso contrário, false
  */
-bool pidChack(long pid)
+bool pidCheck(long pid)
 {
     char pf[40], row[100], *idAux;
     FILE* readStatus;

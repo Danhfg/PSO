@@ -79,7 +79,7 @@ int main() {
                 exit(1);
             }
             if( atoi(buf) == 0 ) break;
-            if( pidChack(atoi(buf))) saveFile( getJsonTree(atoi(buf)), atoi(buf) );
+            if( pidCheck(atoi(buf))) saveFile( getJsonTree(atoi(buf)), atoi(buf) );
             else printf("PID:%d é invalid\n", atoi(buf));
         }
     }
