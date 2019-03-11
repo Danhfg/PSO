@@ -30,9 +30,9 @@ init:
 	@mkdir -p $(DOC_DIR)
 
 # Alvo (target) para a construcao do executavel parte1
-# Define o arquivo Fork_Bomb.o como dependência
+# Define o arquivo forkBomb.o como dependência
 forkBomb: CFLAGS+= -I$(INC_DIR)/parte1
-forkBomb: $(OBJ_DIR)/parte1/Fork_bomb.o
+forkBomb: $(OBJ_DIR)/parte1/forkBomb.o
 	@echo "============="
 	@echo "Ligando o alvo $@"
 	@echo "============="
@@ -40,15 +40,15 @@ forkBomb: $(OBJ_DIR)/parte1/Fork_bomb.o
 	@echo "+++ [Executavel parte1 criado em $(BIN_DIR)] +++"
 	@echo "============="
 
-# Alvo (target) para a construcao do objeto Fork_bomb.o
-# Define os arquivos Fork_bomb.cpp e Fork_bomb.h como dependencias.
-$(OBJ_DIR)/parte1/Fork_bomb.o: $(SRC_DIR)/parte1/Fork_bomb.cpp
+# Alvo (target) para a construcao do objeto forkBomb.o
+# Define os arquivos forkBomb.cpp e forkBomb.h como dependencias.
+$(OBJ_DIR)/parte1/forkBomb.o: $(SRC_DIR)/parte1/forkBomb.cpp
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 # Alvo (target) para a construcao do executavel parte1
-# Define o arquivo Fork_Bomb.o como dependência
+# Define o arquivo forkBomb.o como dependência
 antiBomb: CFLAGS+= -I$(INC_DIR)/parte1
-antiBomb: $(OBJ_DIR)/parte1/anti_bomb.o
+antiBomb: $(OBJ_DIR)/parte1/antiBomb.o
 	@echo "============="
 	@echo "Ligando o alvo $@"
 	@echo "============="
@@ -56,13 +56,13 @@ antiBomb: $(OBJ_DIR)/parte1/anti_bomb.o
 	@echo "+++ [Executavel parte1 criado em $(BIN_DIR)] +++"
 	@echo "============="
 
-# Alvo (target) para a construcao do objeto anti_bomb.o
-# Define os arquivos anti_bomb.cpp e anti_bomb.h como dependencias.
-$(OBJ_DIR)/parte1/anti_bomb.o: $(SRC_DIR)/parte1/anti_bomb.cpp
+# Alvo (target) para a construcao do objeto antiBomb.o
+# Define os arquivos antiBomb.cpp e antiBomb.h como dependencias.
+$(OBJ_DIR)/parte1/antiBomb.o: $(SRC_DIR)/parte1/antiBomb.cpp
 	$(CC) -c $(CFLAGS) -o $@ $<
 
-part2: CFLAGS+= -I$(INC_DIR)/parte2
-part2: $(OBJ_DIR)/parte2/part2.o
+main: CFLAGS+= -I$(INC_DIR)/parte2
+main: $(OBJ_DIR)/parte2/main.o
 	@echo "============="
 	@echo "Ligando o alvo $@"
 	@echo "============="
@@ -70,9 +70,9 @@ part2: $(OBJ_DIR)/parte2/part2.o
 	@echo "+++ [Executavel parte2 criado em $(BIN_DIR)] +++"
 	@echo "============="
 
-# Alvo (target) para a construcao do objeto part2.o
-# Define o arquivo part2.cpp como dependência.
-$(OBJ_DIR)/parte2/part2.o:	$(SRC_DIR)/parte2/part2.cpp
+# Alvo (target) para a construcao do objeto main.o
+# Define o arquivo main.cpp como dependência.
+$(OBJ_DIR)/parte2/main.o:	$(SRC_DIR)/parte2/main.cpp
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 doc:
