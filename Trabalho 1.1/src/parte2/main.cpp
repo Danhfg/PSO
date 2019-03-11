@@ -26,15 +26,15 @@ using namespace std;
  * @param pid   Número de identificação do processo
  */
 void saveFile(string jsonTree, int pid){
-    string path = "json/" + to_string(pid) + ".json";
-    ofstream out(path.c_str());
+    string file = "json/" + to_string(pid) + ".json";
+    ofstream out(file.c_str());
     out << jsonTree;
     out.close();
-    printf("TREE GENERATED WITH SUCCESS ON %s\n", path.c_str());
+    printf("TREE GENERATED WITH SUCCESS ON %s\n", file.c_str());
 }
 
 int main() {
-    //https://linux.die.net/man/3/fd_set
+    // https://linux.die.net/man/3/fd_set
     fd_set rfds;
     struct timeval tv;
     char buf[NMAX];
