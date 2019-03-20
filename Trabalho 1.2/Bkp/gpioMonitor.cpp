@@ -1,5 +1,7 @@
 #include "MonitorarAPI.cpp"
 
+#include <vector>
+
 using namespace std;
 
 int main(int argc, char *argv[]){
@@ -8,32 +10,79 @@ int main(int argc, char *argv[]){
 	long freeMem, maxMen;
 	float percent;
 	ifstream infoMem, infoPid;
+	ifstream cpuLog;
 	string aux;
 	power light = off;
+	int monitorarMemoria_ou_CPU;
+	double totalCPU = 0;
+	string percentCPU;
+	vector<double> percentVectorCPU;
 
 	while (true) {
 
-		system("cat /proc/meminfo | head -2 | awk '{print $2}' > monitorAux.txt");
-		infoMem.open("monitorAux.txt");
+		cout << endl 
+			<< "Qual recurso voce deseja monitorar? memoria ou CPU? " 
+			<< endl
+			<< "Digite 1 caso queira que seja a memoria. Se não, digite 2 para que a CPU seja monitorada... "
+			<< endl;
 
-		if (infoMem.is_open()) {
+		cin >> 	monitorarMemoria_ou_CPU;
 
-			getline(infoMem, aux);
-			maxMen = stoi(aux);
+		if( monitorarMemoria_ou_CPU == 1){ /// MONITORANDO O USO DA MEMÓRIA
 
-			getline(infoMem, aux);
-			freeMem = stoi(aux);
+			system("cat /proc/meminfo | head -2 | awk '{print $2}' > mem.log");
+			infoMem.open("mem.log");
 
-			infoMem.close();
-			system("rm monitorAux.txt");
-		}
+			if (infoMem.is_open()) {
+
+				getline(infoMem, aux);
+				maxMen = stoi(aux);
+
+				getline(infoMem, aux);
+				freeMem = stoi(aux);
+
+				infoMem.close();
+				system("rm mem.log");
+			}
 			else {
-			cout << "Falha na leitura do arquivo de info de memória!" << endl;
-			system("rm monitorAux.txt");
-			exit(1); 
+				cerr << "Falha na leitura do arquivo que contem as infomacoes sobre a memoria!" << endl;
+				system("rm mem.log");
+				exit(1); 
+			}
+
+		}
+		else{ /// MONITORANDO O USO DA CPU
+
+			std::system("ps aux --sort=-%cpu | awk '{ print $3 }' > cpu.log" );
+			cpuLog.open("cpu.log");
+
+			if( cpuLog.is_open() ){
+
+				cpuLog >> percentCPU;
+
+				while( cpuLog >> percentCPU ){
+
+					percentVectorCPU.push_back( std::stod(percentCPU) );	
+				}
+
+				for( auto& n: percentVectorCPU){
+					totalCPU += n;
+				}
+			}
+			else {
+				cerr << "Falha na leitura do arquivo que contem as infomacoes sobre a CPU!" << endl;
+				system("rm cpu.log");
+				exit(1); 
+			}
+
 		}
 
-		percent = (float)(maxMen - freeMem) *100 / maxMen;
+
+		if( monitorarMemoria_ou_CPU == 1)
+			percent = (float)(maxMen - freeMem) *100 / maxMen;
+		else
+			percent = totalCPU;
+
 
 		if(percent < 25.0f) {
 			setVermelho(off);
@@ -74,7 +123,7 @@ int main(int argc, char *argv[]){
 					usleep(3500000);
 				}
 				else {
-					cout << "Falha na leitura do arquivo de info do PID!" << endl;
+					cerr << "Falha na leitura do arquivo de info do PID!" << endl;
 					system("rm killAux.txt");
 					exit(2);
 				}

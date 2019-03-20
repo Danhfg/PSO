@@ -1,5 +1,9 @@
 # Trabalho 1.2 - Tratamento de Sinais e GPIO
 
+## Introdução  
+
+Nesta pasta contém a implementação dos programas relativos ao trabalho 1.2.
+
 ### Objetivo
 Monitoramento (e finalização) de processos fazendo uso de GPIO na BeagleBoneBoard.
 
@@ -14,7 +18,7 @@ percentual de uso desse(s) recurso(s):
 * Quando o recurso tiver ultrapassado os 75% um "botão do pânico" deve ser acionado e o processo que estiver causando o aumento do uso do recurso deverá ser terminado.
 * Ao ser acionado o botão do pânico todos os LEDs ficarão apagados por "X" segundos e depois segue a lógica citada.
   
-#### Para compilar use:
+## Compilação e execução  
 ```
 $ g++ -std=c++11 gpioMonitor.cpp -o gpioMonitor
 $ g++ -std=c++11 memfill.cpp -o memfill
@@ -27,10 +31,14 @@ $ ./gpioMonitor
 Em outra janela do bash:
 ```
 $ ./memfill
-```
-### Autores:
-* Joel Felipe - joelfelipe07@gmail.com
-* Hugo Oliveira - hugotholiveira@hotmail.com
+```  
+  
+Além disso, caso deseje ver a documentação, execute  
 
-### Disponível em: 
-https://github.com/joelffg/ProjetoSO/tree/master/Trabalho%201.2
+```
+$ make doc
+```  
+Em seguida, vá até a pasta **doc** e abra o arquivo `index.html` em um navegador qualquer.   
+## Autores  
+Samuel Lucas de Moura Ferino ( _samuellucas97@ufrn.edu.br_ ) e Daniel Henrique Ferreira Gomes ( _danhfg@ufrn.edu.br_ )     
+:copyright: IMD/UFRN 2019. 
