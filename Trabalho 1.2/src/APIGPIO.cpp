@@ -1,12 +1,22 @@
-#include <string.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
+/**
+ * @file    APIGPIO.cpp
+ * @brief   Contém as funções que escreve e retorna o valor ou direção de uma porta GPIO
+ */
+
+#include <cstring>
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 
 using namespace std;
 
+/**
+ * @brief   Descobre o valor da porta GPIO especificada
+ * @param   gpio    Número da porta GPIO a ser usada
+ * @return  Valor na porta GPIO especificada
+ */
 int getValue(int gpio) {
     ifstream valueFile;
 
@@ -25,6 +35,12 @@ int getValue(int gpio) {
     }
 }
 
+/**
+ * @brief   Modifica o valor da porta GPIO especificada
+ * @param   gpio    Número da porta GPIO a ser usada
+ * @param   value   Valor a ser colocado na porta
+ * @return  True caso foi possível modificar o valor ou false caso contrário
+ */
 bool setValue(int gpio, string value) {
     ofstream valueFile;
 
@@ -42,6 +58,11 @@ bool setValue(int gpio, string value) {
     }
 }
 
+/**
+ * @brief   Descobre a direção da porta GPIO especificada
+ * @param   gpio    Número da porta GPIO a ser usada
+ * @return  Direção da porta GPIO especificada
+ */
 string getDirection(int gpio) {
     ifstream directionCheck;
 
@@ -59,6 +80,12 @@ string getDirection(int gpio) {
     }
 }
 
+/**
+ * @brief   Modifica a direção da porta GPIO especificada
+ * @param   gpio    Número da porta GPIO a ser usada
+ * @param   direction   Direção a ser colocada na porta
+ * @return  True caso foi possível modificar a direção ou false caso contrário
+ */
 bool setDirection(int gpio, string direction) {
     ofstream directionFile;
 

@@ -39,7 +39,7 @@ int main(int argc, char *argv[]){
 		system("rm fillAux.txt");
 	}
 	else {
-		cout << "Falha na leitura do arquivo de info de memória!" << endl;
+		cerr << "Falha na leitura do arquivo de info de memória!" << endl;
 		system("rm fillAux.txt");
 		exit(1); 
 	}

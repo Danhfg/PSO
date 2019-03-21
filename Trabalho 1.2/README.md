@@ -2,29 +2,21 @@
 
 ## Introdução  
 
-Nesta pasta contém a implementação dos programas relativos ao trabalho 1.1, o qual era divido em 2 partes.
+Nesta pasta contém a implementação dos programas relativos ao trabalho 1.2.
 
-### Fork Bomb :bomb: (Parte 1)
+## Objetivo
+Monitoramento (e finalização) de processos fazendo uso de GPIO na BeagleBoneBoard.
 
-#### Objetivo
-Implementar na BeagleBone um programa que evite o fork bomb.
-
-#### Requisitos
-* Evitar o travamento ao executar while(1) fork();
-* Capturar mensagens de exceção geradas.
-* Configurar parâmetro correspondente ao nº de processos suportados pelo programa.
-
-### Hierarquia de Processos (Parte 2)
-
-#### Objetivo
-Implementar um programa que através de um processamento na pasta /proc imprima periodicamente informações sobre os processos.
-
-#### Requisitos
-* Dado o ID de um processo (PID) imprimir a árvore de hierarquia (filhos, netos, bisnetos, tataranetos, etc.).
-* A saída deve estar estruturada em algum formato conhecido (JSON, csv, etc) e de fácil manipulação.
-* Imprimir a cada x instantes de tempo:
-  * Número total de processos no sistema operacional
-  * Número total de processos no sistema operacional organizados por usuário
+## Requisitos:
+* Executar programa que em execução (processo) consuma de forma crescente um determinado recurso (CPU, memória, etc.);
+* Usar GPIOs da BeagleBoneBoard para sinalizar, através de LEDs, o 
+percentual de uso desse(s) recurso(s):
+	1. LED verde acende se até 25% do recurso estiver sendo usado;
+	2. LED amarelo acende se o uso do recurso estiver entre 25% e 50%;
+	3. LED vermelho acende se o uso do recurso estiver entre 50% e 75%;
+	4. Acima de 75% todos os LEDs ficarão piscando.
+* Quando o recurso tiver ultrapassado os 75% um "botão do pânico" deve ser acionado e o processo que estiver causando o aumento do uso do recurso deverá ser terminado.
+* Ao ser acionado o botão do pânico todos os LEDs ficarão apagados por "X" segundos e depois segue a lógica citada.
 
 ## Compilação e execução  
 
@@ -42,25 +34,19 @@ Em seguida, serão criados os seguintes arquivos binários (executáveis):
 
 | Nome do executável: | Descrição: | 
 | ---------- | ------------- |
-|`antiBomb` 	|Programa que impede que um fork bomb cause danos.  
-|`forkBomb` 	|Programa fork bomb que implementa o ataque de negação de serviço (DDos).  
-|`main` 	|Programa que implementa o objetivo da parte 2 deste trabalho.  
+|`gpioMonitor` 	|Programa que impede que um fork bomb cause danos.  
+|`memfill` 	|Programa fork bomb que implementa o ataque de negação de serviço (DDos).  
   
-Diante disso, basta executa o respectivo código de acordo como o nome do executável. Logo, caso seja o `forkBomb`  
+Diante disso, execute como super usuário o arquivo binário `gpioMonitor`  
 
 ```
-$ ./bin/forkBomb
+$ ./bin/gpioMonitor
 ```
-Caso contrário, se for o executável `antiBomb`  
+E, em outra janela do bash, execute o arquivo binário `memfill`  
 
 ```
-$ ./bin/antiBomb
+$ ./bin/memfill
 ```
-Ou, por fim, se for executável `main`  
-
-```
-$ ./bin/main
-```  
   
 Além disso, caso deseje ver a documentação, execute  
 
