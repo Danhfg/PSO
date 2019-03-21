@@ -1,4 +1,4 @@
-# Trabalho 1.1 - Manipulação de Processos
+# Trabalho 1.2 - Tratamento de Sinais e GPIO
 
 ## Introdução  
 
