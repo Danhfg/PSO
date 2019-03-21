@@ -16,8 +16,8 @@ enum power {
  * @param	p	Valor a ser colocado na porta GPIO que está o led vermelho
  */
 void setVermelho(power p){
-	setDirection( 60, "out" );
-	setValue( 60, to_string(p) );
+	setDirection( 50, "out" );
+	setValue( 50, to_string(p) );
 }
 
 /**
@@ -25,8 +25,8 @@ void setVermelho(power p){
  * @param	p	Valor a ser colocada na porta GPIO que está o led amarelo
  */
 void setAmarelo(power p){
-	setDirection( 50, "out" );
-	setValue( 50, to_string(p) );
+	setDirection( 23, "out" );
+	setValue( 23, to_string(p) );
 }
 
 /**
@@ -34,8 +34,8 @@ void setAmarelo(power p){
  * @param	p	Valor a ser colocada na porta GPIO que está o led verde
  */
 void setVerde(power p){
-	setDirection( 51, "out" );
-	setValue( 51, to_string(p) );
+	setDirection( 4, "out" );
+	setValue( 4, to_string(p) );
 }
 
 /**
