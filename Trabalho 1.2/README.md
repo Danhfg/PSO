@@ -34,8 +34,8 @@ Em seguida, serão criados os seguintes arquivos binários (executáveis):
 
 | Nome do executável: | Descrição: | 
 | ---------- | ------------- |
-|`gpioMonitor` 	|Programa que impede que um fork bomb cause danos.  
-|`memfill` 	|Programa fork bomb que implementa o ataque de negação de serviço (DDos).  
+|`gpioMonitor` 	|Programa que monitora o uso da memória.  
+|`memfill` 	|Programa provoca um estresse de uso de memória.  
   
 Diante disso, execute como super usuário o arquivo binário `gpioMonitor`  
 
