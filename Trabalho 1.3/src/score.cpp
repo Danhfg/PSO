@@ -2,8 +2,9 @@
 #include "../include/cur.h"
 #include "../include/cubePoint.h"
 
-void Score::printMessage()
-{
+void 
+Score::printMessage(){
+   
    Cur c;
    CubePoint p;
 

@@ -13,22 +13,22 @@ int main(int argc, char *argv[]){
 	ifstream cpuLog;
 	string aux;
 	power light = off;
-	// int monitorarMemoria_ou_CPU;
-	// double totalCPU = 0;
-	// string percentCPU;
-	// vector<double> percentVectorCPU;
+	int monitorarMemoria_ou_CPU;
+	double totalCPU = 0;
+	string percentCPU;
+	vector<double> percentVectorCPU;
 
 	while (true) {
 
-	// 	cout << endl 
-	// 		<< "Qual recurso voce deseja monitorar? memoria ou CPU? " 
-	// 		<< endl
-	// 		<< "Digite 1 caso queira que seja a memoria. Se não, digite 2 para que a CPU seja monitorada... "
-	// 		<< endl;
+		cout << endl 
+			<< "Qual recurso voce deseja monitorar? memoria ou CPU? " 
+			<< endl
+			<< "Digite 1 caso queira que seja a memoria. Se não, digite 2 para que a CPU seja monitorada... "
+			<< endl;
 
-	// 	cin >> 	monitorarMemoria_ou_CPU;
+		cin >> 	monitorarMemoria_ou_CPU;
 
-	// 	if( monitorarMemoria_ou_CPU == 1){ /// MONITORANDO O USO DA MEMÓRIA
+		if( monitorarMemoria_ou_CPU == 1){ /// MONITORANDO O USO DA MEMÓRIA
 
 			system("cat /proc/meminfo | head -2 | awk '{print $2}' > mem.log");
 			infoMem.open("mem.log");
@@ -50,38 +50,38 @@ int main(int argc, char *argv[]){
 				exit(1); 
 			}
 
-		// }
-		// else{ /// MONITORANDO O USO DA CPU
+		}
+		else{ /// MONITORANDO O USO DA CPU
 
-		// 	std::system("ps aux --sort=-%cpu | awk '{ print $3 }' > cpu.log" );
-		// 	cpuLog.open("cpu.log");
+			std::system("ps aux --sort=-%cpu | awk '{ print $3 }' > cpu.log" );
+			cpuLog.open("cpu.log");
 
-		// 	if( cpuLog.is_open() ){
+			if( cpuLog.is_open() ){
 
-		// 		cpuLog >> percentCPU;
+				cpuLog >> percentCPU;
 
-		// 		while( cpuLog >> percentCPU ){
+				while( cpuLog >> percentCPU ){
 
-		// 			percentVectorCPU.push_back( std::stod(percentCPU) );	
-		// 		}
+					percentVectorCPU.push_back( std::stod(percentCPU) );	
+				}
 
-		// 		for( auto& n: percentVectorCPU){
-		// 			totalCPU += n;
-		// 		}
-		// 	}
-		// 	else {
-		// 		cerr << "Falha na leitura do arquivo que contem as infomacoes sobre a CPU!" << endl;
-		// 		system("rm cpu.log");
-		// 		exit(1); 
-		// 	}
+				for( auto& n: percentVectorCPU){
+					totalCPU += n;
+				}
+			}
+			else {
+				cerr << "Falha na leitura do arquivo que contem as infomacoes sobre a CPU!" << endl;
+				system("rm cpu.log");
+				exit(1); 
+			}
 
-		// }
+		}
 
 
-		// if( monitorarMemoria_ou_CPU == 1)
+		if( monitorarMemoria_ou_CPU == 1)
 			percent = (float)(maxMen - freeMem) *100 / maxMen;
-		// else
-		// 	percent = totalCPU;
+		else
+			percent = totalCPU;
 
 
 		if(percent < 25.0f) {

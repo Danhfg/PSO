@@ -1,12 +1,13 @@
 #include"../include/cubePoint.h"
 #include<cstdio>
-void CubePoint::printPoint()
-{
+void 
+CubePoint::printPoint(){
+	
 	Cur cur;
 	cur.saveCur();
 	cur.moveCur(x,y);
-	switch(color)
-	{
+	
+	switch(color){
 		 case BLACK     :printf("\033[40;30m  \033[0m");break;
 		 case RED       :printf("\033[41;31m  \033[0m");break;
 		 case GREEN     :printf("\033[42;32m  \033[0m");break;
@@ -19,8 +20,11 @@ void CubePoint::printPoint()
 		 default:
 		 break;
 	}
+
 	cur.resumeCur();
+
 }
+
 /*
 int main()
 {

@@ -4,25 +4,25 @@
 #include <iostream>
 using namespace std;
 
-//Ê¹ÓÃËæ»úÊıµÄÒ»¸ö´íÎóµÄ·½Ê½¾ÍÊÇÃ¿´Î¶¼È¥srand,ÕâÑùµ±¶à´Îµ÷ÓÃºÜ½Ó½üÊ±Öµ¾Í»á
-//Ò»Ñù£¨ºÍÊ±¼ä¹ØÏµºÜ´ó£©¶øsrandÒ»´Î¾Í²»´æÔÚÕâ¸öÎÊÌâÁË¡£
-Rand::Rand()
-{
+//Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä·ï¿½Ê½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½Î¶ï¿½È¥srand,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îµï¿½ï¿½ÃºÜ½Ó½ï¿½Ê±Öµï¿½Í»ï¿½
+//Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ïµï¿½Ü´ó£©¶ï¿½srandÒ»ï¿½Î¾Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¡ï¿½
+Rand::Rand(){
     srand(unsigned(time(0)));
 }
 
-int Rand::randNum(int x,int y)
-{
+int 
+Rand::randNum(int x,int y){
     int randNum;
     double random(double,double);
     randNum = int(random(x,y));
     return randNum;
 }
 
-double random(double start,double end)
-{
+double 
+random(double start,double end){
     return start + (end - start)*rand()/(RAND_MAX + 1.0);
 }
+
 /*
 int main()
 {

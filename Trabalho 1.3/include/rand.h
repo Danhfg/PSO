@@ -1,11 +1,13 @@
 #ifndef RAND_H
 #define RAND_H
-class Rand
-{
-public:
-    //·µ»ØÒ»¸öxµ½yÖ®¼äµÄËæ»úÊý
-    int randNum(int x,int y);
-    Rand();
+
+class Rand{
+
+    public:
+        Rand();
+        //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½xï¿½ï¿½yÖ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        int randNum(int x,int y);
+        
 };
 
 #endif

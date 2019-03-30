@@ -9,60 +9,62 @@ enum MARK{
 };
 
 
-class Game
-{
-private:
-    int m_penal[24][17];
-	color m_color[24][17];///////////////////////
-    Context* m_graph;
+class Game{
+        
+    private:
+        int m_penal[24][17];
+        color m_color[24][17];///////////////////////
+        Context* m_graph;
 
-	Context* nextGraph;/////////////////
-	MARK mark;//////////////////////////
-public:
-    int x;
-    int y;//µ±Ç°·½¿éµÄÎ»ÖÃ£¬·½¿éÒÆ¶¯»òÕßÐý×ª³É¹¦ºó²Å¿ÉÒÔÉèÖÃÕâ¸öÖµ
+        Context* nextGraph;/////////////////
+        MARK mark;//////////////////////////
+    
+    public:
+        int x;
+        int y;//ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½É¹ï¿½ï¿½ï¿½Å¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
 
-private:
-    Score s;
-private:
-    //»Ö¸´ÉèÖÃ£¨·½¿é»áÌ½Ë÷ÏÂÒ»¸öÎ»ÖÃÊÇ·ñºÏ·¨£¬²»ºÏ·¨Ðè»Ö¸´Ãæ°å£©
-    bool recoverPenal();
-    //ÊÇ·ñ×ÅÂ½(ÊÇ·ñÅöµ½ÏÂ±ß)
-    bool isAttachBottom();
-    //ÊÇ·ñÅöµ½×ó±ß
-    bool isAttachLeft();
-    //ÊÇ·ñÅöµ½ÓÒ±ß
-    bool isAttachRight();
-    //Ëæ»ú»ñÈ¡·½¿éÐÎ×´
-    char getShape();
-    //ÓÃ·½¿éÊý×é¸øÃæ°åÊý×é¸³Öµ
-    bool setPenal();
-    //·½¿é¶¯¹ýºóÒª°ÑÒÅÁôÃæ°åÐÅÏ¢²Á³ý
-    bool erasePenal();
-public:
-    Game();
+    private:
+        Score s;
+    
+    private:
+        //ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ç·ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½å£©
+        bool recoverPenal();
+        //ï¿½Ç·ï¿½ï¿½ï¿½Â½(ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â±ï¿½)
+        bool isAttachBottom();
+        //ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        bool isAttachLeft();
+        //ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò±ï¿½
+        bool isAttachRight();
+        //ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´
+        char getShape();
+        //ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é¸³Öµ
+        bool setPenal();
+        //ï¿½ï¿½ï¿½é¶¯ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½
+        bool erasePenal();
+    
+    public:
+        Game();
+        ~Game();
 
-	~Game();
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½
+        void createCube();
+        //ï¿½Æ¶ï¿½ï¿½Ä·ï¿½ï¿½ï¿½,ï¿½Æ¶ï¿½ï¿½Ä¹ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½m_penalï¿½Ä¸Ä±ï¿½
+        void move(int dir);
+        //ï¿½ï¿½×ªï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        void roll();
+        //ï¿½ï¿½ï¿½ï¿½Í£Ö¹
+        void stop();
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        void erase();
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¹ï¿½ï¿½
+        void down(int level);
 
-    //Ëæ»ú´´½¨·½¿éµÄ·½·¨
-    void createCube();
-    //ÒÆ¶¯µÄ·½·¨,ÒÆ¶¯µÄ¹ý³ÌÖÐ¶Ôm_penalµÄ¸Ä±ä
-    void move(int dir);
-    //Ðý×ªµÄ·½·¨¡£¡£¡£
-    void roll();
-    //·½¿éÍ£Ö¹
-    void stop();
-    //²Á³ýÂúÐÐ
-    void erase();
-    //²Á³ýÍêÉÏÃæµÄÍ¼ÐÎÕû¿é×¹Âä
-    void down(int level);
+        void printNextCube(Context* m_graph);
+        void gameInit();
 
-	void printNextCube(Context* m_graph);
-	void gameInit();
+        MARK getMark();
+        void setMark( MARK );
 
-MARK getMark();
-void setMark( MARK );
-
-void printHelep();
+        void printHelep();
 
 };

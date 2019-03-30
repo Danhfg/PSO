@@ -26,13 +26,13 @@ int getValue(int gpio) {
     if(valueFile.fail()) {
         valueFile.close();
     }
-    // else {
+    else {
         int readValue;
         valueFile >> readValue;
 
         valueFile.close();
         return readValue;
-    // }
+    }
 }
 
 /**
@@ -72,12 +72,12 @@ string getDirection(int gpio) {
     if(directionCheck.fail()) {
         directionCheck.close();
     }
-    // else {
+    else {
         string readValue;
         directionCheck >> readValue;
 
         return readValue;
-    // }
+    }
 }
 
 /**

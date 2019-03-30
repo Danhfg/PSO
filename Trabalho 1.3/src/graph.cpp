@@ -1,7 +1,8 @@
 #include "../include/graph.h"
 #include <unistd.h>
-void Gbase::printG(int color)
-{
+
+void 
+Gbase::printG(int color){
     int i,j;
     CubePoint p;
     for(i = x; i < x+3; i++)
@@ -15,33 +16,38 @@ void Gbase::printG(int color)
             }
         }
 }
-int Gbase::move(int dir)
-{
-	switch(dir)
-	{
+
+int 
+Gbase::move(int dir){
+	
+    switch(dir){
 		case DOWN:x++;break;
 		case LEFT:y--;break;
 		case RIGHT:y++;break;
 		default:
 				break;
 	}
+    
     return 0;
+
 }
 
-int Gbase::roll()
-{
+int 
+Gbase::roll(){
+
     int i,j;
     int b[3][3];
-    for(i = 0; i < 3; i++)
-        for(j = 0; j < 3; j++)
-        {
+
+    for(i = 0; i < 3; i++){
+        for(j = 0; j < 3; j++) {
             b[2-j][i] = a[i][j];
         }
-    for(i = 0; i < 3; i++)
+    }    
+
+    for(i = 0; i < 3; i++){
         for(j = 0; j < 3; j++)
         {
             a[i][j] = b[i][j];
         }
+    }    
 }
-
-
