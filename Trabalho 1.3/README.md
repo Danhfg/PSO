@@ -31,7 +31,7 @@ Implementar um controle de video game (joystick) usando a BeagleBone Black e as 
 
 ## Sobre o jogo  
 
-Trata-se de uma implementação em terminal do famoso jogo eletrônico chamado [Tetris](https://pt.wikipedia.org/wiki/Tetris)
+Trata-se de uma implementação em terminal do famoso jogo eletrônico chamado [Tetris](https://pt.wikipedia.org/wiki/Tetris).
 
 
 ![](https://github.com/fanux/tetris/blob/master/img/tetris.png?raw=true)  

@@ -1,12 +1,14 @@
 #include <iostream>
-using namespace std;
 #include <stdio.h>
-#include "cubePoint.h"
 #include <stdlib.h>
+
+#include "CubePoint.h"
+
 #define DOWN 0
 #define LEFT 1
 #define RIGHT 2
 
+using namespace std;
 
 class Gbase{
 
