@@ -15,7 +15,10 @@ pthread_mutex_t	mutex_lock;
 int num = 0;
 
 static int stop_flag;
-//为了只调用srand函数一次，这样时间相近产生的随机数就不会重复
+/**
+ *  Para chamar somente a função srand uma vez, 
+ * tais números aleatórios gerados por tempo similar não serão repetidos
+*/
 static Rand r;
 
 
@@ -33,7 +36,7 @@ Game::printNextCube(Context* graph){
     cout<<"next : ";
     c.resumeCur();
 
-    int a[3][3] = {0};  //获取方块数组
+    int a[3][3] = {0};  // Obter o array de quadrados
     memcpy(a,graph->getArray(),CUBE_SIZE);
 
     for(i = x; i < x+3; i++){
@@ -185,7 +188,7 @@ bool
 Game::erasePenal(){
 
     int i,j;
-    int b[3][3] = {0}; //获取方块数组
+    int b[3][3] = {0}; // Obter o array quadrado
 
     m_graph->printG(CLEAR);
     memcpy(b,m_graph->getArray(),CUBE_SIZE);
@@ -204,15 +207,14 @@ bool
 Game::recoverPenal(){
 
     int i,j;
-    int b[3][3] = {0}; //获取方块数组
+    int b[3][3] = {0}; // Obter o array quadrado
 
     memcpy(b,m_graph->getArray(),CUBE_SIZE);
     
     for(i = x; i < x + 3; i++){
-        for(j = y; j < y + 3; j++)
-        {
+        for(j = y; j < y + 3; j++){
             m_penal[i][j] += b[i-x][j-y];
-		m_color[i][j] = m_graph->getColor();///////////////////////////
+		    m_color[i][j] = m_graph->getColor();
         }
     }
 
