@@ -4,62 +4,85 @@
 #include <thread>
 #include <fstream>
 
-void coletaBotao( ){
+#include <iostream>
 
-    std::ofstream arqConteudoBotao;
+bool le_Potenciometro = true;
+bool le_LDR = true;
+
+
+void coletaBotao( bool &conteudoBotao ){
 
     while(true){
             
-        arqConteudoBotao.open("conteudoBotao.dat");
+        conteudoBotao = buttonIsPressed();
+        std::this_thread::sleep_for (std::chrono::milliseconds(500));
 
-        if( arqConteudoBotao.is_open() != 0) /// Verificando se o arquivo foi aberto
-            arqConteudoBotao << buttonIsPressed();
-
-        arqConteudoBotao.close();
-        
-        std::this_thread::sleep_for (std::chrono::milliseconds(250));      
     }
 
 }
 
 
-void coletaPotenciometro( ){
-
-    std::ofstream arqConteudoPotenciometro;
+void coletaPotenciometro( int &conteudoPotenciometro){
 
     while(true){
 
-        arqConteudoPotenciometro.open("conteudoPotenciometro.dat");
-
-        if( arqConteudoPotenciometro.is_open() != 0) /// Verificando se o arquivo foi aberto
-            arqConteudoPotenciometro << getValuePotenciometro();
-        
-        arqConteudoPotenciometro.close();
-
-        std::this_thread::sleep_for (std::chrono::milliseconds(250));     
+        conteudoPotenciometro << getValuePotenciometro();
+        std::this_thread::sleep_for (std::chrono::milliseconds(125));
+        le_Potenciometro = !le_Potenciometro;     
     }
 
 }
 
-void coletaLDR( ){
-
-    std::ofstream arqConteudoLDR;
+void coletaLDR( int &conteudoLDR ){
 
     while(true){
 
-        arqConteudoLDR.open("conteudoLDR.dat");
-
-        if( arqConteudoLDR.is_open() != 0) /// Verificando se o arquivo foi aberto
-            arqConteudoLDR << getValueLDR();
-        
-        arqConteudoLDR.close();
-
+        conteudoLDR << getValueLDR();
         std::this_thread::sleep_for (std::chrono::milliseconds(250));        
-    
+        le_LDR = !le_LDR;
     }
 
 }
 
 
+void escrevendoEmArquivoBBBInputs(){
 
 
+    std::ofstream inputs;
+    bool conteudoBotao;
+    int conteudoPotenciometro;
+    int conteudoLDR;
+
+    while(true){
+
+        inputs.open("inputs.dat");
+
+        std::thread tBotao( coletaBotao, std::ref(conteudoBotao) );
+        std::thread tPotenciometro( coletaPotenciometro, std::ref(conteudoPotenciometro) );
+        std::thread tLDR( coletaLDR,  std::ref(conteudoLDR) );
+    
+        if( inputs.is_open() != 0){ /// Verificando se o arquivo foi aberto
+            
+            if( le_Potenciometro == true ){
+                if( conteudoPotenciometro < 500)    /// Movendo à esquerda
+                    inputs << 'a';
+                 else                               /// Movendo à direita
+                    inputs << 'd';   
+            }        
+            else if ( le_LDR == true ){
+                if( conteudoLDR > 10 )
+                    inputs << 's';
+            }    
+            else        
+                inputs << 'w';
+                
+        }
+
+        std::cout << "oi" << std::endl;
+
+        tBotao.join();
+        tPotenciometro.join();
+        tLDR.join();
+        
+    }    
+}
