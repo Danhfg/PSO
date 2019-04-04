@@ -1,10 +1,15 @@
 #include "ADC_API.h"
 #include "GPIOIN_API.h"
 
+#include <unistd.h>
 #include <thread>
 #include <fstream>
 
 #include <iostream>
+
+#define MINSPEED 1000000
+#define FRAMEWAIT 16000
+#define BDELAY 200000
 
 bool le_Potenciometro = true;
 bool le_LDR = true;
@@ -15,7 +20,9 @@ void coletaBotao( bool &conteudoBotao ){
     while(true){
             
         conteudoBotao = buttonIsPressed();
-        std::this_thread::sleep_for (std::chrono::milliseconds(500));
+
+        fflush(stdout);
+        usleep(FRAMEWAIT); 
 
     }
 
@@ -39,8 +46,8 @@ void coletaPotenciometro( int &conteudoPotenciometroAtual){
             le_Potenciometro = false;
         }
 
-        std::this_thread::sleep_for (std::chrono::milliseconds(125));
-             
+        fflush(stdout);
+        usleep(FRAMEWAIT); 
     }
 
 }
@@ -60,8 +67,11 @@ void coletaLDR( int &conteudoLDR_Atual ){
         else{
             le_LDR = false;
         }    
-
-        std::this_thread::sleep_for (std::chrono::milliseconds(250)); 
+        
+        fflush(stdout);
+        
+        int velocidade = MINSPEED - conteudoLDR_Atual* 200;
+        usleep(velocidade); 
     }
 
 }
