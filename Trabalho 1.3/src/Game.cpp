@@ -12,14 +12,10 @@
 #define PENAL_SIZE (17*24*sizeof(int))
 #define CUBE_SIZE (3*3*sizeof(int))
 
-pthread_mutex_t	mutex_lock;
 int num = 0;
 
 static int stop_flag;
-/**
- *  Para chamar somente a função srand uma vez, 
- * tais números aleatórios gerados por tempo similar não serão repetidos
-*/
+
 static Rand r;
 
 
@@ -197,7 +193,7 @@ Game::erasePenal(){
     for(i = 0; i < 3; i++){
         for(j = 0; j < 3; j++) {
             m_penal[i + x][j + y] -= b[i][j];
-		    m_color[i][j] = CLEAR;//////////////////////////
+		    m_color[i][j] = CLEAR;
         }
     }
     
@@ -227,24 +223,17 @@ bool
 Game::setPenal(){
 
     int i,j;
-    int b[3][3] = {0}; //获取方块数组
-
+    int b[3][3] = {0};
+    
     m_graph->getLocate(&x,&y);
     memcpy(b,m_graph->getArray(),CUBE_SIZE);
-    /*测试取到方块数组是否正常
-    for(i = 0;i < 3; i++)
-    {
-        for(j = 0; j < 3; j++)
-            cout<<b[i][j]<< " ";
-        cout<<endl;
-    }
-    */
+    
     for(i = x; i < x + 3; i++){
         for(j = y; j < y + 3; j++){
             m_penal[i][j] += b[i-x][j-y];
             if(m_penal[i][j] > 1){
                 cout<<"game over"<<endl;
-                //加分数统计排行榜等
+                
                 system("stty icanon echo");
                 exit(0);
             }
@@ -265,14 +254,7 @@ Game::createCube(){
 	nextGraph->draw();
 	nextGraph->setLocate(1,7);
 	printNextCube(nextGraph);
-    /*
-   for(int i = 0; i < 24; i++)
-   {
-        for(int j = 0; j < 17; j++)
-            cout << m_penal[i][j] <<" ";
-        cout << endl;
-   }
-   */
+    
 }
 
 void 
@@ -282,7 +264,7 @@ Game::move(int dir){
 		return;
 
     erasePenal();
-    pthread_mutex_lock(&mutex_lock);///////////////////////////////////////
+    pthread_mutex_lock(&mutex_lock);
     
     switch(dir){
         case DOWN:
@@ -332,16 +314,16 @@ Game::move(int dir){
 
 void 
 Game::roll(){
-    //取出方块的值，先放到一个数组中
+    
     int i,j;
     int flag = 0;
-    int b[3][3] = {0}; //获取方块数组
+    int b[3][3] = {0};
     int temp[3][3] = {0};
 
     m_graph->getLocate(&x,&y);
     memcpy(b,m_graph->getArray(),CUBE_SIZE);
     erasePenal();
-    //旋转数组
+    
     for(i = 0; i < 3; i++){
         for(j = 0; j < 3; j++)
         {
@@ -349,7 +331,7 @@ Game::roll(){
         }
     }    
 
-    //判断旋转后是否会与面板重合
+    
     for(i = 0; i < 3; i++){
         for(j = 0; j < 3; j++){
             if ( temp[i][j] == 1 && m_penal[x + i][y + j] == 1 ){
@@ -360,7 +342,7 @@ Game::roll(){
         if(flag == 1)
             break;
     }
-    //如果不重合则旋转方块，设置面板的值
+    
     if(flag == 0){
         m_graph->roll();
     }
@@ -379,7 +361,7 @@ bool
 Game::isAttachBottom(){
     int i,j;
     int cube_x,cube_y;
-    int b[3][3] = {0};  //获取方块数组
+    int b[3][3] = {0};
     int flag = false;
 
     m_graph->getLocate(&cube_x,&cube_y);
@@ -404,7 +386,7 @@ Game::isAttachLeft(){
     
     int i,j;
     int cube_x,cube_y;
-    int b[3][3] = {0}; //获取方块数组
+    int b[3][3] = {0};
     int flag = false;
 
     m_graph->getLocate(&cube_x,&cube_y);
@@ -429,7 +411,7 @@ bool
 Game::isAttachRight(){
     int i,j;
     int cube_x,cube_y;
-    int b[3][3] = {0}; //获取方块数组
+    int b[3][3] = {0};
     int flag = false;
 
     m_graph->getLocate(&cube_x,&cube_y);
@@ -462,12 +444,11 @@ Game::erase(){
             }
         }
         if(flag == 0){
-            //加分！
+            
             count++;
             s.setScore(count);
             s.printMessage();
 
-            //该行上面的图形整体坐落
             down(i);
             i++;
         }
@@ -487,7 +468,7 @@ Game::down(int level){
         }
     }
 
-    //刷新面板
+    
     CubePoint p;
     
     for(i = 1; i < 23; i++){
