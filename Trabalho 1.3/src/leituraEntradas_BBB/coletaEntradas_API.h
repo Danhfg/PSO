@@ -92,6 +92,16 @@ void escrevendoEmArquivoBBBInputs(){
 
     int prioridadeBotao, prioridadeLDR, prioridadePotenciometro;
 
+    pthread_getschedparam(thread_Potenciometro.native_handle(), &prioridadePotenciometro, &schPotenciometro);
+    schPotenciometro.sched_priority = 3;
+
+    pthread_getschedparam(thread_LDR.native_handle(), &prioridadeLDR, &schLDR);
+    schLDR.sched_priority = 2;
+
+    pthread_getschedparam(thread_Botao.native_handle(), &prioridadeBotao, &schBotao);
+    schBotao.sched_priority = 1;
+
+
     while(true){
 
         inputs.open("inputs.in");
@@ -101,7 +111,8 @@ void escrevendoEmArquivoBBBInputs(){
             std::cout << "Botao:" << thread_Botao.joinable() << std::endl;
             std::cout << "Potenciometro:" << thread_Potenciometro.joinable() << std::endl;
             std::cout << "LDR:" << thread_LDR.joinable() << std::endl;
-                
+            std::cout << " LDR " << le_LDR << " Pot " << le_Potenciometro << std::endl << std::endl;
+
             if( le_Potenciometro == true ){     /// LENDO POTENCIOMETRO
                 if( conteudoPotenciometro < 500)    /// Movendo à esquerda
                     inputs << 'a';
