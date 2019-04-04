@@ -506,6 +506,18 @@ Game::down(int level){
     }    
 }
 
+char
+getnext_move(){
+
+    ifstream ifs("input.in", ifstream::in);
+    char c = ifs.get();
+    
+    ifs.close();
+    usleep(500000)
+
+    return c;
+}
+
 void* 
 listenKey(void *ptr){
     
@@ -514,7 +526,7 @@ listenKey(void *ptr){
 
     while(1){
         system("stty -icanon -echo");
-        key = getchar();
+        key = getnext_move();
         system("stty icanon echo");
         switch(key){
             case 'a':
