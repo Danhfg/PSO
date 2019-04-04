@@ -53,13 +53,19 @@ void escrevendoEmArquivoBBBInputs(){
     int conteudoPotenciometro;
     int conteudoLDR;
 
-    while(true){
 
-        inputs.open("inputs.dat");
 
         std::thread tBotao( coletaBotao, std::ref(conteudoBotao) );
         std::thread tPotenciometro( coletaPotenciometro, std::ref(conteudoPotenciometro) );
         std::thread tLDR( coletaLDR,  std::ref(conteudoLDR) );
+
+        tBotao.join();
+        tPotenciometro.join();
+        tLDR.join();
+
+    while(true){
+
+        inputs.open("inputs.in");
     
         if( inputs.is_open() != 0){ /// Verificando se o arquivo foi aberto
             
@@ -78,11 +84,10 @@ void escrevendoEmArquivoBBBInputs(){
                 
         }
 
-        std::cout << "oi" << std::endl;
+        std::cout << "Botao:" << tBotao.joinable() << std::endl;
+        std::cout << "Potenciometro:" << tPotenciometro.joinable() << std::endl;
+        std::cout << "LDR:" << tLDR.joinable() << std::endl;
 
-        tBotao.join();
-        tPotenciometro.join();
-        tLDR.join();
         
     }    
 }

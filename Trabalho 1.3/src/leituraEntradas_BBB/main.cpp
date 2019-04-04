@@ -2,7 +2,6 @@
 
 int main(){
 
-    escrevendoEmArquivoBBBInputs();
-
+     escrevendoEmArquivoBBBInputs();
     return 0;
 }
