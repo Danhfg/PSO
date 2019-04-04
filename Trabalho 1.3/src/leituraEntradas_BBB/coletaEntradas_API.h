@@ -22,24 +22,46 @@ void coletaBotao( bool &conteudoBotao ){
 }
 
 
-void coletaPotenciometro( int &conteudoPotenciometro){
+void coletaPotenciometro( int &conteudoPotenciometroAtual){
+
+    int conteudoPotenciometroAntigo;
 
     while(true){
 
-        conteudoPotenciometro << getValuePotenciometro();
+        conteudoPotenciometroAtual = getValuePotenciometro();
+
+        if( abs(conteudoPotenciometroAntigo - conteudoPotenciometroAtual) > 100 ){
+
+            le_Potenciometro = true;    
+            conteudoPotenciometroAntigo = conteudoPotenciometroAtual;
+        }
+        else{
+            le_Potenciometro = false;
+        }
+
         std::this_thread::sleep_for (std::chrono::milliseconds(125));
-        le_Potenciometro = !le_Potenciometro;     
+             
     }
 
 }
 
-void coletaLDR( int &conteudoLDR ){
+void coletaLDR( int &conteudoLDR_Atual ){
+
+    int conteudoLDR_Antigo;
 
     while(true){
 
-        conteudoLDR << getValueLDR();
-        std::this_thread::sleep_for (std::chrono::milliseconds(250));        
-        le_LDR = !le_LDR;
+        conteudoLDR_Atual = getValueLDR();
+
+        if( abs(conteudoLDR_Antigo - conteudoLDR_Atual) > 100 ){
+            conteudoLDR_Antigo = conteudoLDR_Atual;
+            le_LDR = true;
+        }
+        else{
+            le_LDR = false;
+        }    
+
+        std::this_thread::sleep_for (std::chrono::milliseconds(250)); 
     }
 
 }
@@ -47,47 +69,52 @@ void coletaLDR( int &conteudoLDR ){
 
 void escrevendoEmArquivoBBBInputs(){
 
-
     std::ofstream inputs;
     bool conteudoBotao;
     int conteudoPotenciometro;
     int conteudoLDR;
 
+    std::thread thread_Botao( coletaBotao, std::ref(conteudoBotao) );
+    std::thread thread_Potenciometro( coletaPotenciometro, std::ref(conteudoPotenciometro) );
+    std::thread thread_LDR( coletaLDR,  std::ref(conteudoLDR) );
 
+    sched_param schBotao, schLDR, schPotenciometro;
 
-        std::thread tBotao( coletaBotao, std::ref(conteudoBotao) );
-        std::thread tPotenciometro( coletaPotenciometro, std::ref(conteudoPotenciometro) );
-        std::thread tLDR( coletaLDR,  std::ref(conteudoLDR) );
-
-        tBotao.join();
-        tPotenciometro.join();
-        tLDR.join();
+    int prioridadeBotao, prioridadeLDR, prioridadePotenciometro;
 
     while(true){
 
         inputs.open("inputs.in");
     
         if( inputs.is_open() != 0){ /// Verificando se o arquivo foi aberto
-            
-            if( le_Potenciometro == true ){
+
+            std::cout << "Botao:" << thread_Botao.joinable() << std::endl;
+            std::cout << "Potenciometro:" << thread_Potenciometro.joinable() << std::endl;
+            std::cout << "LDR:" << thread_LDR.joinable() << std::endl;
+                
+            if( le_Potenciometro == true ){     /// LENDO POTENCIOMETRO
                 if( conteudoPotenciometro < 500)    /// Movendo à esquerda
                     inputs << 'a';
                  else                               /// Movendo à direita
                     inputs << 'd';   
             }        
-            else if ( le_LDR == true ){
+            else if ( le_LDR == true ){         /// LENDO LDR
                 if( conteudoLDR > 10 )
                     inputs << 's';
             }    
-            else        
-                inputs << 'w';
+            else{                               /// LENDO Botão  
+                if(conteudoBotao == true)
+                    inputs << 'w';
+            }                                
                 
         }
 
-        std::cout << "Botao:" << tBotao.joinable() << std::endl;
-        std::cout << "Potenciometro:" << tPotenciometro.joinable() << std::endl;
-        std::cout << "LDR:" << tLDR.joinable() << std::endl;
-
-        
+        inputs.close();
     }    
+
+    thread_Botao.join();
+    thread_Potenciometro.join();
+    thread_LDR.join();
+
+
 }

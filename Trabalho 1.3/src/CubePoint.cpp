@@ -1,5 +1,10 @@
-#include"../include/CubePoint.h"
-#include<cstdio>
+#include "../include/CubePoint.h"
+#include <cstdio>
+
+
+/**
+ * @brief	Imprime na tela ponto colorido 
+ */
 void 
 CubePoint::printPoint(){
 	
@@ -25,14 +30,3 @@ CubePoint::printPoint(){
 
 }
 
-/*
-int main()
-{
-	CubePoint p;
-	system("clear");
-	p.setLocate(3,3);
-	p.setColor(YELLOW);
-	p.printPoint();
-	return 0;
-}
-*/

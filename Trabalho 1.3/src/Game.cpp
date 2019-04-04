@@ -6,6 +6,7 @@
 #include<pthread.h>
 #include <unistd.h>
 #include <semaphore.h>
+#include <fstream>
 
 #define SPEED 500000
 #define PENAL_SIZE (17*24*sizeof(int))
@@ -27,9 +28,9 @@ Game::printNextCube(Context* graph){
         
     int x = 7;
     int y = 19;
-        int i,j;
+    int i,j;
     Cur c;
-        CubePoint p;   
+    CubePoint p;   
 
     c.saveCur();
     c.moveCur(6,19);
@@ -40,12 +41,12 @@ Game::printNextCube(Context* graph){
     memcpy(a,graph->getArray(),CUBE_SIZE);
 
     for(i = x; i < x+3; i++){
-        for(j = y; j < y+3; j++)
-        {       p.setLocate(i,j);
-		p.setColor(CLEAR);
-                p.printPoint();
-            if(a[i - x][j - y] == 1)
-            {
+        for(j = y; j < y+3; j++){       
+            p.setLocate(i,j);
+		    p.setColor(CLEAR);
+            p.printPoint();
+            
+            if(a[i - x][j - y] == 1){
 
                 p.setColor(graph->getColor());
                 p.printPoint();
@@ -61,19 +62,19 @@ Game::printHelep(){
    	Cur c;
 	c.saveCur();
    	c.moveCur(10,19);
-   	cout<<"a: go to left" << endl;
+   	cout<<" Comando possiveis:" << endl;
     c.resumeCur();
     c.saveCur();
-   	c.moveCur(11,19);
-   	cout<<"d: go to right" << endl;
+    c.moveCur(11,19);
+    cout<<"1: gire o potenciômetro para mover" << endl;
     c.resumeCur();
     c.saveCur();
    	c.moveCur(12,19);
-   	cout<<"w: roll cube" << endl;
+   	cout<<"2: aperte o botão para girar" << endl;
     c.resumeCur();
     c.saveCur();
    	c.moveCur(13,19);
-   	cout<<"s: go to down" << endl;
+   	cout<<"3: a intensidade de luz acelera o jogo" << endl;
     c.resumeCur();
     c.saveCur();
    	c.moveCur(14,19);
@@ -509,11 +510,11 @@ Game::down(int level){
 char
 getnext_move(){
 
-    ifstream ifs("input.in", ifstream::in);
+    std::ifstream ifs("input.in", std::ifstream::in);
     char c = ifs.get();
     
     ifs.close();
-    usleep(500000)
+    usleep(500000);
 
     return c;
 }
@@ -584,7 +585,7 @@ int main(){
     
     pthread_t t1;
     pthread_mutex_init(&mutex_lock, NULL);
-	system("clear");
+	system("reset");
     Game g;
     //g.createCube();
 	g.gameInit();

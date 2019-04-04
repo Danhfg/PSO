@@ -1,8 +1,8 @@
 
-#include"../include/Cur.h"
+#include "../include/Cur.h"
 
-#include<cstdio>
-#include<cstdlib>
+#include <cstdio>
+#include <cstdlib>
 
 void 
 Cur::moveCur(const int x,const int y){
