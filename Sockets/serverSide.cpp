@@ -1,6 +1,6 @@
 /**
  * @file    serverSide.cpp
- * @brief   Implementação de arquitetura cliente-servidor no lado do servidor
+ * @brief   Implementação de arquitetura cliente-servidor (TCP) no lado do servidor
  */
 
 #include <iostream>
@@ -13,21 +13,23 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#define PORT_NUMBER 4325
-#define QUEUE_SIZE_OF_REQUISITIONS 10
+#define HOST "127.0.0.1"
+#define PORT_NUMBER 4325    /// Numero da porta usada pelo socket do Servidor
+#define QUEUE_SIZE_OF_REQUISITIONS 10   /// Tamanho da lista de requisicoes
+#define MESSAGE_SIZE 40 /// Quantidade de caracteres que uma mensagem pode transmitir  
 
 int main(){
    
     struct sockaddr_in addrServer;
-    addrServer.sin_addr.s_addr = inet_addr("127.0.0.1");
+    addrServer.sin_addr.s_addr = inet_addr( HOST );
     addrServer.sin_port = htons( PORT_NUMBER );
     addrServer.sin_family = AF_INET;
 
-    /// CRIANDO O SOCKET IPV4 DO SERVIDOR
+    /// CRIANDO O SOCKET IPV4 DO SERVIDOR COM PROTOCOLO TCP
     int socketId_Server = socket(AF_INET, SOCK_STREAM, NULL);
     
     if( socketId_Server != 0){
-        std::cerr << "Falha ao executar o socket do Servidor..." << std::endl;
+        std::cerr << "Falha ao criar o socket do Servidor..." << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -72,18 +74,42 @@ int main(){
     std::cout << "Requisicao retirada da frente da fila de requisicoes com sucesso..." << std::endl;
         
     /// ENVIANDO MENSAGEM DO SOCKET DO SERVIDOR PARA O SOCKET DO CLIENTE 
-    std::string mensagemDoServidor("Oi oi oi....\nTestando...\n");
+    std::string bufferServer("Oi oi oi....\nTestando...\n");
 
     if ( send( socketId_Client_Conexao, 
-               mensagemDoServidor.c_str(), 
-               mensagemDoServidor.size(), 0 
+               bufferServer.c_str(), 
+               MESSAGE_SIZE, 0 
             ) != 0 ){
         std::cerr << "Falha no envio da mensagem por parte do socket do Servidor..." << std::endl;
         exit(EXIT_FAILURE);                           
     }
 
-    std::cout << "O socket do Servidor enviou a seguinte mensagem: " << mensagemDoServidor << std::endl;
+    std::cout   << "O socket do Servidor enviou a mensagem " 
+                << bufferServer 
+                << ". Logo, o cliente esta conectado..."
+                << std::endl;
     
+    /// COMUNICANDO-SE COM O CLIENTE
+    do{
+
+        int messageSizeReceived = recv( socketId_Client_Conexao, 
+                                        bufferServer,
+                                        MESSAGE_SIZE, 0 )
+
+        if( messageSizeReceived > 0 ){  /// Situação em que o cliente mandou uma mensagem não vazia
+            std::cout << "Cliente disse: " << << std::endl;
+        }
+
+        std::string serverResponse;
+        std::getline(cin, serverResponse);
+
+        send( socketId_Client_Conexao, serverResponse.c_str(), MESSAGE_SIZE, 0 );
+
+    }while( mensagemDoCliente != "tchau" ||
+            mensagemDoCliente != "bye" || 
+            mensagemDoCliente != "Ate logo")
+
+
     //// QUEBRANDO CONEXÃO ENTRE O SOCKET DO SERVIDOR E O DO CLIENTE
     close(socketId_Client_Conexao);
     close(socketId_Server);
