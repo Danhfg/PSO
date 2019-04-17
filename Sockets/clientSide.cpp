@@ -37,11 +37,13 @@ int main(){
 
     std::cout << "Cliente conectado ao Servidor (via sockets)..." << std::endl;
 
-    std::string bufferServer;
+    char bufferServer[MESSAGE_SIZE];
+
+    /// SOCKET DO CLIENTE RECEBENDO MENSAGEM DO SOCKET DO SERVIDOR
     int messageSizeReceived = recv(socketId_Cliente, bufferServer, MESSAGE_SIZE, 0);
 
     if( messageSizeReceived > 0 ){ /// Situação em que o Servidor mandou uma mensagem não vazia
-        cout << "Servidor disse: " 
+        std::cout << "Servidor disse: " 
              << bufferServer 
              << ". Logo, o servidor esta conectado..."
              << std::endl;
@@ -49,10 +51,23 @@ int main(){
 
     while( true ){
 
+        std::cin >>     
+
+        if( messageSizeReceived > 0 ){  /// Situação em que o cliente mandou uma mensagem não vazia
+            std::cout << "Servidor disse: " << bufferServer_temporaly << std::endl;
+        }
+
+        std::string serverResponse;
+        std::getline(std::cin, serverResponse);
+
+        send( socketId_Cliente, serverResponse.c_str(), MESSAGE_SIZE, 0 );
+
+
+
     }
 
 
-    return EXIT_SUCESS;
+    return EXIT_SUCCESS;
 
 }    
 

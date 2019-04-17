@@ -12,14 +12,20 @@
 #include <netdb.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <unistd.h>
 
 #define HOST "127.0.0.1"
-#define PORT_NUMBER 4325    /// Numero da porta usada pelo socket do Servidor
+#define PORT_NUMBER 4324    /// Numero da porta usada pelo socket do Servidor
 #define QUEUE_SIZE_OF_REQUISITIONS 10   /// Tamanho da lista de requisicoes
 #define MESSAGE_SIZE 40 /// Quantidade de caracteres que uma mensagem pode transmitir  
 
 int main(){
-   
+
+    char bufferServer_temporaly[MESSAGE_SIZE]; 
+    int socketId_Client_Conexao;
+
+
+    /// CONFIGURANDO PROPRIEDADES DE CONEXÃO
     struct sockaddr_in addrServer;
     addrServer.sin_addr.s_addr = inet_addr( HOST );
     addrServer.sin_port = htons( PORT_NUMBER );
@@ -60,7 +66,7 @@ int main(){
     struct sockaddr_in addrCliente;   
     socklen_t cliente_len = sizeof(addrCliente);
 
-    int socketId_Client_Conexao = accept( socketId_Server,
+    socketId_Client_Conexao = accept( socketId_Server,
                                 (struct sockaddr*)& addrCliente,
                                 &cliente_len);
 
@@ -91,23 +97,23 @@ int main(){
     
     /// COMUNICANDO-SE COM O CLIENTE
     do{
-
+        
         int messageSizeReceived = recv( socketId_Client_Conexao, 
-                                        bufferServer,
-                                        MESSAGE_SIZE, 0 )
+                                        bufferServer_temporaly,
+                                        MESSAGE_SIZE, 0 );
 
         if( messageSizeReceived > 0 ){  /// Situação em que o cliente mandou uma mensagem não vazia
-            std::cout << "Cliente disse: " << << std::endl;
+            std::cout << "Cliente disse: " << bufferServer_temporaly << std::endl;
         }
 
         std::string serverResponse;
-        std::getline(cin, serverResponse);
+        std::getline(std::cin, serverResponse);
 
         send( socketId_Client_Conexao, serverResponse.c_str(), MESSAGE_SIZE, 0 );
 
-    }while( mensagemDoCliente != "tchau" ||
-            mensagemDoCliente != "bye" || 
-            mensagemDoCliente != "Ate logo")
+    }while( std::string( bufferServer_temporaly) != "tchau" ||
+            std::string( bufferServer_temporaly) != "bye" || 
+            std::string( bufferServer_temporaly) != "Ate logo");
 
 
     //// QUEBRANDO CONEXÃO ENTRE O SOCKET DO SERVIDOR E O DO CLIENTE
