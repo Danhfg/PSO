@@ -3,6 +3,7 @@
 /// BIBLIOTECAS P/ SOCKETS
 #include <arpa/inet.h>
 #include <netinet/in.h>  /// AF_INET
+#include <unistd.h>
 
 #define HOST "127.0.0.1"
 #define PORT_NUMBER 4325
@@ -22,7 +23,7 @@ int main(){
     addrServer.sin_family = AF_INET;
 
     /// CRIANDO O SOCKET (AF_INET = IPV4) DO CLIENTE
-    int socketId_Cliente = socket(AF_INET, SOCK_STREAM, NULL);
+    int socketId_Cliente = socket(AF_INET, SOCK_STREAM, 0);
 
     if( socketId_Cliente != 0){
         std::cerr << "Falha ao executar o socket do Cliente..." << std::endl;
@@ -68,8 +69,7 @@ int main(){
             
             if( std::string(bufferServer) == "tchau" ||
                 std::string(bufferServer) == "bye" ||
-                std::string(bufferServer) == "Ate logo" ||
-                ){
+                std::string(bufferServer) == "Ate logo"){
                     break;
                 }
 

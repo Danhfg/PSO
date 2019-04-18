@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <string>
+#include <cstring>
 
 /// BIBLIOTECAS P/ SOCKETS
 #include <arpa/inet.h>
@@ -15,7 +16,7 @@
 #include <unistd.h>
 
 #define HOST "127.0.0.1"
-#define PORT_NUMBER 4324    /// Numero da porta usada pelo socket do Servidor
+#define PORT_NUMBER 4320    /// Numero da porta usada pelo socket do Servidor
 #define QUEUE_SIZE_OF_REQUISITIONS 10   /// Tamanho da lista de requisicoes
 #define MESSAGE_SIZE 40 /// Quantidade de caracteres que uma mensagem pode transmitir  
 
@@ -34,9 +35,9 @@ int main(){
     addrServer.sin_family = AF_INET;
 
     /// CRIANDO O SOCKET IPV4 DO SERVIDOR COM PROTOCOLO TCP
-    int socketId_Server = socket(AF_INET, SOCK_STREAM, NULL);
+    int socketId_Server = socket(AF_INET, SOCK_STREAM, 0);
     
-    if( socketId_Server != 0){
+    if( socketId_Server == -1){
         std::cerr << "Falha ao criar o socket do Servidor..." << std::endl;
         exit(EXIT_FAILURE);
     }
@@ -82,8 +83,8 @@ int main(){
     std::cout << "Requisicao retirada da frente da fila de requisicoes com sucesso..." << std::endl;
         
     /// ENVIANDO MENSAGEM DO SOCKET DO SERVIDOR PARA O SOCKET DO CLIENTE 
-    
-    bufferServer = "Oi cliente, voce esta pronto?\n";
+
+    strncpy( bufferServer, std::string("Oi cliente, voce esta pronto?\n").c_str(), sizeof(std::string("Oi cliente, voce esta pronto?\n").c_str()) );
 
     if ( send( socketId_Client_Conexao, 
                bufferServer, 
