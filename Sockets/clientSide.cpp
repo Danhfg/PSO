@@ -10,6 +10,11 @@
 
 int main(){ 
 
+    char bufferServer[MESSAGE_SIZE]; //-> Buffer que guardara a mensagem recebida e a que sera enviada
+    int messageSizeReceived; //-> Tamanho da mensagem recebida
+    std::string clienteResponse; //-> Resposta do Cliente entrada pelo usuario
+
+
     /// CONFIGURANDO AS PROPRIEDADES DA CONEXAO
     struct sockaddr_in addrServer;
     addrServer.sin_addr.s_addr = inet_addr( HOST );
@@ -37,10 +42,9 @@ int main(){
 
     std::cout << "Cliente conectado ao Servidor (via sockets)..." << std::endl;
 
-    char bufferServer[MESSAGE_SIZE];
-
+    
     /// SOCKET DO CLIENTE RECEBENDO MENSAGEM DO SOCKET DO SERVIDOR
-    int messageSizeReceived = recv(socketId_Cliente, bufferServer, MESSAGE_SIZE, 0);
+    messageSizeReceived = recv(socketId_Cliente, bufferServer, MESSAGE_SIZE, 0);
 
     if( messageSizeReceived > 0 ){ /// Situação em que o Servidor mandou uma mensagem não vazia
         std::cout << "Servidor disse: " 
@@ -49,24 +53,35 @@ int main(){
              << std::endl;
     }
 
+    /// SOCKET DO CLIENTE **COMUNICANDO-SE** COM O SOCKET DO SERVIDOR
     while( true ){
 
-        std::cin >>     
+        std::getline(std::cin, clienteResponse);
+
+        send( socketId_Cliente, clienteResponse.c_str(), MESSAGE_SIZE, 0 );
+
+        messageSizeReceived = recv(socketId_Cliente, bufferServer, MESSAGE_SIZE, 0);
 
         if( messageSizeReceived > 0 ){  /// Situação em que o cliente mandou uma mensagem não vazia
-            std::cout << "Servidor disse: " << bufferServer_temporaly << std::endl;
+            
+            std::cout << "Servidor disse: " << bufferServer << std::endl;
+            
+            if( std::string(bufferServer) == "tchau" ||
+                std::string(bufferServer) == "bye" ||
+                std::string(bufferServer) == "Ate logo" ||
+                ){
+                    break;
+                }
+
         }
-
-        std::string serverResponse;
-        std::getline(std::cin, serverResponse);
-
-        send( socketId_Cliente, serverResponse.c_str(), MESSAGE_SIZE, 0 );
-
-
 
     }
 
-
+    //// QUEBRANDO CONEXÃO ENTRE O SOCKET DO CLIENTE E O DO SERVIDOR
+    close( socketId_Cliente );
+    
+    std::cout << "Conexao entre os sockets do Cliente e do Servidor foi quebrada..." << std::endl;
+    
     return EXIT_SUCCESS;
 
 }    

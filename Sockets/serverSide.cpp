@@ -21,8 +21,10 @@
 
 int main(){
 
-    char bufferServer_temporaly[MESSAGE_SIZE]; 
-    int socketId_Client_Conexao;
+    char bufferServer[MESSAGE_SIZE]; //-> Buffer que guardara a mensagem recebida e a que sera enviada
+    int socketId_Client_Conexao; //-> Indica se houve falha ou nao na retirada da requisicao da fila de requisicoes
+    int messageSizeReceived; //-> Tamanho da mensagem recebida
+    std::string serverResponse; //-> Resposta do Servidor entrada pelo usuario
 
 
     /// CONFIGURANDO PROPRIEDADES DE CONEXÃO
@@ -80,40 +82,50 @@ int main(){
     std::cout << "Requisicao retirada da frente da fila de requisicoes com sucesso..." << std::endl;
         
     /// ENVIANDO MENSAGEM DO SOCKET DO SERVIDOR PARA O SOCKET DO CLIENTE 
-    std::string bufferServer("Oi oi oi....\nTestando...\n");
+    
+    bufferServer = "Oi cliente, voce esta pronto?\n";
 
     if ( send( socketId_Client_Conexao, 
-               bufferServer.c_str(), 
+               bufferServer, 
                MESSAGE_SIZE, 0 
             ) != 0 ){
         std::cerr << "Falha no envio da mensagem por parte do socket do Servidor..." << std::endl;
         exit(EXIT_FAILURE);                           
     }
 
-    std::cout   << "O socket do Servidor enviou a mensagem " 
+    std::cout   << "O socket do Servidor enviou a mensagem: " 
                 << bufferServer 
                 << ". Logo, o cliente esta conectado..."
                 << std::endl;
     
-    /// COMUNICANDO-SE COM O CLIENTE
-    do{
+    /// SOCKET DO SERVIDOR **COMUNICANDO-SE** COM O SOCKET DO CLIENTE
+    while (true){
         
-        int messageSizeReceived = recv( socketId_Client_Conexao, 
-                                        bufferServer_temporaly,
+        messageSizeReceived = recv( socketId_Client_Conexao, 
+                                        bufferServer,
                                         MESSAGE_SIZE, 0 );
 
         if( messageSizeReceived > 0 ){  /// Situação em que o cliente mandou uma mensagem não vazia
-            std::cout << "Cliente disse: " << bufferServer_temporaly << std::endl;
+            
+            std::cout << "Cliente disse: " << bufferServer << std::endl;
+
+            if( std::string( bufferServer) != "tchau" ||
+                std::string( bufferServer) != "bye" || 
+                std::string( bufferServer) != "Ate logo"
+                ){
+                
+                send( socketId_Client_Conexao, bufferServer, MESSAGE_SIZE, 0 );
+                break;
+
+            }
+
         }
 
-        std::string serverResponse;
         std::getline(std::cin, serverResponse);
 
         send( socketId_Client_Conexao, serverResponse.c_str(), MESSAGE_SIZE, 0 );
 
-    }while( std::string( bufferServer_temporaly) != "tchau" ||
-            std::string( bufferServer_temporaly) != "bye" || 
-            std::string( bufferServer_temporaly) != "Ate logo");
+    }
 
 
     //// QUEBRANDO CONEXÃO ENTRE O SOCKET DO SERVIDOR E O DO CLIENTE
@@ -122,6 +134,5 @@ int main(){
 
     std::cout << "Conexao entre os sockets do Servidor e do Cliente foi quebrada..." << std::endl;
     
-
     return EXIT_SUCCESS;
 }    
