@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 #define HOST "127.0.0.1"
-#define PORT_NUMBER 4325
+#define PORT_NUMBER 4326
 #define MESSAGE_SIZE 40 /// Quantidade de caracteres que uma mensagem pode transmitir  
 
 int main(){ 
@@ -21,27 +21,29 @@ int main(){
     addrServer.sin_addr.s_addr = inet_addr( HOST );
     addrServer.sin_port = htons( PORT_NUMBER );
     addrServer.sin_family = AF_INET;
+     
+    std::cout << "Iniciando cliente..." << std::endl;
 
     /// CRIANDO O SOCKET (AF_INET = IPV4) DO CLIENTE
     int socketId_Cliente = socket(AF_INET, SOCK_STREAM, 0);
 
-    if( socketId_Cliente != 0){
+    if( socketId_Cliente == -1){
         std::cerr << "Falha ao executar o socket do Cliente..." << std::endl;
         exit(EXIT_FAILURE);
     }
 
-    std::cout << "Socket do Cliente criado com sucesso..." << std::endl;
+    std::cout << "Socket do Cliente criado com sucesso" << std::endl;
 
     /// ESTABELECENDO CONEXÃO VIA SOCKETS ENTRE O **CLIENTE** E O SERVIDOR
     if( connect( socketId_Cliente, 
                  (struct sockaddr *) &addrServer, 
                   sizeof(addrServer) 
-                ) != 0 ){
+                ) == -1 ){
         std::cerr << "Falha ao conectar o socket do Cliente e o do Servidor..." << std::endl;
         exit(EXIT_FAILURE);
     }
 
-    std::cout << "Cliente conectado ao Servidor (via sockets)..." << std::endl;
+    std::cout << "Cliente conectado ao Servidor (via sockets)..." << std::endl << std::endl;
 
     
     /// SOCKET DO CLIENTE RECEBENDO MENSAGEM DO SOCKET DO SERVIDOR
@@ -51,7 +53,8 @@ int main(){
         std::cout << "Servidor disse: " 
              << bufferServer 
              << ". Logo, o servidor esta conectado..."
-             << std::endl;
+             << std::endl
+	     << std::endl;
     }
 
     /// SOCKET DO CLIENTE **COMUNICANDO-SE** COM O SOCKET DO SERVIDOR

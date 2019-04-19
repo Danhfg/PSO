@@ -16,7 +16,7 @@
 #include <unistd.h>
 
 #define HOST "127.0.0.1"
-#define PORT_NUMBER 4320    /// Numero da porta usada pelo socket do Servidor
+#define PORT_NUMBER 4326    /// Numero da porta usada pelo socket do Servidor
 #define QUEUE_SIZE_OF_REQUISITIONS 10   /// Tamanho da lista de requisicoes
 #define MESSAGE_SIZE 40 /// Quantidade de caracteres que uma mensagem pode transmitir  
 
@@ -34,6 +34,8 @@ int main(){
     addrServer.sin_port = htons( PORT_NUMBER );
     addrServer.sin_family = AF_INET;
 
+    std::cout << "Iniciando Servidor..." << std::endl;   
+
     /// CRIANDO O SOCKET IPV4 DO SERVIDOR COM PROTOCOLO TCP
     int socketId_Server = socket(AF_INET, SOCK_STREAM, 0);
     
@@ -42,18 +44,18 @@ int main(){
         exit(EXIT_FAILURE);
     }
 
-    std::cout << "Socket Servidor criado com sucesso..." << std::endl;
+    std::cout << "Socket Servidor criado com sucesso" << std::endl;
 
     /// LIGANDO O SOCKET CRIADO DO SERVIDOR À PORTA PORT_NUMBER
     if( bind( socketId_Server,
               (struct sockaddr*) &addrServer,
               sizeof(addrServer)   
             ) != 0 ){
-        std::cerr << "Falha em ligar o socket do Servidor a porta " + PORT_NUMBER << (std::string)"..." << std::endl;
+        std::cerr << "Falha em ligar o socket do Servidor a porta " + std::to_string(PORT_NUMBER) << "..." << std::endl;
         exit(EXIT_FAILURE);                
     }
 
-    std::cout << "A ligacao do socket do Servidor a porta " + PORT_NUMBER + (std::string)" foi um sucesso..." << std::endl;
+    std::cout << "A ligacao do socket do Servidor a porta " + std::to_string( PORT_NUMBER) + " foi um sucesso" << std::endl;
 
     /// HABILITA O SOCKET DO SERVIDOR A ESCUTAR REQUISIÇÕES 
     if( listen( socketId_Server, 
@@ -75,21 +77,21 @@ int main(){
 
     std::cout << "Socket do Servidor recebeu conexao de " << inet_ntoa(addrCliente.sin_addr) << std::endl;
 
-    if( socketId_Client_Conexao != 0 ){
+    if( socketId_Client_Conexao == -1 ){
         std::cerr << "Falha ao retira requisicao da frente da fila de requisicoes..." << std::endl;
         exit(EXIT_FAILURE);
     }    
     
-    std::cout << "Requisicao retirada da frente da fila de requisicoes com sucesso..." << std::endl;
+    std::cout << "Requisicao retirada da frente da fila de requisicoes com sucesso" << std::endl;
         
     /// ENVIANDO MENSAGEM DO SOCKET DO SERVIDOR PARA O SOCKET DO CLIENTE 
 
-    strncpy( bufferServer, std::string("Oi cliente, voce esta pronto?\n").c_str(), sizeof(std::string("Oi cliente, voce esta pronto?\n").c_str()) );
+    serverResponse = "Oi cliente! Voce esta pronto?";	
 
     if ( send( socketId_Client_Conexao, 
-               bufferServer, 
+               serverResponse.c_str(), 
                MESSAGE_SIZE, 0 
-            ) != 0 ){
+            ) == -1 ){
         std::cerr << "Falha no envio da mensagem por parte do socket do Servidor..." << std::endl;
         exit(EXIT_FAILURE);                           
     }
@@ -97,7 +99,8 @@ int main(){
     std::cout   << "O socket do Servidor enviou a mensagem: " 
                 << bufferServer 
                 << ". Logo, o cliente esta conectado..."
-                << std::endl;
+                << std::endl
+		<< std::endl;
     
     /// SOCKET DO SERVIDOR **COMUNICANDO-SE** COM O SOCKET DO CLIENTE
     while (true){
@@ -110,9 +113,9 @@ int main(){
             
             std::cout << "Cliente disse: " << bufferServer << std::endl;
 
-            if( std::string( bufferServer) != "tchau" ||
-                std::string( bufferServer) != "bye" || 
-                std::string( bufferServer) != "Ate logo"
+            if( std::string( bufferServer) == "tchau" ||
+                std::string( bufferServer) == "bye" || 
+                std::string( bufferServer) == "Ate logo"
                 ){
                 
                 send( socketId_Client_Conexao, bufferServer, MESSAGE_SIZE, 0 );
