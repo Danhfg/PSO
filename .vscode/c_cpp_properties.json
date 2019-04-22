@@ -3,7 +3,10 @@
         {
             "name": "Win32",
             "includePath": [    
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "C:/MinGW/lib/gcc/mingw32/8.2.0/include/c++",
+                "C:/MinGW/lib/gcc/mingw32/8.2.0/include/c++",
+                "C:/MinGW/lib/gcc/mingw32/8.2.0/include/c++/debug"
             ],
             "defines": [
                 "_DEBUG",

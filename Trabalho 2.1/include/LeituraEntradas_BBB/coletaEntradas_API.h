@@ -15,21 +15,23 @@ bool le_Potenciometro = true;
 bool le_LDR = true;
 
 
-void coletaBotao( bool &conteudoBotao ){
+void 
+coletaBotao( bool &conteudoBotao ){
 
     while(true){
             
         conteudoBotao = buttonIsPressed();
 
         fflush(stdout);
-        usleep(FRAMEWAIT); 
+        // usleep(FRAMEWAIT);  Aparentemente desnecessario
 
     }
 
 }
 
 
-void coletaPotenciometro( int &conteudoPotenciometroAtual){
+void 
+coletaPotenciometro( int &conteudoPotenciometroAtual){
 
     int conteudoPotenciometroAntigo;
 
@@ -47,12 +49,13 @@ void coletaPotenciometro( int &conteudoPotenciometroAtual){
         }
 
         fflush(stdout);
-        usleep(FRAMEWAIT); 
+        //usleep(FRAMEWAIT);  Aparentemente desnecessario
     }
 
 }
 
-void coletaLDR( int &conteudoLDR_Atual ){
+void 
+coletaLDR( int &conteudoLDR_Atual ){
 
     int conteudoLDR_Antigo;
 
@@ -77,7 +80,8 @@ void coletaLDR( int &conteudoLDR_Atual ){
 }
 
 
-void escrevendoEmArquivoBBBInputs(){
+void 
+escrevendoEmArquivoBBBInputs(){
 
     std::ofstream inputs;
     bool conteudoBotao;
@@ -108,10 +112,10 @@ void escrevendoEmArquivoBBBInputs(){
     
         if( inputs.is_open() != 0){ /// Verificando se o arquivo foi aberto
 
-            std::cout << "Botao:" << thread_Botao.joinable() << std::endl;
-            std::cout << "Potenciometro:" << thread_Potenciometro.joinable() << std::endl;
-            std::cout << "LDR:" << thread_LDR.joinable() << std::endl;
-            std::cout << " LDR " << le_LDR << " Pot " << le_Potenciometro << std::endl << std::endl;
+            // std::cout << "Botao:" << thread_Botao.joinable() << std::endl;
+            // std::cout << "Potenciometro:" << thread_Potenciometro.joinable() << std::endl;
+            // std::cout << "LDR:" << thread_LDR.joinable() << std::endl;
+            // std::cout << "LDR " << le_LDR << " Pot " << le_Potenciometro << std::endl << std::endl;
 
             if( le_Potenciometro == true ){     /// LENDO POTENCIOMETRO
                 if( conteudoPotenciometro < 500)    /// Movendo à esquerda
@@ -136,6 +140,5 @@ void escrevendoEmArquivoBBBInputs(){
     thread_Botao.join();
     thread_Potenciometro.join();
     thread_LDR.join();
-
 
 }
