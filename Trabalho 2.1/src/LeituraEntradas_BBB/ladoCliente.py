@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import Adafruit_BBIO.GPIO as GPIO  # Biblioteca para uso de GPIO
 import Adafruit_BBIO.ADC as ADC  # Biblioteca para uso de ADC
 
@@ -67,13 +69,17 @@ def checaPotenciometro():
         sleep(0.5)
 
 
-
-thread_LDR = threading.Thread(target=checaLDR) # Criando a thread de checagem de LDR
-thread_Potenciometro = threading.Thread(target=checaPotenciometro) # Criando a thread de checagem de Potenciometro
+# Criando as threads de checagem
+thread_Botao = threading.Thread(target=checaBotao) 
+thread_LDR = threading.Thread(target=checaLDR)
+thread_Potenciometro = threading.Thread(target=checaPotenciometro) 
 
 # Iniciando as threads
+thread_Botao.start()
 thread_LDR.start()  
 thread_Potenciometro.start()
 
+# Sincronizando as threads
+thread_Botao.join()
 thread_LDR.join()
 thread_Potenciometro.join()
