@@ -1,4 +1,4 @@
-#include "../include/graph.h"
+#include "../../include/Jogo/graph.h"
 
 #include <unistd.h>
 

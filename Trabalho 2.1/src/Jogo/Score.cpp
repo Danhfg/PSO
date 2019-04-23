@@ -1,6 +1,6 @@
-#include "../include/Score.h"
-#include "../include/Cur.h"
-#include "../include/CubePoint.h"
+#include "../../include/Jogo/Score.h"
+#include "../../include/Jogo/Cur.h"
+#include "../../include/Jogo/CubePoint.h"
 
 void 
 Score::printMessage(){

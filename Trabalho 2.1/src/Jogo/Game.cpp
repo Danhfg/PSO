@@ -1,5 +1,5 @@
-#include "../include/Game.h"
-#include "../include/Rand.h"
+#include "../../include/Jogo/Game.h"
+#include "../../include/Jogo/Rand.h"
 
 #include <cstring>
 #include<cstdio>
@@ -16,6 +16,7 @@ int num = 0;
 
 static int stop_flag;
 
+        pthread_mutex_t	mutex_lock;
 static Rand r;
 
 

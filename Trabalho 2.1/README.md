@@ -55,17 +55,17 @@ Em seguida, serão criados os seguintes arquivos binários (executáveis):
 | Nome do executável: | Descrição: | 
 | ---------- | ------------- |
 |`game` 	|Jogo de tetris implementado com interface gráfica.  
-|`leitorEntradas_BBB` 	|Programa que lê as entradas da BeagleBone.  
   
 Diante disso, execute como super usuário o arquivo binário `game`  
 
 ```
 $ ./bin/game
 ```
-E, em outra janela do bash, execute o arquivo binário `leitorEntradas_BBB`  
+E, em outra janela do bash, na pasta raiz do repositorio, execute os programas `ladoServidor.py` e `ladoCliente.py`  
 
 ```
-$ ./bin/leitorEntradas_BBB
+$ python3 src/Sockets/ladoServidor.py
+$ python3 src/LeituraEntradas_BBB/ladoCliente.py
 ```
   
 Além disso, caso deseje ver a documentação, execute  

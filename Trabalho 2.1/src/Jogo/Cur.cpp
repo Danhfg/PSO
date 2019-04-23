@@ -1,5 +1,5 @@
 
-#include "../include/Cur.h"
+#include "../../include/Jogo/Cur.h"
 
 #include <cstdio>
 #include <cstdlib>

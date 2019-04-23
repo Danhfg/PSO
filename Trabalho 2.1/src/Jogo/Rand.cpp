@@ -1,4 +1,4 @@
-#include "../include/Rand.h"
+#include "../../include/Jogo/Rand.h"
 
 #include <ctime>
 #include <stdlib.h>

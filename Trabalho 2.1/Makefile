@@ -17,10 +17,10 @@ CFLAGS=	-Wall -pedantic -ansi -std=c++11 -pthread
 .PHONY:	all	clean doc debug
 
 #Ao final da compilacão, remove os arquivos objetos
-all: init game leitorEntradas_BBB 
+all: init game 
 
 debug:	CFLAGS += -g -O0
-debug:	game leitorEntradas_BBB  
+debug:	game  
 
 # Cria a pasta/diretório bin e a obj
 init:
@@ -68,37 +68,6 @@ $(OBJ_DIR)/Jogo/Score.o: $(SRC_DIR)/Jogo/Score.cpp  $(INC_DIR)/Jogo/Score.h
 # Alvo (target) para a construcao do objeto graph.o
 # Define os arquivos graph.cpp e graph.h como dependencias.
 $(OBJ_DIR)/Jogo/graph.o: $(SRC_DIR)/Jogo/graph.cpp  $(INC_DIR)/Jogo/graph.h
-	$(CC) -c $(CFLAGS) -o $@ $<
-
-# Alvo (target) para a construcao do executavel leitorEntradas_BBB
-# Define o arquivo game.o como dependência
-leitorEntradas_BBB: CFLAGS+= -I$(INC_DIR)/LeituraEntradas_BBB
-leitorEntradas_BBB: $(OBJ_DIR)/LeituraEntradas_BBB/ADC_API.o  $(OBJ_DIR)/LeituraEntradas_BBB/GPIOIN_API.o
-	@echo "============="
-	@echo "Ligando o alvo $@"
-	@echo "============="
-	$(CC) $(CFLAGS) -o $(BIN_DIR)/$@ $^
-	@echo "+++ [Executavel leitorEntradas_BBB criado em $(BIN_DIR)] +++"
-	@echo "============="
-
-# Alvo (target) para a construcao do objeto ADC_API.o
-# Define os arquivos ADC_API.h como dependencias.
-$(OBJ_DIR)/LeituraEntradas_BBB/ADC_API.o: $(INC_DIR)/LeituraEntradas_BBB/ADC_API.h  
-	$(CC) -c $(CFLAGS) -o $@ $<
-
-# Alvo (target) para a construcao do objeto GPIOIN_API.o
-# Define os arquivos GPIOIN_API.h como dependencias.
-$(OBJ_DIR)/LeituraEntradas_BBB/GPIOIN_API.o: $(INC_DIR)/LeituraEntradas_BBB/GPIOIN_API.h  
-	$(CC) -c $(CFLAGS) -o $@ $<
-
-# Alvo (target) para a construcao do objeto coletaEntradas_API.o
-# Define os arquivos coletaEntradas_API.h como dependencias.
-$(OBJ_DIR)/LeituraEntradas_BBB/coletaEntradas_API.o: $(INC_DIR)/LeituraEntradas_BBB/coletaEntradas_API.h  
-	$(CC) -c $(CFLAGS) -o $@ $<
-
-# Alvo (target) para a construcao do objeto main.o
-# Define os arquivos main.cpp como dependencias.
-$(OBJ_DIR)/LeituraEntradas_BBB/main.o: $(SRC_DIR)/LeituraEntradas_BBB/main.cpp  
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 doc:

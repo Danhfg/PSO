@@ -12,7 +12,6 @@ enum MARK{
 class Game{
         
     private:
-        pthread_mutex_t	mutex_lock;
 
         int m_penal[24][17];
         color m_color[24][17];

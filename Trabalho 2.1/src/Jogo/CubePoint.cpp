@@ -1,4 +1,4 @@
-#include "../include/CubePoint.h"
+#include "../../include/Jogo/CubePoint.h"
 #include <cstdio>
 
 
