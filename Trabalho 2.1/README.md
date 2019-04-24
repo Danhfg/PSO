@@ -15,19 +15,19 @@ Nesta pasta contém a implementação dos programas relativos ao trabalho 2.1 .
 Explorar aspectos teóricos e práticos sobre sockets.
 
 ## Requisitos:
-* Funcionalidades:
+* **Funcionalidades:**
     1. o trabalho terá 2 programas, um cliente e outro servidor;
     2. Um será o jogo (executado em desktop - não precisa ser o mesmo jogo usado no trabalho anterior) e o outro, o joystick (obrigatoriamente implementado na BBB);
     3. A escolha de quem será o cliente e servidor fica a critério de cada grupo.
-* Sockets:
+* **Sockets:**
 	1.  A comunicação entre o cliente e o servidor será realizada via socket.
-* Programas:
+* **Programas:**
     1. Cliente e servidor deverão ser implementados em linguagens diferentes.
-* Threads:  
+* **Threads:**  
     1. Threads separadas devem ficar responsáveis pelo gerenciamento da
 comunicação socket em ambos os lados (cliente e servidor).
 
-* Casos omissos:
+* **Casos omissos:**
     1. Projetistas tomam a decisão de que forma implementar.
 
 ## Sobre o jogo  
