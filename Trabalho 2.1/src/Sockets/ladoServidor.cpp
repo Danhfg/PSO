@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <fstream>
 
 /// BIBLIOTECAS P/ SOCKETS
 #include <arpa/inet.h>
@@ -27,6 +28,13 @@ int main(){
     int messageSizeReceived; //-> Tamanho da mensagem recebida
     std::string serverResponse; //-> Resposta do Servidor entrada pelo usuario
 
+	std::ofstream arqDados;
+    arqDados.open("input.in");
+    
+    if(arqDados.is_open() == 0){ /// VERIFICANDO SE O ARQUIVO FOI ABERTO
+		std::cerr << "O arquivo nao foi aberto" << std::endl;
+		exit(1);    
+    }
 
     /// CONFIGURANDO PROPRIEDADES DE CONEXÃO
     struct sockaddr_in addrServer;
@@ -138,5 +146,7 @@ int main(){
 
     std::cout << "Conexao entre os sockets do Servidor e do Cliente foi quebrada..." << std::endl;
     
+    arqDados.close();
+
     return EXIT_SUCCESS;
 }    

@@ -8,13 +8,23 @@ import threading # Biblioteca para uso de threads
 
 from time import sleep 
 
-HOST = "127.0.0.1"  # (localhost)
-PORT_NUMBER = 4324  # Porta usada pelo socket do Servidor
+def run():
+    HOST = "127.0.0.1"  # (localhost)
+    PORT_NUMBER = 4324  # Porta usada pelo socket do Servidor
+    s = socket.socket( socket.AF_INET, socket.SOCK_STREAM ) # Criando socket do Cliente
+    s.connect( (HOST, PORT_NUMBER) )    # Conectando socket do Cliente ao socket do Servidor
+    print("O socket do Cliente está conectado ao socket do Servidor\n")
 
-s = socket.socket( socket.AF_INET, socket.SOCK_STREAM ) # Criando socket do Cliente
+    while (True):
+        if( checaPotenciometro() != "" )
+            s.send( checaPotenciometro() )
+        else if( checaLDR() != "" )
+            s.send( checaLDR() ) 
+        else
+            if( checaBotao() != "" )
+                s.send( checaBotao() )       
 
-s.connect( (HOST, PORT_NUMBER) )    # Conectando socket do Cliente ao socket do Servidor
-print("O socket do Cliente está conectado ao socket do Servidor\n")
+
 
 # CONFIGURANDO ENTRADAS BEAGLEBONE BLACK
 GPIO.setup("P9_27", GPIO.IN) # Configurando entrada GPIO 115 que receberá o sinal do botão
@@ -27,59 +37,55 @@ def checaBotao():
     
     while (True):
         if GPIO.input("P9_27"):
-            s.send("w")
+            return ("w")
+        else
+            return ("")    
 
 
 def checaLDR():
 
     global conteudoLDR_Antigo
     
-    while( True ):
-        conteudoLDR_Atual = ADC.read("AIN0")
+    conteudoLDR_Atual = ADC.read("AIN0")
+    
+    diferenca = abs(conteudoLDR_Antigo - conteudoLDR_Atual)
+
+    if( diferenca > 0.02 ):  # Situação em que houve variação no LDR
+        print("Houve variacao no LDR do Cliente e por isso foi enviado para o Servidor a letra 's'...\n")
+        return ("s")
         
-        diferenca = abs(conteudoLDR_Antigo - conteudoLDR_Atual)
-
-        if( diferenca > 0.02 ):  # Situação em que houve variação no LDR
-            s.send("s")
-            print("Houve variacao no LDR do Cliente e por isso foi enviado para o Servidor a letra 's'...\n")
-
-        sleep(0.5)
+    else
+        return("")
 
 
 def checaPotenciometro():
     
     global conteudoPotenciometro_Antigo
     
-    while( True ):
-        conteudoPotenciometro_Atual = ADC.read("AIN1")
+    conteudoPotenciometro_Atual = ADC.read("AIN1")
 
-        diferenca = conteudoPotenciometro_Antigo - conteudoPotenciometro_Atual
+    diferenca = conteudoPotenciometro_Antigo - conteudoPotenciometro_Atual
 
-        if( abs(diferenca) > 0.3 )  # Situação em que houve variação no potenciômetro
-            print("Houve varicao no Potenciometro de modo que o comando foi ir para a ")
+    if( abs(diferenca) > 0.3 )  # Situação em que houve variação no potenciômetro
+        print("Houve varicao no Potenciometro de modo que o comando foi ir para a ")
+        
+        if( diferenca < 0 ) # Movendo-se para à esquerda 
+            print(" esquerda\n")
+            return ("a")
             
-            if( diferenca < 0 ) # Movendo-se para à esquerda 
-                s.send("a")
-                print(" esquerda\n")
+        else  # Movendo-se para a direita
+            print(" direita\n")
+            return("d")
             
-            else  # Movendo-se para a direita
-                s.send("d")
-                print(" direita\n")
-                
-        sleep(0.5)
+    else
+        return("")
 
 
-# Criando as threads de checagem
-thread_Botao = threading.Thread(target=checaBotao) 
-thread_LDR = threading.Thread(target=checaLDR)
-thread_Potenciometro = threading.Thread(target=checaPotenciometro) 
+# Criando a threads de checagem
+thread_run = threading.Thread(target=run)
 
-# Iniciando as threads
-thread_Botao.start()
-thread_LDR.start()  
-thread_Potenciometro.start()
+# Iniciando a threads
+thread_run.start()
 
-# Sincronizando as threads
-thread_Botao.join()
-thread_LDR.join()
-thread_Potenciometro.join()
+# Sincronizando a thread
+thread_run.join()
