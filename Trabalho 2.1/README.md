@@ -55,17 +55,17 @@ Em seguida, serão criados os seguintes arquivos binários (executáveis):
 | Nome do executável: | Descrição: | 
 | ---------- | ------------- |
 |`game` 	|Jogo de tetris implementado com interface gráfica.  
+|`servidor` 	|Socket do servidor que recebe o comando e envia a atualizacao da tela.  
   
-Diante disso, execute como super usuário o arquivo binário `game`  
+Diante disso, **no lado do servidor**, execute como super usuário o arquivo binário `servidor`  
 
 ```
-$ ./bin/game
+$ ./bin/servidor
 ```
-E, em outra janela do bash, na pasta raiz do repositorio, execute os programas `ladoServidor.py` e `ladoCliente.py`  
+E, em outra janela do bash, **no lado do cliente**, na pasta raiz do repositorio, execute o programa `cliente.py`  
 
 ```
-$ python3 src/Sockets/ladoServidor.py
-$ python3 src/LeituraEntradas_BBB/ladoCliente.py
+$ python3 src/cliente.py
 ```
   
 Além disso, caso deseje ver a documentação, execute  

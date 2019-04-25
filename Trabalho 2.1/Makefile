@@ -17,7 +17,7 @@ CFLAGS=	-Wall -pedantic -ansi -std=c++11 -pthread
 .PHONY:	all	clean doc debug
 
 #Ao final da compilacão, remove os arquivos objetos
-all: init game 
+all: init game servidor
 
 debug:	CFLAGS += -g -O0
 debug:	game  
@@ -25,7 +25,7 @@ debug:	game
 # Cria a pasta/diretório bin e a obj
 init:
 	@mkdir -p $(OBJ_DIR)/Jogo
-	@mkdir -p $(OBJ_DIR)/LeituraEntradas_BBB	
+	@mkdir -p $(OBJ_DIR)/Servidor	
 	@mkdir -p $(BIN_DIR)
 	@mkdir -p $(DOC_DIR)
 
@@ -70,6 +70,21 @@ $(OBJ_DIR)/Jogo/Score.o: $(SRC_DIR)/Jogo/Score.cpp  $(INC_DIR)/Jogo/Score.h
 $(OBJ_DIR)/Jogo/graph.o: $(SRC_DIR)/Jogo/graph.cpp  $(INC_DIR)/Jogo/graph.h
 	$(CC) -c $(CFLAGS) -o $@ $<
 
+# Alvo (target) para a construcao do executavel servidor
+# Define o arquivo servidor.o como dependência
+servidor: $(OBJ_DIR)/Servidor/servidor.o
+	@echo "============="
+	@echo "Ligando o alvo $@"
+	@echo "============="
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/$@ $^
+	@echo "+++ [Executavel servidor criado em $(BIN_DIR)] +++"
+	@echo "============="
+
+# Alvo (target) para a construcao do objeto servidor.o
+# Define os arquivos servidor.cpp e servidor.h como dependencias.
+$(OBJ_DIR)/Servidor/servidor.o: $(SRC_DIR)/servidor.cpp
+	$(CC) -c $(CFLAGS) -o $@ $<
+
 doc:
 	$(RM) $(DOC_DIR)/*
 	doxygen Doxyfile
@@ -78,7 +93,7 @@ doc:
 clean:
 	$(RM) $(BIN_DIR)/*
 	$(RM) $(OBJ_DIR)/Jogo/*
-	$(RM) $(OBJ_DIR)/LeituraEntradas_BBB/*
+	$(RM) $(OBJ_DIR)/Servidor/*
 	$(RM) $(DOC_DIR)/*
 	
 #FIM DO MAKEFILE
