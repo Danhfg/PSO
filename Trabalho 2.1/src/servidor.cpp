@@ -112,7 +112,8 @@ void runServidor(){
                 << ". Logo, o cliente esta conectado..."
                 << std::endl
 				<< std::endl;
-    
+	
+    std::system("./bin/game > tela.dat");
     /// SOCKET DO SERVIDOR **COMUNICANDO-SE** COM O SOCKET DO CLIENTE
     while (true){
         
@@ -140,8 +141,7 @@ void runServidor(){
         }
 		
 		/// ENVIANDO TELA PARA CLIENTE
-
-		std::system("./bin/game > tela.dat");										
+		/// LEMBRAR DE NAO ENVIAR O ARQUIVO COMPLETO									
     	arqTela.open("tela.dat");
 		
 		if(arqTela.is_open() == 0){ /// VERIFICANDO SE O ARQUIVO FOI ABERTO
