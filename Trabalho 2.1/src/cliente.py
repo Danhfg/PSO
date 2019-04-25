@@ -89,7 +89,7 @@ def run():
 		# Recebendo atualizacao da tela vinda do servidor e imprimindo na tela do cliente
 		telaAtualizada = s.recv()
 
-		if( not or data.decode() == "FIM") 
+		if( not or telaAtualizada.decode() == "FIM") 
 			print( "Houve problema no recebimento da tela atualizada...")
 			break
 		else
