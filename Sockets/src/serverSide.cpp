@@ -15,14 +15,14 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#define HOST "127.0.0.1"
-#define PORT_NUMBER 4326    /// Numero da porta usada pelo socket do Servidor
+#define HOST "192.168.7.1"
+#define PORT_NUMBER 4322    /// Numero da porta usada pelo socket do Servidor
 #define QUEUE_SIZE_OF_REQUISITIONS 10   /// Tamanho da lista de requisicoes
 #define MESSAGE_SIZE 40 /// Quantidade de caracteres que uma mensagem pode transmitir  
 
 int main(){
 
-    char bufferServer[MESSAGE_SIZE]; //-> Buffer que guardara a mensagem recebida e a que sera enviada
+    char bufferServer[MESSAGE_SIZE]=""; //-> Buffer que guardara a mensagem recebida e a que sera enviada
     int socketId_Client_Conexao; //-> Indica se houve falha ou nao na retirada da requisicao da fila de requisicoes
     int messageSizeReceived; //-> Tamanho da mensagem recebida
     std::string serverResponse; //-> Resposta do Servidor entrada pelo usuario
@@ -96,15 +96,12 @@ int main(){
         exit(EXIT_FAILURE);                           
     }
 
-    std::cout   << "O socket do Servidor enviou a mensagem: " 
-                << bufferServer 
-                << ". Logo, o cliente esta conectado..."
-                << std::endl
-		<< std::endl;
+    printf("O socket do Servidor enviou a mensagem: %s. Logo o cliente esta conectado\n\n", bufferServer);
     
     /// SOCKET DO SERVIDOR **COMUNICANDO-SE** COM O SOCKET DO CLIENTE
     while (true){
-        
+       fflush(stdin);
+	fflush(stdout); 
         messageSizeReceived = recv( socketId_Client_Conexao, 
                                         bufferServer,
                                         MESSAGE_SIZE, 0 );
@@ -124,10 +121,11 @@ int main(){
             }
 
         }
-
+	fflush(stdout);
+	fflush(stdin);
         std::getline(std::cin, serverResponse);
-
-        send( socketId_Client_Conexao, serverResponse.c_str(), MESSAGE_SIZE, 0 );
+	strcpy(bufferServer,serverResponse.c_str()); 
+        send( socketId_Client_Conexao, bufferServer, MESSAGE_SIZE, 0 );
 
     }
 

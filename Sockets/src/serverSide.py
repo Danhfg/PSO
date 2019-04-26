@@ -2,7 +2,7 @@
 
 import socket  # Biblioteca para sockets
 
-HOST = "127.0.0.1"  # (localhost)
+HOST = "192.168.7.1"  # (localhost)
 PORT_NUMBER = 4324  # Porta usada pelo socket do Servidor
 MESSAGE_SIZE = 40 # Quantidade de caracteres que uma mensagem pode transmitir  
 
