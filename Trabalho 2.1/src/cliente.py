@@ -33,11 +33,11 @@ def checaLDR():
     
     diferenca = abs(conteudoLDR_Antigo - conteudoLDR_Atual)
 
-    if( diferenca > 0.02 ):  # Situação em que houve variação no LDR
+    if diferenca > 0.02 :  # Situação em que houve variação no LDR
         print("Houve variacao no LDR do Cliente e por isso foi enviado para o Servidor a letra 's'...\n")
         return ("s")
         
-    else
+    else:
         return("")
 
 
@@ -50,51 +50,51 @@ def checaPotenciometro():
     conteudoPotenciometro_Atual = ADC.read("AIN1")
     diferenca = conteudoPotenciometro_Antigo - conteudoPotenciometro_Atual
 
-    if( abs(diferenca) > 0.3 )  # Situação em que houve variação no potenciômetro
-        print("Houve varicao no Potenciometro de modo que o comando foi ir para a ")
+    if abs(diferenca) > 0.3 :  # Situação em que houve variação no potenciômetro
+		print("Houve varicao no Potenciometro de modo que o comando foi ir para a ")
         
-        if( diferenca < 0 ) # Movendo-se para à esquerda 
+		if diferenca < 0 : # Movendo-se para à esquerda 
             print(" esquerda\n")
             return ("a")
             
-        else  # Movendo-se para a direita
+        else:  # Movendo-se para a direita
             print(" direita\n")
             return("d")
             
-    else
+    else:
         return("")
 
 ############## SOCKET CLIENTE ####################
 
 def run():
-	HOST = "127.0.0.1"  # (localhost)
-    PORT_NUMBER = 4324  # Porta usada pelo socket do Servidor
+	HOST = "192.168.7.1"  # (localhost)
+    PORT_NUMBER = 4202  # Porta usada pelo socket do Servidor
 	s = socket.socket( socket.AF_INET, socket.SOCK_STREAM ) # Criando socket do Cliente
     s.connect( (HOST, PORT_NUMBER) )    # Conectando socket do Cliente ao socket do Servidor
     print("O socket do Cliente está conectado ao socket do Servidor\n")
 	
-	arqTela = open('/telAtual.dat','w')
+	arqTela = open('tela.dat','wb')
 
     while (True):
 
 		# Enviando comando capturado do joystick
-        if( checaPotenciometro() != "" )
-            s.send( checaPotenciometro() )
-        else if( checaLDR() != "" )
-            s.send( checaLDR() ) 
-        else
-            if( checaBotao() != "" )
-                s.send( checaBotao() )
+        if checaPotenciometro() != "" :
+            s.send( str.encode( checaPotenciometro() ) )
+        elif checaLDR() != "" :
+            s.send( str.encode( checaLDR() ) ) 
+        else:
+            if checaBotao() != "" :
+                s.send( str.encode( checaBotao() ) )
 		
 		# Recebendo atualizacao da tela vinda do servidor e imprimindo na tela do cliente
-		telaAtualizada = s.recv()
+		telaAtualizada = s.recv(10000)
 
-		if( not or telaAtualizada.decode() == "FIM") 
+		if not telaAtualizada :
 			print( "Houve problema no recebimento da tela atualizada...")
 			break
-		else
+		else:
 			arqTela.write( telaAtualizada )
-			call('cat telaAtual.dat', shell=True)
+			call('cat tela.dat', shell=True)
 	
 	arqTela.close()
 	s.close()
