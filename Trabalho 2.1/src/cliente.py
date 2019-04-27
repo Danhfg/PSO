@@ -1,108 +1,120 @@
 #!/usr/bin/env python3
 
-import Adafruit_BBIO.GPIO as GPIO  # Biblioteca para uso de GPIO
-import Adafruit_BBIO.ADC as ADC  # Biblioteca para uso de ADC
-
 import socket  # Biblioteca para uso de sockets
 import threading # Biblioteca para uso de threads
 
 from subprocess import call # Chamada de sistema por subprocessos
 
-
-############## BOTAO ####################
-
-GPIO.setup("P9_27", GPIO.IN) # Configurando entrada GPIO 115 que receberá o sinal do botão
-
-def checaBotao():
-
-	if GPIO.input("P9_27"):
-	    return ("w")
-	else
-	    return ("")    
-
-############## LDR ####################
-
-ADC.setup() # Configurando entrada ADC
-conteudoLDR_Antigo = ADC.read("AIN0") # Lendo sinal do LDR, inicializando
-
-def checaLDR():
-
-    global conteudoLDR_Antigo
-    
-    conteudoLDR_Atual = ADC.read("AIN0")
-    
-    diferenca = abs(conteudoLDR_Antigo - conteudoLDR_Atual)
-
-    if diferenca > 0.02 :  # Situação em que houve variação no LDR
-        print("Houve variacao no LDR do Cliente e por isso foi enviado para o Servidor a letra 's'...\n")
-        return ("s")
-        
-    else:
-        return("")
-
+def readADC(number):
+	PATH="/sys/bus/iio/devices/iio:device0/in_voltage" +str(number) + "_raw"
+	fileADC = open(PATH, "r")
+	valueADC = int ( fileADC.readline() )
+	fileADC.close()
+	return valueADC
 
 ############ POTENCIOMETRO ###############
 
-conteudoPotenciometro_Antigo = ADC.read("AIN1") # Lendo sinal do potenciômetro, inicializando
+def readPotenciometer():
+	return readADC(0)
 
-def checaPotenciometro():    
-    global conteudoPotenciometro_Antigo
-    conteudoPotenciometro_Atual = ADC.read("AIN1")
-    diferenca = conteudoPotenciometro_Antigo - conteudoPotenciometro_Atual
 
-    if abs(diferenca) > 0.3 :  # Situação em que houve variação no potenciômetro
-		print("Houve varicao no Potenciometro de modo que o comando foi ir para a ")
-        
-		if diferenca < 0 : # Movendo-se para à esquerda 
-            print(" esquerda\n")
-            return ("a")
+potenciometer_old = readPotenciometer()
+
+def checkingPotenciometer():    
+    global potenciometro_old
+    Potenciometro_now = readPotenciometer()
+    diference = potenciometer_old - potenciometer_now
+	potenciometer_old = potenciometer_now
+    if abs(diference) > 5 : 
+		print("Houve varicao no Potenciometro", flush=True)
+		if diference < 0 : # Movendo-se para à esquerda 
+            return "d"
             
         else:  # Movendo-se para a direita
-            print(" direita\n")
-            return("d")
-            
+            return "a"
     else:
-        return("")
+        return ""
+
+############## LDR ####################
+
+def readLDR():
+	return readADC(1)
+
+LDR_old = readLDR()
+
+def checkingLDR():
+    global LDR_old
+    LDR_now = readLDR()
+    diferenca = abs(LDR_old - LDR_now)
+    if diferenca > 0.07 :  # Situação em que houve variação no LDR
+        print("Houve variacao no LDR", flush=True)
+        return "s"
+    else:
+        return ""
+
+############## BOTAO ####################
+
+def readButton():
+	PATH_export = "/sys/class/gpio/export"
+	export = open(PATH_export, "a")
+	export.write("115")
+	PATH = "/sys/class/gpio/gpio115/value"
+	fileButton = open(PATH, "r")
+	valueButton = int( fileButton.readline() )
+	try:
+		export.close()
+	except:
+		pass
+	return valueButton
+
+def checkingBotao():
+	if readButton() == 1:
+		print("Botao foi apertado" , flush=True)
+	    return "w"
+	else
+	    return ""    
 
 ############## SOCKET CLIENTE ####################
 
-def run():
+def runClient():
 	HOST = "192.168.7.1"  # (localhost)
-    PORT_NUMBER = 4202  # Porta usada pelo socket do Servidor
-	s = socket.socket( socket.AF_INET, socket.SOCK_STREAM ) # Criando socket do Cliente
+    PORT_NUMBER = 4339  # Porta usada pelo socket do Servidor
+	MESSAGE_SIZE = 40
+	
+	with socket.socket( socket.AF_INET, socket.SOCK_STREAM ) as s: # Criando socket do Cliente
     s.connect( (HOST, PORT_NUMBER) )    # Conectando socket do Cliente ao socket do Servidor
     print("O socket do Cliente está conectado ao socket do Servidor\n")
+	while (True):
+		valueLDR=checkingLDR()
+		valuePotenciometer=checkingPotenciometer()
+		valueButton = checkingButton()		
 	
-	arqTela = open('tela.dat','wb')
-
-    while (True):
-
 		# Enviando comando capturado do joystick
-        if checaPotenciometro() != "" :
-            s.send( str.encode( checaPotenciometro() ) )
-        elif checaLDR() != "" :
-            s.send( str.encode( checaLDR() ) ) 
+        if valuePotenciometer != "" :
+            s.send( str.encode( valuePotenciometer ) )
+        elif valueLDR != "" :
+            s.send( str.encode( valueLDR ) ) 
         else:
-            if checaBotao() != "" :
-                s.send( str.encode( checaBotao() ) )
+            if valueBotao != "" :
+                s.send( str.encode( valueButton ) )
+			else:
+				s.send( str.encode("") )
 		
+		arqTela = open('tela.dat','wb')		
 		# Recebendo atualizacao da tela vinda do servidor e imprimindo na tela do cliente
-		telaAtualizada = s.recv(10000)
-
+		telaAtualizada = s.recv(MESSAGE_SIZE)
 		if not telaAtualizada :
-			print( "Houve problema no recebimento da tela atualizada...")
+			print( "Houve problema no recebimento da tela atualizada...", flush=True)
 			break
-		else:
-			arqTela.write( telaAtualizada )
-			call('cat tela.dat', shell=True)
-	
-	arqTela.close()
+		arqTela.write( telaAtualizada )
+		arqTela.close()
+		call('cat tela.dat', shell=True)
 	s.close()
 
 ####### THREADS ##########
-
+	
 # Criando a threads de checagem
-thread_run = threading.Thread(target=run)
+thread_run = threading.Thread(target=runClient)
 
 # Iniciando a threads
 thread_run.start()

@@ -7,7 +7,6 @@
 #include <string>
 #include <cstring>
 #include <fstream>
-
 #include <thread>
 
 /// BIBLIOTECAS P/ SOCKETS
@@ -19,27 +18,27 @@
 #include <unistd.h>
 
 #define HOST "192.168.7.1"
-#define PORT_NUMBER 4202    /// Numero da porta usada pelo socket do Servidor
+#define PORT_NUMBER 4339    /// Numero da porta usada pelo socket do Servidor
 #define QUEUE_SIZE_OF_REQUISITIONS 10   /// Tamanho da lista de requisicoes
-#define MESSAGE_SIZE 10000 /// Quantidade de caracteres que uma mensagem pode transmitir  
+#define MESSAGE_SIZE 40 /// Quantidade de caracteres que uma mensagem pode transmitir  
 
 void runServidor(){
 
-    char bufferServer[MESSAGE_SIZE]; //-> Buffer que guardara a mensagem recebida e a que sera enviada
+    char bufferServer[MESSAGE_SIZE]=""; //-> Buffer que guardara a mensagem recebida e a que sera enviada
     int socketId_Client_Conexao; //-> Indica se houve falha ou nao na retirada da requisicao da fila de requisicoes
     int messageSizeReceived; //-> Tamanho da mensagem recebida
     std::string serverResponse; //-> Resposta do Servidor entrada pelo usuario
 
-    std::ifstream arqTela;
-	
-    std::ofstream arqComandoJoystick;
-    arqComandoJoystick.open("input.in");
 
-    if(arqComandoJoystick.is_open() == 0){ /// VERIFICANDO SE O ARQUIVO FOI ABERTO
-	std::cerr << "O arquivo de comando nao foi aberto corretamente..." << std::endl;
-	exit(1);    
-    }
+	std::ifstream arqTela;
+	std::ofstream arqComandoJoystick;
+	arqComandoJoystick.open("input.in");
 	
+	if(arqComandoJoystick.is_open() == 0 ){
+		std::cerr << "O arquivo de comando nao foi aberto corretamente..." << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
     /// CONFIGURANDO PROPRIEDADES DE CONEXÃO
     struct sockaddr_in addrServer;
     addrServer.sin_addr.s_addr = inet_addr( HOST );
@@ -99,60 +98,40 @@ void runServidor(){
     /// ENVIANDO MENSAGEM DO SOCKET DO SERVIDOR PARA O SOCKET DO CLIENTE 
 
     if ( send( socketId_Client_Conexao, 
-               "Oi cliente, voce esta pronto?", 
-               MESSAGE_SIZE, 0 ) == -1 ){
-        std::cerr << "Falha no envio da mensagem por parte do socket do Servidor..." << std::endl;
-        exit(EXIT_FAILURE);                           
+               "Oi cliente! Voce estah pronto?\n", 
+               MESSAGE_SIZE, 0 
+            ) == -1 ){
+	fflush(stderr);
+	std::cerr << "Falha no envio da mensagem por parte do socket do Servidor..." << std::endl;
+	exit(EXIT_FAILURE);                           
     }
 
-    //std::cout   << "O socket do Servidor enviou a mensagem: " 
-    //            << bufferServer 
-    //            << ". Logo, o cliente esta conectado..."
-     //           << std::endl
-	//			<< std::endl;
+    std::cout <<"O socket do Servidor enviou uma mensagem. Logo o cliente esta conectado" << std::endl << std::endl;
 	
-    std::system("./bin/game > tela.dat");
+	std::system("./bin/game > tela.dat");    
     /// SOCKET DO SERVIDOR **COMUNICANDO-SE** COM O SOCKET DO CLIENTE
     while (true){
-        
-	/// RECEBENDO COMANDO DO JOYSTICK DE CLIENTE
-		
+       fflush(stdout); 
         messageSizeReceived = recv( socketId_Client_Conexao, 
                                         bufferServer,
                                         MESSAGE_SIZE, 0 );
-	
-	//std::cout << "Servidor recebeu algo" << std::endl;	
-	arqComandoJoystick << std::string( bufferServer); 	
 
         if( messageSizeReceived > 0 ){  /// Situação em que o cliente mandou uma mensagem não vazia
             
-            //std::cout << "Cliente disse: " << bufferServer << std::endl;
-
-            if( std::string( bufferServer) == "tchau" ||
-                std::string( bufferServer) == "bye" || 
-                std::string( bufferServer) == "Ate logo"){
-                
-                send( socketId_Client_Conexao, bufferServer, MESSAGE_SIZE, 0 );
+            std::cout << "Cliente disse: " << bufferServer[0] << std::endl;
+		arqComandoJoystick << bufferServer;
+            if( std::string(1, bufferServer[0]) == "" ){
+                send( socketId_Client_Conexao, "Sem comando", MESSAGE_SIZE, 0 );
                 break;
 
             }
 
         }
-		
-		/// ENVIANDO TELA PARA CLIENTE
-		/// LEMBRAR DE NAO ENVIAR O ARQUIVO COMPLETO									
-    	arqTela.open("tela.dat" );
-	///std::cout << "Abrindo arquivo" << std::endl;
-		
-	if(arqTela.is_open() == 0){ /// VERIFICANDO SE O ARQUIVO FOI ABERTO
-		std::cerr << "O arquivo de tela nao foi aberto corretamente..." << std::endl;
-		exit(1);    
-	}
-		
-	while(arqTela >> serverResponse); 
-	strcpy(bufferServer, serverResponse.c_str());
-	fflush(stdout);        
-	send( socketId_Client_Conexao, bufferServer, MESSAGE_SIZE, 0 );
+
+	fflush(stdin);
+        std::getline(std::cin, serverResponse);
+	strcpy(bufferServer,serverResponse.c_str()); 
+        send( socketId_Client_Conexao, bufferServer, MESSAGE_SIZE, 0 );
 
     }
 
@@ -162,16 +141,14 @@ void runServidor(){
     close(socketId_Server);
 
     std::cout << "Conexao entre os sockets do Servidor e do Cliente foi quebrada..." << std::endl;
-    
-    arqComandoJoystick.close();
-
-
+	arqComandoJoystick.close();    
 }    
+
 
 int main(){
 
-	std::thread threadSocketServidor( runServidor );	
+	std::thread threadSocketServidor( runServidor );
 	threadSocketServidor.join();
-
+	
 	return 0;
 }

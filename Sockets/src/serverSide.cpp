@@ -16,7 +16,7 @@
 #include <unistd.h>
 
 #define HOST "192.168.7.1"
-#define PORT_NUMBER 4322    /// Numero da porta usada pelo socket do Servidor
+#define PORT_NUMBER 4339    /// Numero da porta usada pelo socket do Servidor
 #define QUEUE_SIZE_OF_REQUISITIONS 10   /// Tamanho da lista de requisicoes
 #define MESSAGE_SIZE 40 /// Quantidade de caracteres que uma mensagem pode transmitir  
 
@@ -86,42 +86,36 @@ int main(){
         
     /// ENVIANDO MENSAGEM DO SOCKET DO SERVIDOR PARA O SOCKET DO CLIENTE 
 
-    serverResponse = "Oi cliente! Voce esta pronto?";	
-
     if ( send( socketId_Client_Conexao, 
-               serverResponse.c_str(), 
+               "Oi cliente! Voce estah pronto?\n", 
                MESSAGE_SIZE, 0 
             ) == -1 ){
-        std::cerr << "Falha no envio da mensagem por parte do socket do Servidor..." << std::endl;
-        exit(EXIT_FAILURE);                           
+	fflush(stderr);
+	std::cerr << "Falha no envio da mensagem por parte do socket do Servidor..." << std::endl;
+	exit(EXIT_FAILURE);                           
     }
 
-    printf("O socket do Servidor enviou a mensagem: %s. Logo o cliente esta conectado\n\n", bufferServer);
+    std::cout <<"O socket do Servidor enviou uma mensagem. Logo o cliente esta conectado" << std::endl << std::endl;
     
     /// SOCKET DO SERVIDOR **COMUNICANDO-SE** COM O SOCKET DO CLIENTE
     while (true){
-       fflush(stdin);
-	fflush(stdout); 
+       fflush(stdout); 
         messageSizeReceived = recv( socketId_Client_Conexao, 
                                         bufferServer,
                                         MESSAGE_SIZE, 0 );
 
         if( messageSizeReceived > 0 ){  /// Situação em que o cliente mandou uma mensagem não vazia
             
-            std::cout << "Cliente disse: " << bufferServer << std::endl;
+            std::cout << "Cliente disse: " << bufferServer[0] << std::endl;
 
-            if( std::string( bufferServer) == "tchau" ||
-                std::string( bufferServer) == "bye" || 
-                std::string( bufferServer) == "Ate logo"
-                ){
-                
-                send( socketId_Client_Conexao, bufferServer, MESSAGE_SIZE, 0 );
+            if( std::string(1, bufferServer[0]) == "" ){
+                send( socketId_Client_Conexao, "Sem comando", MESSAGE_SIZE, 0 );
                 break;
 
             }
 
         }
-	fflush(stdout);
+
 	fflush(stdin);
         std::getline(std::cin, serverResponse);
 	strcpy(bufferServer,serverResponse.c_str()); 
