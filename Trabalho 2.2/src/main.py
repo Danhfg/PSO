@@ -1,4 +1,5 @@
 import threading 
+import time
 
 from os import system
 from re import split
@@ -13,6 +14,8 @@ def tratamentoArquivo( conteudoArquivo ):
 def atualizandoArquivo():
   while True:
     system("grep 'MemTotal\|MemFree\|Cached\|SwapTotal\|SwapFree' /proc/meminfo > memInfo.dat")
+    time.sleep(0.5)
+
 
 arqMemInfo = open("memInfo.dat", 'r')
 conteudoArqMemInfo = arqMemInfo.readlines()
