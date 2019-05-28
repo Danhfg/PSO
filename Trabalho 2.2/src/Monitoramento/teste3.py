@@ -15,7 +15,8 @@ fracs2 = [10,10,10,10]
 
 the_grid = GridSpec(1, 2)
 i = 0
-while True:
+winOpen = True
+while winOpen:
 
     plt.subplot(the_grid[0, 0], aspect=1, title="MONITORANDO RAM")
 
@@ -28,10 +29,15 @@ while True:
     plt.draw()
 
     plt.pause(0.5)
-    plt.clf()
     fracs[i%4]+=10
     fracs2[i%4]+=10
     i+=1
+    if plt.get_fignums():
+        plt.clf()
+        continue
+    else:
+        winOpen = False
+
 
 
 plt.show()

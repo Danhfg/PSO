@@ -11,13 +11,18 @@ def make_autopct(values):
 plt.axis([0, 10, 0, 1])
 x = [1,2,3,4]
 i = 0
-while True:
+winOpen = True
+while winOpen:
     plt.title("Monitorando MEMORIA")
     plt.pie(x, labels=["T1", "T2", "T3", "T4"],autopct=make_autopct(x),shadow=True, startangle=90)
     plt.draw()
     plt.pause(0.5)
-    plt.clf()
     x[i%4]+=10
     i+=1
+    if plt.get_fignums():
+        plt.clf()
+        continue
+    else:
+        winOpen = False
 
 plt.show()
