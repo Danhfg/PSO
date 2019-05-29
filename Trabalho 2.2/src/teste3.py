@@ -26,44 +26,47 @@ the_grid = GridSpec(2, 3)
 winOpen = True
 
 while winOpen:
-    arqMemInfo = open("memInfo.dat", 'r')
+    try:
+        arqMemInfo = open("memInfo.dat", 'r')
 
-    conteudoArqMemInfo = arqMemInfo.readlines()
+        conteudoArqMemInfo = arqMemInfo.readlines()
 
-    lista =  tratamentoArquivo(conteudoArqMemInfo)
+        lista =  tratamentoArquivo(conteudoArqMemInfo)
 
-    labels1 = 'MemTotal', 'MemFree'
+        labels1 = 'Memória Usada', 'Memória Livre'
 
-    labels2 = 'Cached', 'SwapCached'
+        labels2 = 'Cached', 'SwapCached'
 
-    labels3 = 'SwapTotal', 'SwapFree'
+        labels3 = 'Swap Total', 'Swap Livre'
 
-    fracs1 = [lista[0]-lista[1], lista[1]]
+        fracs1 = [lista[0]-lista[1], lista[1]]
 
-    fracs2 = lista[2:4]
+        fracs2 = lista[2:4]
 
-    fracs3 = [lista[4]-lista[5], lista[5]]
+        fracs3 = [lista[4]-lista[5], lista[5]]
 
-    plt.subplot(the_grid[0, 0], aspect=1, title="MONITORANDO RAM")
+        plt.subplot(the_grid[0, 0], aspect=1, title="MONITORANDO RAM")
 
-    plt.pie(fracs1, labels=labels1, autopct=make_autopct(fracs1), shadow=True)
+        plt.pie(fracs1, labels=labels1, autopct=make_autopct(fracs1), shadow=True)
 
-    plt.subplot(the_grid[0, 2], aspect=1, title="MONITORANDO CACHE")
+        plt.subplot(the_grid[0, 2], aspect=1, title="MONITORANDO CACHE")
 
-    plt.pie(fracs2, labels=labels2, autopct=make_autopct(fracs2),shadow=True)
+        plt.pie(fracs2, labels=labels2, autopct=make_autopct(fracs2),shadow=True)
 
-    plt.subplot(the_grid[1, 1], aspect=1, title="MONITORANDO SWAP")
+        plt.subplot(the_grid[1, 1], aspect=1, title="MONITORANDO SWAP")
 
-    plt.pie(fracs2, labels=labels3, autopct=make_autopct(fracs2),shadow=True)
+        plt.pie(fracs2, labels=labels3, autopct=make_autopct(fracs2),shadow=True)
 
-    plt.draw()
+        plt.draw()
 
-    plt.pause(0.5)
+        plt.pause(0.5)
 
-    if plt.get_fignums():
-        plt.clf()
-        continue
-    else:
-        winOpen = False
+        if plt.get_fignums():
+            plt.clf()
+            continue
+        else:
+            winOpen = False
+    except:
+        pass
 
 plt.show()
