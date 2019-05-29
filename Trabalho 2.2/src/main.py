@@ -13,7 +13,7 @@ def tratamentoArquivo( conteudoArquivo ):
     
 def atualizandoArquivo():
   while True:
-    system("grep 'MemTotal\|MemFree\|Cached\|SwapTotal\|SwapFree' /proc/meminfo > memInfo.dat")
+    system("grep 'MemTotal\|MemFree\|Cached\|SwapCached\|SwapTotal\|SwapFree' /proc/meminfo > memInfo.dat")
     time.sleep(0.5)
 
 
