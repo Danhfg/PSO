@@ -10,11 +10,8 @@ def update_model():
 def update_title(set_smu=False):
     update_model()
     table.redraw()
-    #root.title('total: {:.2f}MB - added per redraw: {:.2f}kB'
-    #           .format(mem / 1000**2, (S/N)/1000))
     root.after(1000, update_title)
 
-#if __name__ == '__main__':
 me = psutil.Process()
 root = tk.Tk()
 frame = tk.Frame(root)

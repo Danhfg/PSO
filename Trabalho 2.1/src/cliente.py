@@ -17,7 +17,6 @@ def readADC(number):
 def readPotenciometer():
 	return readADC(0)
 
-
 potenciometer_old = readPotenciometer()
 
 def checkingPotenciometer():    
@@ -80,7 +79,6 @@ def runClient():
 	HOST = "192.168.7.1"  # (localhost)
     PORT_NUMBER = 4339  # Porta usada pelo socket do Servidor
 	MESSAGE_SIZE = 40
-	
 	with socket.socket( socket.AF_INET, socket.SOCK_STREAM ) as s: # Criando socket do Cliente
     s.connect( (HOST, PORT_NUMBER) )    # Conectando socket do Cliente ao socket do Servidor
     print("O socket do Cliente está conectado ao socket do Servidor\n")

@@ -2,8 +2,6 @@
 
 ## Introdução  
 
-Nesta pasta contém a implementação de uma arquitetura *Cliente-Servidor.*
+Nesta pasta contém a implementação de um socket nas linguagens de programacao C++, Java e Python que faz o uso do protocolo da camada de transporte TCP
 
-## Como compilar e executar  
-
-Compile separadamente ambos os arquivos dentre da pasta **src**. Em seguida, execute cada arquivo binário em uma janela do terminal.
+## Compilacao e exceuccao e executar  

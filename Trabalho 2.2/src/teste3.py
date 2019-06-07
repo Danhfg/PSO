@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 import threading 
 import time
-
 from os import system
 from re import split
 
@@ -15,18 +14,6 @@ def make_autopct(values):
     return my_autopct
 
 def tratamentoArquivo( conteudoArquivo ):
-    """
-    Realiza o tratamento da string que possui o conteúdo do arquivo
-
-    lista =  tratamentoArquivo(conteudoArquivo)
-
-    INPUT:
-      * conteudoArquivo: Conteudo do arquivo
-
-    return: Lista de informações
-    
-    Maio 2019
-    """
     listaInformacoes = []
     for linha in conteudoArquivo:
         c = split('kB|:', linha)
@@ -34,13 +21,11 @@ def tratamentoArquivo( conteudoArquivo ):
     return listaInformacoes
 
 the_grid = GridSpec(2, 3)
-
 winOpen = True
 while winOpen:
     try:
         arqMemInfo = open("memInfo.dat", 'r')
         conteudoArqMemInfo = arqMemInfo.readlines()
-
         lista =  tratamentoArquivo(conteudoArqMemInfo)
         labels1 = 'Memória Usada', 'Memória Livre'
         labels2 = 'Cached', 'SwapCached'
@@ -68,4 +53,4 @@ while winOpen:
     except:
         pass
 
-plt.show()
+    plt.show()

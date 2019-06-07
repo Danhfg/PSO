@@ -25,3 +25,5 @@ class Board:
 
     def loop(self):
         self._mainWindows.mainloop()    
+
+     def add_fruit(self):   
