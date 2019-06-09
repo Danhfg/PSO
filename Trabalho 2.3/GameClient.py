@@ -7,7 +7,7 @@ from Board import Board
 
 host = socket.gethostname()  # (localhost)
 portNumber = 4324  # Porta usada pelo socket do Servidor
-bufferSize = 8192  # Tamanho do buffer para recebimento de dados na comunicacao via sockets
+bufferSize = 10000000  # Tamanho do buffer para recebimento de dados na comunicacao via sockets
 
 clientSocket = socket.socket( socket.AF_INET, socket.SOCK_STREAM ) # Criando o socket do Cliente
 
@@ -26,10 +26,12 @@ def sendingPlayerName():
 
 		return playerName
 		
-def receivingScreen(board):
+def receivingScreen():
 	dataBytes = clientSocket.recv( bufferSize )
 	board = pickle.loads(dataBytes)
- 
+ 	
+	return board
+
 def findingMySnake(board, playerName):
 	snakeList = board.getSnakes()
 
@@ -45,14 +47,14 @@ def sendingSnakeComand(board, snake):
 
 def main():
 
-	sendingPlayerName()
+	playerName = sendingPlayerName()
 
 	while True :
-		receivingScreen(board)
+		board = receivingScreen()
 		
 		board.loop()
 
-		mySnake = findingMySnake(board)	
+		mySnake = findingMySnake(board, playerName)	
 		sendingSnakeComand(board, mySnake)
 
 if __name__ == '__main__':

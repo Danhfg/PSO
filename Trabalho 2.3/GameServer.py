@@ -13,7 +13,7 @@ delay = 0.1
 
 host = socket.gethostname()  # (localhost)
 portNumber = 4324  # Porta usada pelo socket do Servidor
-bufferSize = 8192  # Tamanho do buffer para recebimento de dados na comunicacao via sockets
+bufferSize = 10000000  # Tamanho do buffer para recebimento de dados na comunicacao via sockets
 
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 
@@ -22,7 +22,7 @@ def receivingPlayerName(board, connection ):
     uniquePlayerName = True
 
     dataBytes = connection.recv( bufferSize )
-    playerName = pickle.loads(dataBytes)
+    playerName = dataBytes.decode('ascii')
 
     for snake in snakeList:
         if snake.getName() == playerName:
@@ -40,12 +40,12 @@ def sendingScreen(board, connection):
     connection.sendall( boardBytes )
 
 def receivedScreen( board, connection):
-    dataBytes = clientSocket.recv( bufferSize )
+    dataBytes = connection.recv( bufferSize )
     board = pickle.loads(dataBytes)
 
 def threaded(connection, board): 
     newPlayerName = receivingPlayerName(board, connection)
-    board.add_snake( Snake(playerName) )    
+    board.add_snake( Snake(newPlayerName) )    
 
     while True: 
         sendingScreen(board, connection)
@@ -66,7 +66,7 @@ def main():
       # establish connection with client 
         c, addr = serverSocket.accept() 
     
-        start_new_thread(threaded, (c,))
+        start_new_thread(threaded, (c,board))
 
         board.update()
         snakeList = board.getSnakes()
