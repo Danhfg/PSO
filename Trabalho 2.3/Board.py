@@ -44,11 +44,19 @@ class Board:
             self._mainWindows.onkeypress(snake.goLeft,"Left")
             self._mainWindows.onkeypress(snake.goRight,"Right")
 
+    def listenEspecificSnake(snake):
+        self._mainWindows.listen()
+        self._mainWindows.onkeypress(snake.goUp,"Up")
+        self._mainWindows.onkeypress(snake.goDown,"Down")
+        self._mainWindows.onkeypress(snake.goLeft,"Left")
+        self._mainWindows.onkeypress(snake.goRight,"Right")
+
     def loop(self):
         self._mainWindows.mainloop()    
 
     def getSnakes(self):
         return self._snakeList       
+
     def getFood(self):
         return self._food
 

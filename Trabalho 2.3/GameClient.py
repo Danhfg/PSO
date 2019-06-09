@@ -5,28 +5,55 @@ import pickle	# Usada na serializacao da cobra
 from Snake import Snake
 from Board import Board
 
+host = socket.gethostname()  # (localhost)
+portNumber = 4324  # Porta usada pelo socket do Servidor
+bufferSize = 8192  # Tamanho do buffer para recebimento de dados na comunicacao via sockets
 
-HOST = sockets.gethostname()  # (localhost)
-PORT_NUMBER = 4324  # Porta usada pelo socket do Servidor
-clientSocket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )      # Criando o socket do Cliente
-    
+clientSocket = socket.socket( socket.AF_INET, socket.SOCK_STREAM ) # Criando o socket do Cliente
 
+def sendingPlayerName():
+	playerName = sys.argv[1]
+
+	clientSocket.connect( (host, portNumber) )
+
+	while True:
+		clientSocket.send( playerName.encode('ascii') )
+		dataBytes = clientSocket.recv( bufferSize )
+		uniqueName = pickle.loads(dataBytes)
+
+		if uniqueName:
+			break
+
+		return playerName
+		
+def receivingScreen(board):
+	dataBytes = clientSocket.recv( bufferSize )
+	board = pickle.loads(dataBytes)
+ 
+def findingMySnake(board, playerName):
+	snakeList = board.getSnakes()
+
+	for snake in snakeList:
+		if snake.getName() == playerName:
+			return snake
+
+def sendingSnakeComand(board, snake):
+	board.listenEspecificSnake(snake)
+	boardBytes = pickle.dumps(board)
+	clientSocket.sendall( boardBytes )
+  		
 
 def main():
 
-    playerName = sys.argv[1]
-    playerSnake = Snake( playerSnake )
+	sendingPlayerName()
 
-    board = Board()
-    board.add_snake(playerSnake)
+	while True :
+		receivingScreen(board)
+		
+		board.loop()
 
-    #playerSnakeBytes = pickle.dumps( playerSnake ) # Serializando cobra do jogador
-
-    #clientSocket.connect( (HOST, PORT_NUMBER) )    # Conectando socket do Cliente ao socket do Servidor
-    #clientSocket.sendall( playerSnakeBytes )
-
-
-
+		mySnake = findingMySnake(board)	
+		sendingSnakeComand(board, mySnake)
 
 if __name__ == '__main__':
     main()

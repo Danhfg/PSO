@@ -3,38 +3,74 @@ import sys
 import pickle	# Usada na serializacao da cobra
 import random
 import time
+from _thread import *
+import threading 
 
 from Snake import Snake
 from Board import Board
 
-
-#HOST = sockets.gethostname()  # (localhost)
-#PORT_NUMBER = 4324  # Porta usada pelo socket do Servidor
-#serverSocket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )      # Criando o socket do servere
-    
 delay = 0.1
 
+host = socket.gethostname()  # (localhost)
+portNumber = 4324  # Porta usada pelo socket do Servidor
+bufferSize = 8192  # Tamanho do buffer para recebimento de dados na comunicacao via sockets
+
+serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+
+def receivingPlayerName(board, connection ):
+    snakeList = board.getSnakes()
+    uniquePlayerName = True
+
+    dataBytes = connection.recv( bufferSize )
+    playerName = pickle.loads(dataBytes)
+
+    for snake in snakeList:
+        if snake.getName() == playerName:
+            uniquePlayerName = False
+            break
+
+    uniquePlayerNameBytes = pickle.dumps(uniquePlayerName)
+    connection.sendall( uniquePlayerNameBytes )
+
+    return playerName
+
+    
+def sendingScreen(board, connection):
+    boardBytes = pickle.dumps(board)
+    connection.sendall( boardBytes )
+
+def receivedScreen( board, connection):
+    dataBytes = clientSocket.recv( bufferSize )
+    board = pickle.loads(dataBytes)
+
+def threaded(connection, board): 
+    newPlayerName = receivingPlayerName(board, connection)
+    board.add_snake( Snake(playerName) )    
+
+    while True: 
+        sendingScreen(board, connection)
+        receivedScreen(board, connection)
+   
+    c.close() # Fechando a conexao
+  
 
 def main():
 
-    playerName = sys.argv[1]
-    playerSnake = Snake( playerName )
-    playerName = sys.argv[2]
-    playerSnake2 = Snake( playerName )
-    playerName = sys.argv[3]
-    playerSnake3 = Snake( playerName )
-    #playerSnakeBytes = pickle.dumps( playerSnake ) # Serializando cobra do jogador
-
-    #serverSocket.connect( (HOST, PORT_NUMBER) )    # Conectando socket do servere ao socket do Servidor
-    #serverSocket.sendall( playerSnakeBytes )
+    serverSocket.bind( (host, portNumber) ) 
+    serverSocket.listen(5) 
     board = Board()
     board.listen()
-    board.add_snake(playerSnake)
-    board.add_snake(playerSnake2)
-    board.add_snake(playerSnake3)
+    
     while True:
+        
+      # establish connection with client 
+        c, addr = serverSocket.accept() 
+    
+        start_new_thread(threaded, (c,))
+
         board.update()
         snakeList = board.getSnakes()
+        
         if snakeList != None:
             for snake in snakeList:
                 if(snake.getHead().xcor() > 290 or
@@ -114,7 +150,10 @@ def main():
             time.sleep(delay)         
         else:
             pass
+
     board.loop()
+    serverSocket.close()
+
 
 
 if __name__ == '__main__':
