@@ -1,4 +1,5 @@
 import turtle
+import random
 
 class Apple:
     def __init__(self):
@@ -7,7 +8,9 @@ class Apple:
         self._food.shape("circle")
         self._food.color("red")
         self._food.penup()
-        self._food.goto(0,150)
+        x = random.randint(-290, 290)
+        y = random.randint(-290, 290)
+        self._food.goto(x,y)
 
     def goto(self, x, y):
         self._food.goto(x, y)

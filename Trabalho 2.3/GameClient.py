@@ -14,14 +14,19 @@ clientSocket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )      # Criand
 
 def main():
 
-	playerName = sys.argv[1]
-	playerSnake = Snake( playerSnake )
-	playerSnakeBytes = pickle.dumps( playerSnake ) # Serializando cobra do jogador
+    playerName = sys.argv[1]
+    playerSnake = Snake( playerSnake )
 
-    clientSocket.connect( (HOST, PORT_NUMBER) )    # Conectando socket do Cliente ao socket do Servidor
-    clientSocket.sendall( playerSnakeBytes )
+    board = Board()
+    board.add_snake(playerSnake)
+
+    #playerSnakeBytes = pickle.dumps( playerSnake ) # Serializando cobra do jogador
+
+    #clientSocket.connect( (HOST, PORT_NUMBER) )    # Conectando socket do Cliente ao socket do Servidor
+    #clientSocket.sendall( playerSnakeBytes )
 
 
 
 
 if __name__ == '__main__':
+    main()

@@ -10,10 +10,16 @@ class Snake:
         self._head.penup()
         self._head.goto(0,0)
         self._head.direction = "stop"
-        self._segments = []
+        self.segments = []
 
     def getName(self):
         return self._name
+
+    def getHead(self):
+        return self._head
+
+#    def getSegments(self):
+#        return self._segments
 
     def goUp(self):
         self._head.direction = "UP"
@@ -29,6 +35,10 @@ class Snake:
 
     def goto(self, x,y):
         self._head.goto(x,y)
+
+    def setDirection(self,direction):
+        self._head.direction("Stop")
+
 
     def eats(self):
         new_segment = turtle.Turtle()
