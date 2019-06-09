@@ -21,6 +21,8 @@ def main():
     playerSnake = Snake( playerName )
     playerName = sys.argv[2]
     playerSnake2 = Snake( playerName )
+    playerName = sys.argv[3]
+    playerSnake3 = Snake( playerName )
     #playerSnakeBytes = pickle.dumps( playerSnake ) # Serializando cobra do jogador
 
     #serverSocket.connect( (HOST, PORT_NUMBER) )    # Conectando socket do servere ao socket do Servidor
@@ -29,6 +31,7 @@ def main():
     board.listen()
     board.add_snake(playerSnake)
     board.add_snake(playerSnake2)
+    board.add_snake(playerSnake3)
     while True:
         board.update()
         snakeList = board.getSnakes()
@@ -66,14 +69,15 @@ def main():
 
                 for snk in snakeList: # Matar as cobras que encostarem a cabeça
                     if snk.getName() != snake.getName():
+                        #print(snake.getHead().distance(snk.getHead()))
                         if snake.getHead().distance(snk.getHead()) < 20:
                             x = random.randint(-200, 200)
                             y = random.randint(-200, 200)
-                            #snake.getHead().goto(x,y)
+                            snake.getHead().goto(x,y)
                             snake.getHead().direction = "stop"
                             x = random.randint(-200, 200)
                             y = random.randint(-200, 200)
-                            #snk.getHead().goto(x,y)
+                            snk.getHead().goto(x,y)
                             snk.getHead().direction = "stop"
 
                 for index in range(len(snake.segments)-1, 0 , -1):
@@ -99,7 +103,7 @@ def main():
                 snake.move()
 
                 for segment in snake.segments:
-                    if (segment.distance(snake.getHead()) < 20):
+                    if (segment.distance(snake.getHead()) < 20): #matar cobra que comer a sí própria
                         time.sleep(1)
                         snake.goto(0, 0)
                         snake.setDirection("Stop")

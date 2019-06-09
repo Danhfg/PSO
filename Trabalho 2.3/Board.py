@@ -5,7 +5,11 @@ from Snake import Snake
 class Board:
     def __init__(self):
         self._snakeList = []
-        self._food = None
+        self._food = turtle.Turtle()
+        self._food.speed(0)
+        self._food.shape("circle")
+        self._food.color("red")
+        self._food.penup()
         self.changeFood()
         self._mainWindows = turtle.Screen()
         self._mainWindows.title("SnakeGame")
@@ -22,15 +26,15 @@ class Board:
         self._snakeList.append(snake)
 
     def changeFood(self):
-        food = turtle.Turtle()
-        food.speed(0)
-        food.shape("circle")
-        food.color("red")
-        food.penup()
+        #food = turtle.Turtle()
+        #food.speed(0)
+        #food.shape("circle")
+        #food.color("red")
+        #food.penup()
         x = random.randint(-290, 290)
         y = random.randint(-290, 290)
-        food.goto(x, y)
-        self._food = food
+        #food.goto(x, y)
+        self._food.goto(x, y)
 
     def listen(self):
         self._mainWindows.listen()
