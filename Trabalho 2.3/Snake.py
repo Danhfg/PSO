@@ -11,7 +11,9 @@ class Snake:
         self._head.color(cor[0])
         #print(cor[0])
         self._head.penup()
-        self._head.goto(0,0)
+        x = random.randint(-200, 200)
+        y = random.randint(-200, 200)
+        self._head.goto(x,y)
         self._head.direction = "stop"
         self.segments = []
 
@@ -49,7 +51,7 @@ class Snake:
         new_segment.shape("square")
         new_segment.color("red")
         new_segment.penup()
-        self._segments.append(new_segment)
+        self.segments.append(new_segment)
 
     def move(self):
         if(self._head.direction == "UP"):
