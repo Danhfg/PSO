@@ -2,6 +2,7 @@ import socket
 import sys
 import pickle	# Usada na serializacao da cobra
 import random
+import time
 
 from Snake import Snake
 from Board import Board
@@ -11,22 +12,25 @@ from Board import Board
 #PORT_NUMBER = 4324  # Porta usada pelo socket do Servidor
 #serverSocket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )      # Criando o socket do servere
     
+delay = 0.1
 
 
 def main():
-
     playerName = sys.argv[1]
     playerSnake = Snake( playerName )
+    playerName = sys.argv[2]
+    playerSnake2 = Snake( playerName )
     #playerSnakeBytes = pickle.dumps( playerSnake ) # Serializando cobra do jogador
 
     #serverSocket.connect( (HOST, PORT_NUMBER) )    # Conectando socket do servere ao socket do Servidor
     #serverSocket.sendall( playerSnakeBytes )
     board = Board()
     board.add_snake(playerSnake)
+    board.add_snake(playerSnake2)
     while True:
         board.update()
         snakeList = board.getSnakes()
-        if snakeList == None:
+        if snakeList != None:
             for snake in snakeList:
                 if(snake.getHead().xcor() > 290 or
                     snake.getHead().xcor() < -290 or 
@@ -37,7 +41,7 @@ def main():
                     #snake.getHead().goto(0,0)
                     #snake.getHead().direction = "stop"
 
-                if snake.getHead().distance(food) < 20: # Comer a maça
+                if snake.getHead().distance(board.getFood()) < 20: # Comer a maça
                     board.changeFood()
                     snake.eats()
                     # adding body of the snake
@@ -59,7 +63,7 @@ def main():
                     y = snake.getHead().ycor()
                     snake.segments[0].goto(x, y)
                     
-                move()
+                snake.move()
 
                 for segment in snake.segments:
                     if (segment.distance(snake.getHead()) < 20):
