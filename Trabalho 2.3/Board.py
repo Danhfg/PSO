@@ -51,26 +51,23 @@ class Board:
     def setPositionFood(self, x, y):
         self._food.setpos(x, y)
 
-    def buttonUpPressioned(self):
+    def _upPressioned(self):
         self._comandNow = "Up"
     
-    def buttonDownPressioned(self):
+    def _downPressioned(self):
         self._comandNow = "Down"
         
-    def buttonLeftPressioned(self):
+    def _leftPressioned(self):
         self._comandNow = "Left"
         
-    def buttonRightPressioned(self):
+    def _rightPressioned(self):
         self._comandNow = "Right"
-        
-    def listButtonPressioned(self):
-        self._mainWindows.onkeypress(buttonUpPressioned,"Up")
-        self._mainWindows.onkeypress(buttonDownPressioned,"Down")
-        self._mainWindows.onkeypress(buttonLeftPressioned,"Left")
-        self._mainWindows.onkeypress(buttonRightPressioned,"Right")
 
     def buttonPressioned(self):
-        self.listButtonPressioned()
+        self._mainWindows.onkeypress(self._upPressioned,"Up")
+        self._mainWindows.onkeypress(self._downPressioned,"Down")
+        self._mainWindows.onkeypress(self._leftPressioned,"Left")
+        self._mainWindows.onkeypress(self._rightPressioned,"Right")
         return self._comandNow
 
     def listen(self):
