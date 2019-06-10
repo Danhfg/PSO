@@ -35,7 +35,7 @@ def main():
 
         board.update()
         print( board.buttonPressioned() )
-		clientSocket.send
+		clientSocket.send( board.buttonPressioned() )
 
 
 if __name__ == "__main__":

@@ -9,7 +9,6 @@ class Snake:
         self._head.shape("square")
         cor = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])]
         self._head.color(cor[0])
-        #print(cor[0])
         self._head.penup()
         x = random.randint(-200, 200)
         y = random.randint(-200, 200)
