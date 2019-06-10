@@ -17,21 +17,24 @@ bufferSize = 10000000  # Tamanho do buffer para recebimento de dados na comunica
 
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 
-def receivingPlayerName(listPlayersNames, connection ):
+def receivingPlayerName(snakeList, connection ):
     uniquePlayerName = True
 
-    dataBytes = connection.recv( bufferSize )
-    newPlayerName = dataBytes.decode('ascii')
+    while True:
 
-    for playerName in listPlayersNames:
-        if playerName == newPlayerName:
-            uniquePlayerName = False
-            break
+        dataBytes = connection.recv( bufferSize )
+        newPlayerName = dataBytes.decode('ascii')
 
-    uniquePlayerNameBytes = pickle.dumps(uniquePlayerName)
-    connection.sendall( uniquePlayerNameBytes )
+        for snake in snakeList:
+            if snake.getName() == newPlayerName:
+                uniquePlayerName = False
+                break
 
-    return playerName
+        uniquePlayerNameBytes = pickle.dumps(uniquePlayerName)
+        connection.sendall( uniquePlayerNameBytes )
+
+    snakeList.append( Snake(newPlayerName) )
+
     
 def sendingSnakeList(snakeList, connection):
     connection.sendall( pickle.dumps(snakeList) )
@@ -45,8 +48,8 @@ def receivedSnakeList(connection):
 
     return snakeList
 
-def threaded(connection, snakeList, applePosition, listPlayersNames, newPlayerName): 
-    newPlayerName = receivingPlayerName(listPlayersNames, connection)
+def threaded(connection, snakeList, applePosition): 
+    receivingPlayerName(snakeList, connection)
 
     while True: 
         sendingSnakeList(snakeList , connection)
@@ -71,11 +74,10 @@ def main():
         
         c, addr = serverSocket.accept() 
 
-        start_new_thread(threaded, (c, board.getSnakeList(),  board.positionFood(), board.listPlayersNames(), newPlayerName ))
-
-        board.add_snake( Snake(newPlayerName) )
+        start_new_thread(threaded, (c, board.getSnakeList(),  board.positionFood()))
 
         board.update()
+        snakeList = board.getSnakeList()
         
         if snakeList != None:
             for snake in snakeList:

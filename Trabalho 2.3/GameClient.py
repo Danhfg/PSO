@@ -32,6 +32,12 @@ def receivingSnakeList():
  	
 	return snakeList
 
+def receivingApplePosition():
+	applePositionBytes = clientSocket.recv( bufferSize )
+	applePosition = pickle.loads(applePositionBytes)
+ 	
+	return applePosition
+
 def sendingSnakeComand(board, snakeList, playerName):
 
 	for snake in snakeList:
@@ -51,7 +57,7 @@ def main():
 	while True :
 		
 		applePosition = receivingApplePosition()
-		board.setFoodPosition( applePosition.getPosition() )
+		board.setFoodPosition( applePosition )
 
 		snakeList = receivingSnakeList()
 		board.setSnakeList(snakeList)

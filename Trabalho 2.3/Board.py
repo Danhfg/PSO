@@ -26,6 +26,9 @@ class Board:
     def add_snake(self, snake):
         self._snakeList.append(snake)
 
+    def getSnakeList(self):
+        return self._snakeList
+
     def setSnakeList(self, newSnakeList):
         self._snakeList = newSnakeList        
 
@@ -63,9 +66,6 @@ class Board:
 
     def loop(self):
         self._mainWindows.mainloop()    
-
-    def getSnakes(self):
-        return self._snakeList       
 
     def getFood(self):
         return self._food
