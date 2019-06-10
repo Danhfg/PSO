@@ -5,8 +5,8 @@ import pickle	# Usada na serializacao da cobra
 from Snake import Snake
 from Board import Board
 
-host = socket.gethostname()  # (localhost)
-portNumber = 4324  # Porta usada pelo socket do Servidor
+host = "localhost"
+portNumber = 5544  # Porta usada pelo socket do Servidor
 bufferSize = 10000000  # Tamanho do buffer para recebimento de dados na comunicacao via sockets
 
 clientSocket = socket.socket( socket.AF_INET, socket.SOCK_STREAM ) # Criando o socket do Cliente
@@ -34,7 +34,9 @@ def receivingSnakeList():
 
 def receivingApplePosition():
 	applePositionBytes = clientSocket.recv( bufferSize )
+	print(applePositionBytes)
 	applePosition = pickle.loads(applePositionBytes)
+	print(applePosition)
  	
 	return applePosition
 
@@ -57,7 +59,8 @@ def main():
 	while True :
 		
 		applePosition = receivingApplePosition()
-		board.setFoodPosition( applePosition )
+		print(applePosition)
+		board.setPositionFood( applePosition )
 
 		snakeList = receivingSnakeList()
 		board.setSnakeList(snakeList)
