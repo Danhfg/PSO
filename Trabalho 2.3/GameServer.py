@@ -17,15 +17,14 @@ bufferSize = 10000000  # Tamanho do buffer para recebimento de dados na comunica
 
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 
-def receivingPlayerName(board, connection ):
-    snakeList = board.getSnakes()
+def receivingPlayerName(listPlayersNames, connection ):
     uniquePlayerName = True
 
     dataBytes = connection.recv( bufferSize )
-    playerName = dataBytes.decode('ascii')
+    newPlayerName = dataBytes.decode('ascii')
 
-    for snake in snakeList:
-        if snake.getName() == playerName:
+    for playerName in listPlayersNames:
+        if playerName == newPlayerName:
             uniquePlayerName = False
             break
 
@@ -33,43 +32,50 @@ def receivingPlayerName(board, connection ):
     connection.sendall( uniquePlayerNameBytes )
 
     return playerName
-
     
-def sendingScreen(board, connection):
-    boardBytes = pickle.dumps(board)
-    connection.sendall( boardBytes )
+def sendingSnakeList(snakeList, connection):
+    connection.sendall( pickle.dumps(snakeList) )
 
-def receivedScreen( board, connection):
-    dataBytes = connection.recv( bufferSize )
-    board = pickle.loads(dataBytes)
+def sendingApplePosition( applePosition, connection):
+    connection.sendall( pickle.dumps(applePosition) )
 
-def threaded(connection, board): 
-    newPlayerName = receivingPlayerName(board, connection)
-    board.add_snake( Snake(newPlayerName) )    
+def receivedSnakeList(connection):
+    snakeListBytes = connection.recv( bufferSize )
+    snakeList = pickle.loads(snakeListBytes)
+
+    return snakeList
+
+def threaded(connection, snakeList, applePosition, listPlayersNames, newPlayerName): 
+    newPlayerName = receivingPlayerName(listPlayersNames, connection)
 
     while True: 
-        sendingScreen(board, connection)
-        receivedScreen(board, connection)
+        sendingSnakeList(snakeList , connection)
+        sendingApplePosition(applePosition , connection)
+        
+        snakeList = receivedSnakeList(connection)
    
     c.close() # Fechando a conexao
   
 
 def main():
 
+    newPlayerName = ""
+
     serverSocket.bind( (host, portNumber) ) 
     serverSocket.listen(5) 
+    
     board = Board()
     board.listen()
-    
+        
     while True:
         
-      # establish connection with client 
         c, addr = serverSocket.accept() 
-    
-        start_new_thread(threaded, (c,board))
+
+        start_new_thread(threaded, (c, board.getSnakeList(),  board.positionFood(), board.listPlayersNames(), newPlayerName ))
+
+        board.add_snake( Snake(newPlayerName) )
 
         board.update()
-        snakeList = board.getSnakes()
         
         if snakeList != None:
             for snake in snakeList:
@@ -147,13 +153,13 @@ def main():
                         for segment in snake.segments:
                             segment.goto(1000, 1000)
                         snake.segments.clear()  
-            time.sleep(delay)         
-        else:
-            pass
+            time.sleep(delay)
+
+        # else:
+        #     pass
 
     board.loop()
     serverSocket.close()
-
 
 
 if __name__ == '__main__':

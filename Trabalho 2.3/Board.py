@@ -11,6 +11,7 @@ class Board:
         self._food.color("red")
         self._food.penup()
         self.changeFood()
+
         self._mainWindows = turtle.Screen()
         self._mainWindows.title("SnakeGame")
         self._mainWindows.bgcolor("green")
@@ -25,6 +26,9 @@ class Board:
     def add_snake(self, snake):
         self._snakeList.append(snake)
 
+    def setSnakeList(self, newSnakeList):
+        self._snakeList = newSnakeList        
+
     def changeFood(self):
         #food = turtle.Turtle()
         #food.speed(0)
@@ -35,6 +39,12 @@ class Board:
         y = random.randint(-290, 290)
         #food.goto(x, y)
         self._food.goto(x, y)
+
+    def positionFood(self):
+        return self._food.pos()
+
+    def setPositionFood(self, x, y):
+        self._food.setpos(x, y)
 
     def listen(self):
         self._mainWindows.listen()
@@ -60,4 +70,10 @@ class Board:
     def getFood(self):
         return self._food
 
-    #def add_fruit(self):   
+    def listPlayersNames(self):
+        playersNames = []
+
+        for snake in _snakeList:
+            playersNames.append(snake.getName())
+
+        return playersNames

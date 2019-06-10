@@ -24,38 +24,41 @@ def sendingPlayerName():
 		if uniqueName:
 			break
 
-		return playerName
+	return playerName
 		
-def receivingScreen():
-	dataBytes = clientSocket.recv( bufferSize )
-	board = pickle.loads(dataBytes)
+def receivingSnakeList():
+	snakeListBytes = clientSocket.recv( bufferSize )
+	snakeList = pickle.loads(snakeList)
  	
-	return board
+	return snakeList
 
-def findingMySnake(board, playerName):
-	snakeList = board.getSnakes()
+def sendingSnakeComand(board, snakeList, playerName):
 
 	for snake in snakeList:
 		if snake.getName() == playerName:
-			return snake
-
-def sendingSnakeComand(board, snake):
-	board.listenEspecificSnake(snake)
-	boardBytes = pickle.dumps(board)
-	clientSocket.sendall( boardBytes )
+			board.listenEspecificSnake(snake)
+	
+	snakeListBytes = pickle.dumps(snakeList)
+	clientSocket.sendall( snakeListBytes )
   		
 
 def main():
 
+	board = Board()
+
 	playerName = sendingPlayerName()
 
 	while True :
-		board = receivingScreen()
 		
+		applePosition = receivingApplePosition()
+		board.setFoodPosition( applePosition.getPosition() )
+
+		snakeList = receivingSnakeList()
+		board.setSnakeList(snakeList)
+
 		board.loop()
 
-		mySnake = findingMySnake(board, playerName)	
-		sendingSnakeComand(board, mySnake)
+		sendingSnakeComand(board, snakeList, playerName)
 
 if __name__ == '__main__':
     main()
