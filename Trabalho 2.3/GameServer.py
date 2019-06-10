@@ -20,7 +20,7 @@ serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 def receivingPlayerName(snakeList, connection ):
     uniquePlayerName = True
 
-    while True:
+    while uniquePlayerName:
 
         dataBytes = connection.recv( bufferSize )
         newPlayerName = dataBytes.decode('ascii')
@@ -28,8 +28,7 @@ def receivingPlayerName(snakeList, connection ):
         for snake in snakeList:
             if snake.getName() == newPlayerName:
                 uniquePlayerName = False
-                break
-
+                
         uniquePlayerNameBytes = pickle.dumps(uniquePlayerName)
         connection.sendall( uniquePlayerNameBytes )
 
