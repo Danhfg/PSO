@@ -19,21 +19,28 @@ def threaded(c, addr):
         data = c.recv(1024) 
         data = pickle.loads(data)
         print( "Client ("  + ")ask:" + str(data))
-        if data['name'] not in clients.keys():
-            clients[data['name']] = {'head':'','segments':''}
-            data =  {'name':data['name'],'head':'','segments':''}
-        else:
-            break
+#         if data['name'] not in clients.keys():
+#             clients[data['name']] = {'head':'','segments':''}
+#             data =  {'name':data['name'],'head':'','segments':''}
+#         else:
+#             break
 
-        if not data: 
-            print( "Client ("  + ") disconnect")
-            break
-            # lock released on exit 
- #           print_lock.release()                                            ## CASO DESEJE MULTIPLOS CLIENTE, COMENTE ESTA LINHA 
+#         if not data: 
+#             print( "Client ("  + ") disconnect")
+#             break
+#             # lock released on exit 
+#  #           print_lock.release()                                            ## CASO DESEJE MULTIPLOS CLIENTE, COMENTE ESTA LINHA 
             
 
-        # send back reversed string to client 
-        c.send(pickle.dumps(data)) 
+#         # send back reversed string to client 
+#         c.send(pickle.dumps(data)) 
+
+#         # data comand pressioned received from client 
+#         data = c.recv(1024) 
+#         data = pickle.loads(data)
+
+#         print( "Client ("  + ") ask:" + str(data))
+        
 
     # connection closed 
     c.close() 
@@ -45,7 +52,7 @@ def Main():
     # reverse a port on your computer 
     # in our case it is 12345 but it 
     # can be anything 
-    port = 14345
+    port = 14342
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
     s.bind((host, port)) 
     print("socket binded to post", port) 

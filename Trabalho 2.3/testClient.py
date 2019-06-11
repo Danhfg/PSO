@@ -1,42 +1,53 @@
-import socket
-import sys
-import pickle	
+# import socket
+# import sys
+# import pickle	
 
 from Board import Board
 
-host = socket.gethostname()
-port = 14343
+board = Board()
 
-clientSocket = socket.socket( socket.AF_INET,socket.SOCK_STREAM )  
-
-def sendingPlayerName():
-	playerName = sys.argv[1]
-
-	clientSocket.connect( (host, portNumber) )
-
-	while True:
-		clientSocket.send( playerName.encode('ascii') )
-		dataBytes = clientSocket.recv( bufferSize )
-		uniqueName = pickle.loads(dataBytes)
-
-		if uniqueName:
-			break
-
-	return playerName
+while True:
+	board.update()
+	print( board.buttonPressioned() )
 
 
-def main():
+# host = socket.gethostname()
+# port = 14343
 
-    board = Board()
+# clientSocket = socket.socket( socket.AF_INET,socket.SOCK_STREAM )  
 
-	playerName = sendingPlayerName()
+# def sendingPlayerName():
+# 	playerName = sys.argv[1]
 
-    while True:
+# 	clientSocket.connect( (host, portNumber) )
 
-        board.update()
-        print( board.buttonPressioned() )
-		clientSocket.send( board.buttonPressioned() )
+# 	while True:
+# 		clientSocket.send( playerName.encode('ascii') )
+# 		dataBytes = clientSocket.recv( bufferSize )
+# 		uniqueName = pickle.loads(dataBytes)
+
+# 		if uniqueName:
+# 			break
+
+# 	return playerName
 
 
-if __name__ == "__main__":
-    main()
+
+
+# def main():
+
+#     board = Board()
+
+# 	playerName = sendingPlayerName()
+
+#     while True:
+
+#         board.update()
+#         print( board.buttonPressioned() )
+# 		clientSocket.send( board.buttonPressioned() )
+
+
+# if __name__ == "__main__":
+#     main()
+
+
