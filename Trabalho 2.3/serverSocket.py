@@ -1,11 +1,15 @@
 # import socket programming library 
 import socket 
+#import pickle
+import pickle as pickle
+import json
 
 # import thread module 
 from _thread import *
 import threading 
 
 #print_lock = threading.Lock()                                                     ## CASO DESEJE MULTIPLOS CLIENTE, COMENTE ESTA LINHA
+clients = {}
 
 # thread fuction 
 def threaded(c, addr): 
@@ -13,20 +17,23 @@ def threaded(c, addr):
 
         # data received from client 
         data = c.recv(1024) 
-        print( "Client (" + str(addr) + ")ask:" + data.decode() )
+        data = pickle.loads(data)
+        print( "Client ("  + ")ask:" + str(data))
+        if data['name'] not in clients.keys():
+            clients[data['name']] = {'head':'','segments':''}
+            data =  {'name':data['name'],'head':'','segments':''}
+        else:
+            break
 
         if not data: 
-            print( "Client (" + str(addr) + ") disconnect")
+            print( "Client ("  + ") disconnect")
             break
             # lock released on exit 
  #           print_lock.release()                                            ## CASO DESEJE MULTIPLOS CLIENTE, COMENTE ESTA LINHA 
             
 
-        # reverse the given string from client 
-        data = data[::-1] 
-
         # send back reversed string to client 
-        c.send(data) 
+        c.send(pickle.dumps(data)) 
 
     # connection closed 
     c.close() 
@@ -38,7 +45,7 @@ def Main():
     # reverse a port on your computer 
     # in our case it is 12345 but it 
     # can be anything 
-    port = 14343
+    port = 14345
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
     s.bind((host, port)) 
     print("socket binded to post", port) 
@@ -55,7 +62,8 @@ def Main():
 
         # lock acquired by client 
         #print_lock.acquire()                                                    ## CASO DESEJE MULTIPLOS CLIENTE, COMENTE ESTA LINHA
-        print('Connected to :', addr[0], ':', addr[1]) 
+        #print('Connected to :', addr[0], ':', addr[1]) 
+        print(clients)
 
         # Start a new thread and return its identifier 
         start_new_thread(threaded, (c,addr ,)) 
