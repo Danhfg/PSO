@@ -58,6 +58,6 @@ Feito isso, o cliente pode aperta os seguintes botões para controlar sua cobra
 
 ## Vídeo  
   
-Esse é o [link] do vídeo onde se demonstra a execução de três clientes se conectando a um servidor.
+Esse é o link do [vídeo] onde se demonstra a execução de três clientes se conectando a um servidor.
 
-[link]:https://youtu.be/LUjfCrN4dGY
+[vídeo]:https://youtu.be/LUjfCrN4dGY
