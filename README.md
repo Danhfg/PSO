@@ -6,7 +6,7 @@ Neste respositório contém as implementações das atividades feitas na discipl
   
 ## :page_facing_up: Requisitos mínimos
 
-Compilador C++ 11 (**g++**), GNU debugger (**GDB**) e Doxygen.
+Compilador C++ 11 (**g++**), GNU debugger (**GDB**), interpretador Python e Doxygen.
 	
 	Obs.: Para usuários Linux, tanto o g++ quanto o gdb são ambos nativo, faltando apenas instalar o Doxygen.  
 	Porém, caso deseje usar o gdb no Windows será necessário instalar o MinGW. 
@@ -43,5 +43,8 @@ Além disso, caso deseje fazer o debugger do programa, primeiro digite no termin
 
 ## Autores  
 
-Samuel Lucas de Moura Ferino ( _samuellucas97@ufrn.edu.br_ ) e Daniel Henrique Ferreira Gomes ( _danhfg@ufrn.edu.br_ )     
-:copyright: IMD/UFRN 2019. 
+| Nome: | email: | 
+| ---------- | ------------- |
+|`Daniel Henrique Ferreira Gomes` 	|_danhfg@ufrn.edu.br_  
+|`Samuel Lucas de Moura Ferino` 	|_samuellucas97@ufrn.edu.br_  
+

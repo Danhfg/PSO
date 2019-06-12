@@ -14,22 +14,44 @@ class Board:
 
         self._comandNow = ""
 
-        self._mainWindows = turtle.Screen()
-        self._mainWindows.title("SnakeGame")
-        self._mainWindows.bgcolor("green")
-        self._mainWindows.setup(width = 600, height = 600)
-        self._mainWindows.tracer(0)
+        self.mainWindows = turtle.Screen()
+        self.mainWindows.title("SnakeGame")
+        self.mainWindows.bgcolor("green")
+        self.mainWindows.setup(width = 600, height = 600)
+        self.mainWindows.tracer(0)
         self.listen()
-        #self._mainWindows.mainloop()
+        #self.mainWindows.mainloop()
     
     def update(self):
-        self._mainWindows.update()
+        self.mainWindows.update()
+    
+    def update2(self, data):
+        aux = data.copy()
+        if len(aux.keys()) > 4:
+            for i in aux:
+                print(aux[i])
+                for snake in self._snakeList:
+                    if aux[i] == snake.getName():
+                        if aux[i]['direction'] == 'A':
+                            snake.goLeft()
+                        if aux[i]['direction'] == 'S':
+                            snake.goDown()
+                        if aux[i]['direction'] == 'D':
+                            snake.goRight()
+                        if aux[i]['direction'] == 'W':
+                            snake.goUp()
+        self.mainWindows.update()
 
     def add_snake(self, snake):
         self._snakeList.append(snake)
 
     def getSnakeList(self):
         return self._snakeList
+
+    def getSnake(self, snakeName):
+        for i in self._snakeList:
+            if i.getName() == snakeName:
+                return i
 
     def setSnakeList(self, newSnakeList):
         self._snakeList = newSnakeList        
@@ -64,32 +86,35 @@ class Board:
         self._comandNow = "Right"
 
     def buttonPressioned(self):
-        self._mainWindows.onkeypress(self._upPressioned,"Up")
-        self._mainWindows.onkeypress(self._downPressioned,"Down")
-        self._mainWindows.onkeypress(self._leftPressioned,"Left")
-        self._mainWindows.onkeypress(self._rightPressioned,"Right")
+        self.mainWindows.onkeypress(self._upPressioned,"Up")
+        self.mainWindows.onkeypress(self._downPressioned,"Down")
+        self.mainWindows.onkeypress(self._leftPressioned,"Left")
+        self.mainWindows.onkeypress(self._rightPressioned,"Right")
         return self._comandNow
 
     def listen(self):
-        self._mainWindows.listen()
+        self.mainWindows.listen()
         for snake in self._snakeList:
-            self._mainWindows.onkeypress(snake.goUp,"Up")
-            self._mainWindows.onkeypress(snake.goDown,"Down")
-            self._mainWindows.onkeypress(snake.goLeft,"Left")
-            self._mainWindows.onkeypress(snake.goRight,"Right")
+            self.mainWindows.onkeypress(snake.goUp,"Up")
+            self.mainWindows.onkeypress(snake.goDown,"Down")
+            self.mainWindows.onkeypress(snake.goLeft,"Left")
+            self.mainWindows.onkeypress(snake.goRight,"Right")
             
     def listenEspecificSnake(snake):
-        self._mainWindows.listen()
-        self._mainWindows.onkeypress(snake.goUp,"Up")
-        self._mainWindows.onkeypress(snake.goDown,"Down")
-        self._mainWindows.onkeypress(snake.goLeft,"Left")
-        self._mainWindows.onkeypress(snake.goRight,"Right")
+        self.mainWindows.listen()
+        self.mainWindows.onkeypress(snake.goUp,"Up")
+        self.mainWindows.onkeypress(snake.goDown,"Down")
+        self.mainWindows.onkeypress(snake.goLeft,"Left")
+        self.mainWindows.onkeypress(snake.goRight,"Right")
 
     def loop(self):
-        self._mainWindows.mainloop()    
+        self.mainWindows.mainloop()    
 
     def getFood(self):
         return self._food
+
+    def setFood(self, x, y):
+        self._food.goto(x,y)
 
     def listPlayersNames(self):
         playersNames = []

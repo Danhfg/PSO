@@ -7,8 +7,8 @@ class Snake:
         self._head = turtle.Turtle()        
         self._head.speed(0)
         self._head.shape("square")
-        cor = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])]
-        self._head.color(cor[0])
+        self.cor = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])]
+        self._head.color(self.cor[0])
         #print(cor[0])
         self._head.penup()
         x = random.randint(-200, 200)
@@ -23,8 +23,11 @@ class Snake:
     def getHead(self):
         return self._head
 
-#    def getSegments(self):
-#        return self._segments
+    def getSegments(self):
+        return self.segments
+
+    def getCor(self):
+        return self.cor
 
     def goUp(self):
         self._head.direction = "UP"
