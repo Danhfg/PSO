@@ -9,10 +9,9 @@ class Snake:
         self._head.shape("square")
         self.cor = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])]
         self._head.color(self.cor[0])
-        #print(cor[0])
         self._head.penup()
         x = random.randint(-200, 200)
-        y = random.randint(-200, 200)
+        y = random.randint(random.randint(-200, 200), 200)
         self._head.goto(x,y)
         self._head.direction = "stop"
         self.segments = []
