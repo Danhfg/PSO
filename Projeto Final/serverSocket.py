@@ -3,9 +3,11 @@ import sys
 import socket 
 import pickle
 import json
+from time import sleep
 import threading 
 
-def recebendoConsumoDeMemoriaDoCliente(conn, clientes):
+
+def recebendoConsumoDeMemoriaDoCliente(conn, clientes, contadorLogServidor):
     """ Recebe continuamente o consumo de memoria do cliente  
 
     Parameters:
@@ -15,7 +17,20 @@ def recebendoConsumoDeMemoriaDoCliente(conn, clientes):
     """
     while True:
         mensagemCliente = pickle.loads( conn.recv(1024) )
+
+        ## ATUALIZANDO LISTA DE CLIENTES
         clientes[ mensagemCliente['name'] ] = mensagemCliente['memoryUsage']
+        
+        if int(mensagemCliente['memoryUsage']) > 50:
+            conn.send( pickle.dumps('Quero lista de processos') )
+
+        # else:
+        #     sleep(3)
+
+        #     if contadorLogServidor
+
+
+
         print(clientes)
 
 
@@ -26,6 +41,7 @@ def Main():
         sys.exit() 
 
     clients = {}
+    contadorLogServidor = 15   
     
     host = socket.gethostbyname( socket.gethostname() ) 
     portNumber = 14345
@@ -43,7 +59,7 @@ def Main():
 
         ## 3. ESTABELECENDO CONEXÃO COM SOCKET DO CLIENTE 
         conn, address = serverSocket.accept()
-        thread_consumoDeMemoriaCliente = threading.Thread( target=recebendoConsumoDeMemoriaDoCliente, args=(conn, clients,) )
+        thread_consumoDeMemoriaCliente = threading.Thread( target=recebendoConsumoDeMemoriaDoCliente, args=(conn, clients,contadorLogServidor,) )
         thread_consumoDeMemoriaCliente.start() 
 
     serverSocket.close() 
@@ -51,3 +67,4 @@ def Main():
 
 if __name__ == '__main__': 
     Main() 
+

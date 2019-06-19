@@ -3,9 +3,22 @@ import socket
 import pickle as pickle
 import json
 import sys
-import time
+from time import sleep
 import threading
 import subprocess
+
+
+def listaDeProcessos():
+    """ Executa o comando de terminal para pegar a lista de processos
+
+    Returns:
+    str:Lista de processos
+
+    """
+    comandoListaDeProcesso = "ps -eo user,pid,stat"
+    return subprocess.check_output(comandoListaDeProcesso, stderr=subprocess.STDOUT, shell=True).decode("utf-8")
+    
+
 
 def capturaConsumoDeMemoria():
     """ Executa o comando de terminal para pegar o consumo de memória
@@ -24,14 +37,12 @@ def enviandoConsumoDeMemoria(clientSocket, mensagem):
     Parameters:
     clientSocket (int): Arquivo descritor do socket do cliente
 
-    Returns:
-    str:Porcentagem do consumo de memória atual
-
     """
     try:
         while True:
             mensagem['memoryUsage'] = capturaConsumoDeMemoria()
             clientSocket.send( pickle.dumps( mensagem ) )
+            sleep(3)
     finally:
         clientSocket.close()
 
@@ -57,6 +68,14 @@ def Main():
     ## 4. CRIANDO E INICIANDO THREAD QUE SEMPRE ENVIA CONSUMO DE MEMÓRIA PARA O SERVIDOR
     thread_consumoDeMemoria = threading.Thread( target=enviandoConsumoDeMemoria, args=(clientSocket,informacoesCliente,) )
     thread_consumoDeMemoria.start()
+
+    while True:
+        mensagemServidor = pickle.loads( clientSocket.recv(1024) )
+
+        if( mensagemServidor == "Quero lista de processos"):
+
+
+
  
 
 if __name__ == '__main__': 
