@@ -48,8 +48,11 @@ import threading
 #     # connection closed 
 #     c.close() 
 
-def recebendoConsumoDeMemoriaDoCliente(serverSocket, clientes):
-    
+def recebendoConsumoDeMemoriaDoCliente(conn, clientes):
+    mensagemCliente = pickle.loads( conn.recv(1024) )
+    print( mensagemCliente['name'] + mensagemCliente['memoryUsage'] )
+
+
 
 
 def Main():
@@ -75,7 +78,9 @@ def Main():
     while True: 
 
         ## 3. ESTABELECENDO CONEXÃO COM SOCKET DO CLIENTE 
-        c, addr = serverSocket.accept() 
+        conn, address = serverSocket.accept()
+        thread_consumoDeMemoriaCliente = threading.Thread( target=recebendoConsumoDeMemoriaDoCliente, args=(conn, clients,) )
+        thread_consumoDeMemoriaCliente.start() 
 
     serverSocket.close() 
 
