@@ -5,7 +5,7 @@ import json
 import sys
 import time
 import threading
-
+import subprocess
 
 def capturaConsumoDeMemoria():
     """ Executa o comando de terminal para pegar o consumo de memória
@@ -34,7 +34,6 @@ def enviandoConsumoDeMemoria(clientSocket, mensagem):
             clientSocket.send( pickle.dumps( mensagem ) )
     finally:
         clientSocket.close()
-        break
 
 
 def Main():

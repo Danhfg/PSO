@@ -5,54 +5,18 @@ import pickle
 import json
 import threading 
 
-
-#print_lock = threading.Lock()                                                     ## CASO DESEJE MULTIPLOS CLIENTE, COMENTE ESTA LINHA
-
-# # thread fuction 
-# def threaded(c, addr, b, clients): 
-#     while True: 
-
-#         # data received from client 
-#         data = c.recv(1024) 
-#         if not data:
-#             print( "Client ("  + ") disconnect")
-#             c.send(pickle.dumps({'disconnect':'True'})) 
-#             break
-#         data = pickle.loads(data)
-#         #print( "Client ("  + ")ask:" + str(data))
-#         if 'run' in data.keys():
-#             break
-
-#         elif data['name'] not in clients.keys():
-#             snk = b.getSnake(data['name'])
-#             fruit = b.getFood()
-#             segments = []
-#             if snk != None:
-#                 if snk.getSegments() != []:
-#                     segments = [(i.xcor(), i.ycor()) for i in snk.getSegments()]
-#                 clients[data['name']] = {'head':(snk.getHead().xcor(), snk.getHead().ycor()),'segments':segments, 'cor':snk.getCor(), 'direction':'stop',
-#                                       'apple':(fruit.xcor(),fruit.ycor())  }
-#                 data.update( {'head':(snk.getHead().xcor(), snk.getHead().ycor()),'segments':segments, 'cor':snk.getCor(),
-#                            'apple':(fruit.xcor(),fruit.ycor()) })
-#         elif 'head' in data.keys():
-#             clients[data['name']]['direction'] = data['direction']
-#             #clients[data['name']] = {'head':'','segments':'', 'cor':''}
-#             #data = {'name':data['name'],'head':'','segments':''}
-#             # lock released on exit 
-#  #           print_lock.release()                                            ## CASO DESEJE MULTIPLOS CLIENTE, COMENTE ESTA LINHA 
-            
-
-#         # send back reversed string to client 
-#         c.send(pickle.dumps(clients)) 
-
-#     # connection closed 
-#     c.close() 
-
 def recebendoConsumoDeMemoriaDoCliente(conn, clientes):
-    mensagemCliente = pickle.loads( conn.recv(1024) )
-    print( mensagemCliente['name'] + mensagemCliente['memoryUsage'] )
+    """ Recebe continuamente o consumo de memoria do cliente  
 
+    Parameters:
+    conn (int): Conexao do servidor com o cliente
+    clientes(dict): Dicionario de informacoes dos clientes conectados
 
+    """
+    while True:
+        mensagemCliente = pickle.loads( conn.recv(1024) )
+        clientes[ mensagemCliente['name'] ] = mensagemCliente['memoryUsage']
+        print(clientes)
 
 
 def Main():
