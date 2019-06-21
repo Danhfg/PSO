@@ -15,30 +15,35 @@ def recebendoConsumoDeMemoriaDoCliente(conn, clientes, contadorLogServidor):
     """
     contadorLog = 0
     contadorLogMaximo = 15 
+    listaDeProcessosCliente = ""
 
-    while True:
-        ## 1. SERVIDOR RECEBE O USO DE MEMÓRIA DO CLIENTE E ATUALIZA COM O QUE TINHA
-        mensagemCliente = pickle.loads( conn.recv(1024) )
-        clientes[ mensagemCliente['name'] ] = mensagemCliente['memoryUsage']
-        
-        ## 2. SERVIDOR VERIFICA SE O USO DE MEMÓRIA DO CLIENTE ULTRAPASSOU O PERMITIDO
-        if int(mensagemCliente['memoryUsage']) > 50:
-            ## 3. SERVIDOR PEDE A LISTA DE PROCESSOS E RECEBE DO CLIENTE
-            conn.send( pickle.dumps('Quero lista de processos') )
-            listaDeProcessosCliente = pickle.loads( conn.recv(1024) )
-            print( listaDeProcessosCliente )
-            sleep(3)
-        
-        else:
-            conn.send( pickle.dumps('Nao quero lista de processos') )
-            sleep(3)
+    try:
 
-            ## 4. SERVIDOR ESPERA E ATUALIZA O SEU CONTADOR DE ENVIO DE LOG
-         #   ++contadorLog
+        while True:
+            ## 1. SERVIDOR RECEBE O USO DE MEMÓRIA DO CLIENTE E ATUALIZA COM O QUE TINHA
+            mensagemCliente = pickle.loads( conn.recv(1024) )
+            clientes[ mensagemCliente['name'] ] = mensagemCliente['memoryUsage']
             
-            ## 5. 
-          #  if contadorLog == contadorLogMaximo:
-        print(clientes)
+            ## 2. SERVIDOR VERIFICA SE O USO DE MEMÓRIA DO CLIENTE ULTRAPASSOU O PERMITIDO
+            if mensagemCliente['memoryUsage'] > 50:
+                ## 3. SERVIDOR PEDE A LISTA DE PROCESSOS E RECEBE DO CLIENTE
+                conn.send( pickle.dumps('Quero lista de processos') )
+                listaDeProcessosCliente = pickle.loads( conn.recv(10024) )
+                print( listaDeProcessosCliente )
+                sleep(3)
+            
+            else:
+                conn.send( pickle.dumps('Nao quero lista de processos') )
+                sleep(3)
+
+                ## 4. SERVIDOR ESPERA E ATUALIZA O SEU CONTADOR DE ENVIO DE LOG
+             #   ++contadorLog
+                
+                ## 5. 
+              #  if contadorLog == contadorLogMaximo:
+            print(clientes)
+    finally:
+        print('Erro!')
 
 
 def Main():

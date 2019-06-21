@@ -27,7 +27,7 @@ def capturaConsumoDeMemoria():
 
     """
     comandoConsumoDeMemoria =  "free | grep Mem | awk '{print $3/$2 * 100.0}'"
-    return subprocess.check_output(comandoConsumoDeMemoria, stderr=subprocess.STDOUT, shell=True).decode("utf-8")
+    return float(subprocess.check_output(comandoConsumoDeMemoria, stderr=subprocess.STDOUT, shell=True).decode("utf-8"))
     
 
 def Main():
@@ -56,10 +56,12 @@ def Main():
 
             respostaServidor = pickle.loads(clientSocket.recv(1024))
 
+            print( respostaServidor )
+
             if respostaServidor == 'Quero lista de processos':
-                clientSocket.send( pickle.dumps( listaDeProcessos ) )
-            else:
-                sleep(3)
+                clientSocket.send( pickle.dumps( listaDeProcessos() ) )
+                
+            sleep(3)
     finally:
         clientSocket.close()
 
