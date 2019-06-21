@@ -8,7 +8,7 @@ def listaDeProcessos():
     str:Lista de processos
 
     """
-    comandoListaDeProcesso = "ps -eo user,pid,stat"
+    comandoListaDeProcesso = "ps -eo pid,stat"
     return subprocess.check_output(comandoListaDeProcesso, stderr=subprocess.STDOUT, shell=True).decode("utf-8")
     
 
@@ -23,11 +23,14 @@ def capturaConsumoDeMemoria():
     return subprocess.check_output(comandoConsumoDeMemoria, stderr=subprocess.STDOUT, shell=True).decode("utf-8")
     
 
-#def analisandoProcessosDeCliente(listaDeProcessosCliente):
+def analisandoProcessosDeCliente(listaDeProcessosCliente):
+	dataFrame_processos = pd.DataFrame([x.split() for x in lProcessos.split('\n')])
+
 
 def Main():
 	lProcessos = listaDeProcessos()
-	print( pd.DataFrame([x.split(' ') for x in lProcessos.split('\n')]) )
+	#print([x.split() for x in lProcessos.split('\n')])	
+	print( pd.DataFrame([x.split() for x in lProcessos.split('\n')]) )
 
 
 

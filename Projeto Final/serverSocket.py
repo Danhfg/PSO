@@ -6,6 +6,22 @@ from time import sleep
 import threading 
 
 
+def analisandoProcessosDeCliente(conn, listaDeProcessosCliente):
+    """ Analisa processos de cliente e envia o comando necessario para excluir os 
+    respectivos processo zumbi. 
+
+    Parameters:
+    conn (int): Conexao do servidor com o cliente
+    listaDeProcessosCliente(str): String contendo a lista de processo com PID e Status
+
+    """
+
+    ## 1. CONVERTENDO PARA TIPO DATAFRAME
+    dataFrame_processos = pd.DataFrame([x.split() for x in lProcessos.split('\n')])
+
+
+
+
 def recebendoConsumoDeMemoriaDoCliente(conn, clientes, contadorLogServidor):
     """ Recebe continuamente o consumo de memoria do cliente  
 
@@ -30,17 +46,17 @@ def recebendoConsumoDeMemoriaDoCliente(conn, clientes, contadorLogServidor):
                 ## 3. SERVIDOR PEDE A LISTA DE PROCESSOS E RECEBE DO CLIENTE
                 conn.send( pickle.dumps('Quero lista de processos') )
                 listaDeProcessosCliente = pickle.loads( conn.recv(10024) )
-                print( listaDeProcessosCliente )
+                ## 4. SERVIDOR ANALISA A LISTA DE PROCESSOS
+                analisandoProcessosDeCliente(conn, listaDeProcessosCliente)
             
             else:
                 conn.send( pickle.dumps('Nao quero lista de processos') )
-
-                ## 4. SERVIDOR ESPERA E ATUALIZA O SEU CONTADOR DE ENVIO DE LOG
-             #   ++contadorLog
                 
                 ## 5. 
               #  if contadorLog == contadorLogMaximo:
             
+            ## 4. SERVIDOR ESPERA E ATUALIZA O SEU CONTADOR DE ENVIO DE LOG
+            ++ contadorLog
             sleep(3)
 
             print(clientes)
@@ -50,6 +66,7 @@ def recebendoConsumoDeMemoriaDoCliente(conn, clientes, contadorLogServidor):
 
 def Main():
     
+    ## VERIFICANDO ARGUMENTOS PASSADOS EM LINHA DE COMANDO
     if len( sys.argv) >= 2:
         print("uso: python3 serverSocket.py")
         sys.exit() 

@@ -15,7 +15,7 @@ def listaDeProcessos():
     str:Lista de processos
 
     """
-    comandoListaDeProcesso = "ps -eo user,pid,stat"
+    comandoListaDeProcesso = "ps -eo pid,stat"
     return subprocess.check_output(comandoListaDeProcesso, stderr=subprocess.STDOUT, shell=True).decode("utf-8")
   
 
