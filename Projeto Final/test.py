@@ -1,4 +1,5 @@
 import subprocess
+import pandas as pd
 
 def listaDeProcessos():
     """ Executa o comando de terminal para pegar a lista de processos
@@ -22,8 +23,11 @@ def capturaConsumoDeMemoria():
     return subprocess.check_output(comandoConsumoDeMemoria, stderr=subprocess.STDOUT, shell=True).decode("utf-8")
     
 
+#def analisandoProcessosDeCliente(listaDeProcessosCliente):
+
 def Main():
-	print( str(float(capturaConsumoDeMemoria())) )
+	lProcessos = listaDeProcessos()
+	print( pd.DataFrame([x.split(' ') for x in lProcessos.split('\n')]) )
 
 
 

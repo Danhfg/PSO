@@ -5,6 +5,7 @@ import pickle
 from time import sleep
 import threading 
 
+
 def recebendoConsumoDeMemoriaDoCliente(conn, clientes, contadorLogServidor):
     """ Recebe continuamente o consumo de memoria do cliente  
 
@@ -30,17 +31,18 @@ def recebendoConsumoDeMemoriaDoCliente(conn, clientes, contadorLogServidor):
                 conn.send( pickle.dumps('Quero lista de processos') )
                 listaDeProcessosCliente = pickle.loads( conn.recv(10024) )
                 print( listaDeProcessosCliente )
-                sleep(3)
             
             else:
                 conn.send( pickle.dumps('Nao quero lista de processos') )
-                sleep(3)
 
                 ## 4. SERVIDOR ESPERA E ATUALIZA O SEU CONTADOR DE ENVIO DE LOG
              #   ++contadorLog
                 
                 ## 5. 
               #  if contadorLog == contadorLogMaximo:
+            
+            sleep(3)
+
             print(clientes)
     finally:
         print('Erro!')
