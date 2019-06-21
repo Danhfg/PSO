@@ -2,10 +2,8 @@
 import sys
 import socket 
 import pickle
-import json
 from time import sleep
 import threading 
-
 
 def recebendoConsumoDeMemoriaDoCliente(conn, clientes, contadorLogServidor):
     """ Recebe continuamente o consumo de memoria do cliente  
@@ -15,22 +13,31 @@ def recebendoConsumoDeMemoriaDoCliente(conn, clientes, contadorLogServidor):
     clientes(dict): Dicionario de informacoes dos clientes conectados
 
     """
-    while True:
-        mensagemCliente = pickle.loads( conn.recv(1024) )
+    contadorLog = 0
+    contadorLogMaximo = 15 
 
-        ## ATUALIZANDO LISTA DE CLIENTES
+    while True:
+        ## 1. SERVIDOR RECEBE O USO DE MEMÓRIA DO CLIENTE E ATUALIZA COM O QUE TINHA
+        mensagemCliente = pickle.loads( conn.recv(1024) )
         clientes[ mensagemCliente['name'] ] = mensagemCliente['memoryUsage']
         
+        ## 2. SERVIDOR VERIFICA SE O USO DE MEMÓRIA DO CLIENTE ULTRAPASSOU O PERMITIDO
         if int(mensagemCliente['memoryUsage']) > 50:
+            ## 3. SERVIDOR PEDE A LISTA DE PROCESSOS E RECEBE DO CLIENTE
             conn.send( pickle.dumps('Quero lista de processos') )
+            listaDeProcessosCliente = pickle.loads( conn.recv(1024) )
+            print( listaDeProcessosCliente )
+            sleep(3)
+        
+        else:
+            conn.send( pickle.dumps('Nao quero lista de processos') )
+            sleep(3)
 
-        # else:
-        #     sleep(3)
-
-        #     if contadorLogServidor
-
-
-
+            ## 4. SERVIDOR ESPERA E ATUALIZA O SEU CONTADOR DE ENVIO DE LOG
+         #   ++contadorLog
+            
+            ## 5. 
+          #  if contadorLog == contadorLogMaximo:
         print(clientes)
 
 

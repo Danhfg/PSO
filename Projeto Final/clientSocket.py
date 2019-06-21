@@ -17,8 +17,7 @@ def listaDeProcessos():
     """
     comandoListaDeProcesso = "ps -eo user,pid,stat"
     return subprocess.check_output(comandoListaDeProcesso, stderr=subprocess.STDOUT, shell=True).decode("utf-8")
-    
-
+  
 
 def capturaConsumoDeMemoria():
     """ Executa o comando de terminal para pegar o consumo de memória
@@ -30,22 +29,6 @@ def capturaConsumoDeMemoria():
     comandoConsumoDeMemoria =  "free | grep Mem | awk '{print $3/$2 * 100.0}'"
     return subprocess.check_output(comandoConsumoDeMemoria, stderr=subprocess.STDOUT, shell=True).decode("utf-8")
     
-
-def enviandoConsumoDeMemoria(clientSocket, mensagem):
-    """ Enviando continuamente para o servidor o uso atual, em porcentagem, de memória 
-
-    Parameters:
-    clientSocket (int): Arquivo descritor do socket do cliente
-
-    """
-    try:
-        while True:
-            mensagem['memoryUsage'] = capturaConsumoDeMemoria()
-            clientSocket.send( pickle.dumps( mensagem ) )
-            sleep(3)
-    finally:
-        clientSocket.close()
-
 
 def Main():
 
@@ -65,18 +48,21 @@ def Main():
     ## 3. CONECTANDO O SOCKET DO CLIENTE AO SOCKET DO SERVIDOR
     clientSocket.connect( (host, portNumber) )
 
-    ## 4. CRIANDO E INICIANDO THREAD QUE SEMPRE ENVIA CONSUMO DE MEMÓRIA PARA O SERVIDOR
-    thread_consumoDeMemoria = threading.Thread( target=enviandoConsumoDeMemoria, args=(clientSocket,informacoesCliente,) )
-    thread_consumoDeMemoria.start()
+    try:
+        while True:
+            ## 4. ENVIA CONSUMO DE MEMÓRIA PARA O SERVIDOR
+            informacoesCliente['memoryUsage'] = capturaConsumoDeMemoria()
+            clientSocket.send( pickle.dumps( informacoesCliente ) )
 
-    while True:
-        mensagemServidor = pickle.loads( clientSocket.recv(1024) )
+            respostaServidor = pickle.loads(clientSocket.recv(1024))
 
-        if( mensagemServidor == "Quero lista de processos"):
+            if respostaServidor == 'Quero lista de processos':
+                clientSocket.send( pickle.dumps( listaDeProcessos ) )
+            else:
+                sleep(3)
+    finally:
+        clientSocket.close()
 
-
-
- 
 
 if __name__ == '__main__': 
     Main() 
