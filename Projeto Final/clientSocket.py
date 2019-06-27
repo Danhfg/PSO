@@ -3,6 +3,7 @@ import socket
 import pickle as pickle
 import json
 import sys
+import os
 from time import sleep
 import threading
 import subprocess
@@ -15,7 +16,7 @@ def listaDeProcessos():
     str:Lista de processos
 
     """
-    comandoListaDeProcesso = "ps -eo pid,stat"
+    comandoListaDeProcesso = "ps -eo pid,stat,ppid"
     return subprocess.check_output(comandoListaDeProcesso, stderr=subprocess.STDOUT, shell=True).decode("utf-8")
   
 
@@ -33,13 +34,13 @@ def capturaConsumoDeMemoria():
 def Main():
 
     ## 1. VERIFICANDO ARGUMENTOS 
-    if len( sys.argv) != 2:
-        print("uso: python3 clientSocket.py <nome do cliente>")
+    if len( sys.argv) != 4:
+        print("uso: python3 clientSocket.py <nome do cliente> <IP Servidor> <tempo máximo>")
         sys.exit()
 
-    informacoesCliente = {"name":sys.argv[1]}  
+    informacoesCliente = {"name":sys.argv[1], "max":sys.argv[3]}  
 
-    host = socket.gethostname()
+    host = sys.argv[2]
     portNumber = 14345
 
     ## 2. CRIANDO SOCKET DO CLIENTE
@@ -56,12 +57,20 @@ def Main():
 
             respostaServidor = pickle.loads(clientSocket.recv(1024))
 
-            print( respostaServidor )
-
-            if respostaServidor == 'Quero lista de processos':
+            #print( respostaServidor )
+            if "kill" in respostaServidor:
+                os.system(respostaServidor)
                 clientSocket.send( pickle.dumps( listaDeProcessos() ) )
-                
-            sleep(3)
+            elif "loops" in respostaServidor:
+                #os.system(respostaServidor)
+                os.system("echo \""+respostaServidor + "\" > zumbi.log")
+                clientSocket.send( pickle.dumps( listaDeProcessos() ) )
+            elif respostaServidor == 'Quero lista de processos':
+                clientSocket.send( pickle.dumps( listaDeProcessos() ) )
+            elif respostaServidor == 'Nao quero lista de processos':
+                pass
+
+            sleep(1)
     finally:
         clientSocket.close()
 

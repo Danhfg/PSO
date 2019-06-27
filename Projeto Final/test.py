@@ -1,3 +1,4 @@
+import sys
 import subprocess
 import pandas as pd
 
@@ -35,5 +36,9 @@ def Main():
 
 
 
-if __name__ == '__main__': 
-    Main() 
+if __name__ == '__main__':
+    
+    ## 1. VERIFICANDO ARGUMENTOS 
+    if len( sys.argv) != 4:
+        print("uso: python3 clientSocket.py <nome do cliente> <IP Servidor> <tempo máximo>")
+        sys.exit()
