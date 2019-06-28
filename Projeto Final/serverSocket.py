@@ -102,7 +102,7 @@ def Main():
     clients = {}
     contadorLogServidor = 15   
     
-    host = socket.gethostbyname( socket.gethostname() ) 
+    host = ''
     portNumber = 14345
 
     ## 1. CRIANDO SOCKET DO SERVIDOR E PRENDENDO-SE À PORTA
